@@ -4,8 +4,21 @@ spring:
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+    # driver-class-name: org.h2.Driver
   jpa:
-    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    # database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+
+logging:
+  level:
+    io.realworld: debug
+
+jwt:
+  header: Authorization
+  secret: c2FlcmFuZy1yZWFsd29ybGQtand0LXNlY3JldC1rZXkuIEkgd2FudCB0byB3b3JrIGFzIGEgYmFlbWluLiBJIHdhbnQgdG8gZGV2ZWxvcCB3ZWxsLg==
+  token-validity-in-seconds: 86400
+
+

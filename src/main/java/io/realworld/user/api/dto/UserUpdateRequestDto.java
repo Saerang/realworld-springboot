@@ -5,9 +5,9 @@ import io.realworld.user.domain.User;
 import lombok.Builder;
 
 public class UserUpdateRequestDto {
-    private final String email;
-    private final String bio;
-    private final String image;
+    private String email;
+    private String bio;
+    private String image;
 
     @Builder
     public UserUpdateRequestDto(String email, String bio, String image) {

@@ -7,9 +7,9 @@ import lombok.Getter;
 
 @Getter
 public class UserCreateRequestDto {
-    private final String username;
-    private final String email;
-    private final String password;
+    private String username;
+    private String email;
+    private String password;
 
     @Builder
     public UserCreateRequestDto(String username, String email, String password) {
