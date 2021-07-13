@@ -2,7 +2,9 @@ package io.realworld.user.app;
 
 import io.realworld.user.api.UserService;
 import io.realworld.user.api.dto.UserCreateRequestDto;
+import io.realworld.user.api.dto.UserCreateResponseDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
+import io.realworld.user.app.dto.UserMappers;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +20,9 @@ public class DefaultUserService implements UserService {
     final private UserRepository userRepository;
 
     @Override
-    public User createUser(UserCreateRequestDto dto) {
-        return userRepository.save(dto.toEntity());
+    public UserCreateResponseDto createUser(UserCreateRequestDto dto) {
+        User user = userRepository.save(dto.toEntity());
+        return UserMappers.toUserCreateResponseDto(user, dto.getPassword());
     }
 
     @Override

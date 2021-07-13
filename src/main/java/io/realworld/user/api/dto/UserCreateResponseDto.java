@@ -8,26 +8,26 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserUpdateRequestDto {
+public class UserCreateResponseDto {
+    private String username;
     private String email;
-    private String bio;
-    private String image;
+    private String password;
 
     @Builder
-    public UserUpdateRequestDto(String email, String bio, String image) {
+    public UserCreateResponseDto(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
         this.email = email;
-        this.bio = bio;
-        this.image = image;
     }
 
     public User toEntity() {
         Profile profile = Profile.builder()
-                .bio(this.bio)
-                .image(this.image)
+                .username(this.username)
                 .build();
 
         return User.builder()
                 .profile(profile)
+                .password(this.password)
                 .email(this.email)
                 .build();
     }

@@ -4,8 +4,10 @@ import io.realworld.user.domain.Profile;
 import io.realworld.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class UserCreateRequestDto {
     private String username;
     private String email;
@@ -29,5 +31,4 @@ public class UserCreateRequestDto {
                 .password(this.password)
                 .build();
     }
-
 }
