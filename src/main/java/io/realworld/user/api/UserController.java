@@ -3,6 +3,7 @@ package io.realworld.user.api;
 import io.realworld.common.security.TokenProvider;
 import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserResponseDto;
+import io.realworld.user.app.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

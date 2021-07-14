@@ -1,9 +1,9 @@
 package io.realworld.user.app;
 
-import io.realworld.user.api.UserService;
 import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
+import io.realworld.user.app.exception.UserAlreadyExist;
 import io.realworld.user.domain.Profile;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.UserRepository;
@@ -15,9 +15,10 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest
 @Transactional
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class UserServiceTest {
 
     @Autowired
@@ -44,9 +45,22 @@ public class UserServiceTest {
 
         User findUser = userRepository.findByEmail(user.getEmail()).get();
 
-
         //then
         assertThat(user.getEmail()).isEqualTo(findUser.getEmail());
+    }
+
+    @Test
+    void createUser_dup() {
+        //given
+        userRepository.save(getDefaultUser());
+        UserCreateRequestDto dto = UserCreateRequestDto.builder()
+                .username("realworld")
+                .email("realworld@gmail.com")
+                .password("1234")
+                .build();
+
+        //when
+        assertThatThrownBy(() -> userService.createUser(dto)).isInstanceOf(UserAlreadyExist.class);
     }
 
     @Test
@@ -74,6 +88,19 @@ public class UserServiceTest {
         assertThat(findUser.getProfile().getImage()).isEqualTo(image);
     }
 
+    @Test
+    void getUserByUsername() {
+        //given
+        User user = getDefaultUser();
+        userRepository.save(user);
+
+        //when
+        User findUser = userService.findUserByUsername(user.getProfile().getUsername()).get();
+
+        //then
+        assertThat(user.getId()).isEqualTo(findUser.getId());
+    }
+
     private User getDefaultUser() {
         Profile profile = Profile.builder()
                 .username("realworld")
@@ -86,3 +113,4 @@ public class UserServiceTest {
     }
 
 }
+
