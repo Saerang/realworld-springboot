@@ -2,7 +2,7 @@ package io.realworld.user.app;
 
 import io.realworld.user.api.UserService;
 import io.realworld.user.api.dto.UserCreateRequestDto;
-import io.realworld.user.api.dto.UserCreateResponseDto;
+import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
 import io.realworld.user.domain.Profile;
 import io.realworld.user.domain.User;
@@ -37,12 +37,13 @@ public class UserServiceTest {
                 .build();
 
         //when
-        UserCreateResponseDto user = userService.createUser(dto);
+        UserResponseDto user = userService.createUser(dto);
 
         em.flush();
         em.clear();
 
         User findUser = userRepository.findByEmail(user.getEmail()).get();
+
 
         //then
         assertThat(user.getEmail()).isEqualTo(findUser.getEmail());

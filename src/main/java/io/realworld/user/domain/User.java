@@ -16,16 +16,18 @@ public class User {
     private Long id;
     private String email;
     private String password;
-    private String token;
 
     @Embedded
     private Profile profile;
 
+    public User(String email, String password, String username) {
+        this(email, password, Profile.builder().username(username).build());
+    }
+
     @Builder
-    public User(String email, String password, String token, Profile profile) {
+    public User(String email, String password, Profile profile) {
         this.email = email;
         this.password = password;
-        this.token = token;
         this.profile = profile;
     }
 }

@@ -24,12 +24,11 @@ public class JwtFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String jwt = resolveToken(request);
-        String requestURI = request.getRequestURI();
+//        String requestURI = request.getRequestURI();
 
         if(StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
             Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
         }
 
         filterChain.doFilter(servletRequest, servletResponse);

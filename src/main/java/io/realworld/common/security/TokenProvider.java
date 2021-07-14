@@ -3,22 +3,20 @@ package io.realworld.common.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.realworld.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -48,19 +46,11 @@ public class TokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(Authentication authentication) {
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-
-        LocalDateTime expiredLocalDateTime = LocalDateTime.now().plus(this.tokenValidityMilliseconds, ChronoUnit.SECONDS);
-        Date expiredDate = Date.from(expiredLocalDateTime.atZone(ZoneId.systemDefault()).toInstant());
-
+    public String createToken(User user) {
         return Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
+                .setSubject(Long.toString(user.getId()))
                 .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(expiredDate)
+                .setExpiration(new Date(System.currentTimeMillis() + this.tokenValidityMilliseconds * 1000))
                 .compact();
     }
 
@@ -76,7 +66,7 @@ public class TokenProvider implements InitializingBean {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

@@ -47,4 +47,14 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$..password").value("1234"));
     }
 
+    @Test
+    void login() {
+        //given
+
+
+        //when
+
+        //then
+    }
+
 }
