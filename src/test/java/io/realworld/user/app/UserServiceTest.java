@@ -4,15 +4,19 @@ import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
 import io.realworld.user.app.exception.UserAlreadyExist;
+import io.realworld.user.app.exception.UserNotFoundException;
 import io.realworld.user.domain.Profile;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -99,6 +103,25 @@ public class UserServiceTest {
 
         //then
         assertThat(user.getId()).isEqualTo(findUser.getId());
+    }
+    
+    @Test
+    void getCurrentUser_authNotFound() {
+        // given 
+        // when
+        // then
+        assertThatThrownBy(() -> userService.getCurrentUser()).isInstanceOf(UserNotFoundException.class).hasMessage("User dose not found.");
+    }
+
+    @Test
+    void getCurrentUser_userNotFound() {
+        // given
+        org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User("1", "", Collections.emptyList());
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(principal, "token", Collections.emptyList()));
+
+        // when
+        // then
+        assertThatThrownBy(() -> userService.getCurrentUser()).isInstanceOf(UserNotFoundException.class).hasMessage("User userId:1 dose not found.");
     }
 
     private User getDefaultUser() {

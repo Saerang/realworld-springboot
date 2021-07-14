@@ -3,37 +3,25 @@ package io.realworld.common.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.realworld.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class TokenProvider implements InitializingBean {
-
-    private static final String AUTHORITIES_KEY = "auth";
-
+public class JwtTokenProvider implements InitializingBean {
     private final String secret;
     private final long tokenValidityMilliseconds;
-
     private Key key;
 
-    public TokenProvider(
+    public JwtTokenProvider(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityMilliseconds) {
         this.secret = secret;
@@ -42,13 +30,12 @@ public class TokenProvider implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+        key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
-    public String createToken(User user) {
+    public String createToken(long userId) {
         return Jwts.builder()
-                .setSubject(Long.toString(user.getId()))
+                .setSubject(Long.toString(userId))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(new Date(System.currentTimeMillis() + this.tokenValidityMilliseconds * 1000))
                 .compact();
@@ -61,14 +48,9 @@ public class TokenProvider implements InitializingBean {
                 .parseClaimsJws(token)
                 .getBody();
 
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User(claims.getSubject(), "", Collections.emptyList());
 
-        org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        return new UsernamePasswordAuthenticationToken(principal, token, Collections.emptyList());
     }
 
     public boolean validateToken(String token) {
@@ -80,7 +62,10 @@ public class TokenProvider implements InitializingBean {
             IllegalArgumentException – if the claimsJws string is null or empty or only whitespace
          */
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Claims body = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+
+            log.debug(body.getSubject());
+            log.debug(String.valueOf(body.getExpiration()));
             return true;
         } catch (SecurityException | MalformedJwtException e) {
         } catch (ExpiredJwtException e) {

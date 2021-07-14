@@ -3,7 +3,7 @@ package io.realworld.common.config;
 import io.realworld.common.security.JwtAccessDeniedHandler;
 import io.realworld.common.security.JwtAuthenticationEntryPoint;
 import io.realworld.common.security.JwtSecurityConfig;
-import io.realworld.common.security.TokenProvider;
+import io.realworld.common.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -23,7 +23,7 @@ import static org.springframework.http.HttpMethod.POST;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final TokenProvider tokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 // security configurer
                 .and()
-                .apply(new JwtSecurityConfig(tokenProvider));
+                .apply(new JwtSecurityConfig(jwtTokenProvider));
     }
 
     @Bean
