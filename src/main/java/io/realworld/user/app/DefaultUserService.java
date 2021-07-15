@@ -36,9 +36,9 @@ public class DefaultUserService implements UserService {
 
     @Override
     public UserResponseDto createUser(UserCreateRequestDto dto) {
-        Optional<User> optionalUser = userRepository.findByProfile_Username(dto.getUsername());
+        Optional<User> optionalUser = userRepository.findByEmailOrProfile_Username(dto.getEmail(), dto.getUsername());
         if(optionalUser.isPresent()) {
-            throw new UserAlreadyExist();
+            throw new UserAlreadyExist(optionalUser.get().getId());
         }
 
         User user = new User(dto.getEmail(), passwordEncoder.encode(dto.getPassword()), dto.getUsername());
@@ -62,6 +62,19 @@ public class DefaultUserService implements UserService {
         return getUserResponseDto(user);
     }
 
+    @Transactional(readOnly = true)
+    public User findCurrentUser() {
+        // ToDo: service 분리하는게 좋아보임.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null) {
+            throw new UserNotFoundException();
+        }
+
+        long userId = Long.parseLong(authentication.getName());
+
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(USER_ID.getMessage() + userId));
+    }
+
     @Override
     public Optional<User> findUserByUsername(String username) {
         return userRepository.findByProfile_Username(username);
@@ -69,19 +82,30 @@ public class DefaultUserService implements UserService {
 
     @Override
     public UserResponseDto updateUser(UserUpdateRequestDto dto) {
-        User user = userRepository.save(dto.toEntity());
+        Optional<User> findUser = userRepository.findByEmailOrProfile_Username(dto.getEmail(), dto.getUsername());
+
+        if(findUser.isPresent()) {
+            throw new UserAlreadyExist(findUser.get().getId());
+        }
+
+        User user = findCurrentUser();
+        user.updateUserInfo(dto.getEmail(), dto.getUsername(), passwordEncoder.encode(dto.getPassword()), dto.getImage(), dto.getBio());
         return getUserResponseDto(user);
     }
 
     @Override
     public UserResponseDto login(UserLoginRequestDto dto) {
-        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + dto.getEmail()));
+        User user = getUserByEmail(dto.getEmail());
 
         if(!dto.getPassword().equals(user.getPassword())) {
             throw new PasswordNotMatchedException(user.getId());
         }
 
         return getUserResponseDto(user);
+    }
+
+    private User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + email));
     }
 
     private UserResponseDto getUserResponseDto(User user) {

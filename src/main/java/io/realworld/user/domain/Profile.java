@@ -22,4 +22,10 @@ public class Profile {
         this.image = image;
     }
 
+    public void updateProfile(String username, String bio, String image) {
+        this.username = username;
+        this.bio = bio;
+        this.image = image;
+    }
+
 }

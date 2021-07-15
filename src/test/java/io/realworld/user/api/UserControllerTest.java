@@ -33,9 +33,11 @@ public class UserControllerTest {
     @Test
     void createUser() throws Exception {
         // given
+        String username = "new_realworld";
+        String email = "new_realworld@email.com";
         UserCreateRequestDto dto = UserCreateRequestDto.builder()
-                .username("realworld")
-                .email("realworld@email.com")
+                .username(username)
+                .email(email)
                 .password("1234")
                 .build();
         String jsonDto = objectMapper.writeValueAsString(dto);
@@ -46,23 +48,16 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$..token").isNotEmpty())
-                .andExpect(jsonPath("$..username").value("realworld"))
-                .andExpect(jsonPath("$..email").value("realworld@email.com"));
+                .andExpect(jsonPath("$..username").value(username))
+                .andExpect(jsonPath("$..email").value(email));
     }
 
     @Test
     void login() throws Exception {
         // given
-        UserCreateRequestDto dto = UserCreateRequestDto.builder()
-                .username("realworld")
-                .email("realworld@email.com")
-                .password("1234")
-                .build();
-        userRepository.save(dto.toEntity());
-
         UserLoginRequestDto loginDto = UserLoginRequestDto.builder()
                 .email("realworld@email.com")
-                .password("1234")
+                .password("12345678")
                 .build();
 
         String jsonDto = objectMapper.writeValueAsString(loginDto);

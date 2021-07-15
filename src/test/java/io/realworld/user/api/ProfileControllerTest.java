@@ -33,18 +33,10 @@ public class ProfileControllerTest {
     @Test
     void getProfile() throws Exception {
         //given
-        UserCreateRequestDto dto = UserCreateRequestDto.builder()
-                .username("realworld")
-                .email("realworld@email.com")
-                .password("1234")
-                .build();
-        userRepository.save(dto.toEntity());
-
         //when
+        //then
         mockMvc.perform(get("/api/profiles/{username}", "realworld").contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$..username").value("realworld"));
-
-        //then
     }
 }

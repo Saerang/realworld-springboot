@@ -13,7 +13,7 @@ import javax.persistence.Entity;
 public class FollowRelation {
 
     @EmbeddedId
-    FollowRelationId followRelationId;
+    private FollowRelationId followRelationId;
 
     public FollowRelation(FollowRelationId followRelationId) {
         this.followRelationId = followRelationId;

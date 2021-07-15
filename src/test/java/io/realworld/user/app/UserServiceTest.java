@@ -4,7 +4,6 @@ import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserLoginRequestDto;
 import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
-import io.realworld.user.app.enumerate.LoginType;
 import io.realworld.user.app.exception.UserAlreadyExist;
 import io.realworld.user.app.exception.UserNotFoundException;
 import io.realworld.user.domain.Profile;
@@ -21,7 +20,6 @@ import javax.transaction.Transactional;
 import java.util.Collections;
 
 import static io.realworld.user.app.enumerate.LoginType.*;
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -40,9 +38,9 @@ public class UserServiceTest {
     void createUser() {
         //given
         UserCreateRequestDto dto = UserCreateRequestDto.builder()
-                .username("realworld")
-                .email("realworld@email.com")
-                .password("1234")
+                .username("createUser")
+                .email("createUser@email.com")
+                .password("12345678")
                 .build();
 
         //when
@@ -60,7 +58,6 @@ public class UserServiceTest {
     @Test
     void createUser_dup() {
         //given
-        userRepository.save(getDefaultUser());
         UserCreateRequestDto dto = UserCreateRequestDto.builder()
                 .username("realworld")
                 .email("realworld@email.com")
@@ -74,15 +71,19 @@ public class UserServiceTest {
     @Test
     void updateUser() {
         //given
-        userRepository.save(getDefaultUser());
+        authSetUp("1");
 
-        String bio = "update bio";
         String email = "update@email.com";
-        String image = "update image";
+        String username = "updateUsername";
+        String password = "87654321";
+        String bio = "updateBio";
+        String image = "updateImage";
 
         UserUpdateRequestDto dto = UserUpdateRequestDto.builder()
-                .bio(bio)
                 .email(email)
+                .username(username)
+                .password(password)
+                .bio(bio)
                 .image(image)
                 .build();
 
@@ -100,13 +101,13 @@ public class UserServiceTest {
     void getUserByUsername() {
         //given
         User user = getDefaultUser();
-        userRepository.save(user);
 
         //when
-        User findUser = userService.findUserByUsername(user.getProfile().getUsername()).orElseThrow(() -> new UserNotFoundException(USER_ID.getMessage() + user.getProfile().getUsername()));
+        User findUser = userService.findUserByUsername(user.getProfile().getUsername()).orElseThrow(() -> new UserNotFoundException(USERNAME.getMessage() + user.getProfile().getUsername()));
 
         //then
-        assertThat(user.getId()).isEqualTo(findUser.getId());
+        assertThat(user.getEmail()).isEqualTo(findUser.getEmail());
+        assertThat(user.getProfile().getUsername()).isEqualTo(findUser.getProfile().getUsername());
     }
     
     @Test
@@ -120,22 +121,19 @@ public class UserServiceTest {
     @Test
     void getCurrentUser_userNotFound() {
         // given
-        org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User("1", "", Collections.emptyList());
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(principal, "token", Collections.emptyList()));
+        authSetUp("2");
 
         // when
         // then
-        assertThatThrownBy(() -> userService.getCurrentUser()).isInstanceOf(UserNotFoundException.class).hasMessage("User userId:1 dose not found.");
+        assertThatThrownBy(() -> userService.getCurrentUser()).isInstanceOf(UserNotFoundException.class).hasMessage("User userId:2 dose not found.");
     }
 
     @Test
     void login() {
         //given
-        User user = getDefaultUser();
-        userRepository.save(user);
         UserLoginRequestDto dto = UserLoginRequestDto.builder()
                 .email("realworld@email.com")
-                .password("1234")
+                .password("12345678")
                 .build();
 
         //when
@@ -143,6 +141,11 @@ public class UserServiceTest {
 
         //then
         assertThat(result.getEmail()).isEqualTo("realworld@email.com");
+    }
+
+    private void authSetUp(String userId) {
+        org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User(userId, "", Collections.emptyList());
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(principal, "token", Collections.emptyList()));
     }
 
     private User getDefaultUser() {

@@ -8,6 +8,7 @@ import javax.persistence.*;
 @ToString
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "users")
 public class User {
 
     @Id
@@ -29,5 +30,11 @@ public class User {
         this.email = email;
         this.password = password;
         this.profile = profile;
+    }
+
+    public void updateUserInfo(String email, String username, String password, String image, String bio) {
+        this.email = email;
+        this.password = password;
+        this.profile.updateProfile(username, bio, image);
     }
 }

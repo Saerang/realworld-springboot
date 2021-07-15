@@ -1,7 +1,5 @@
 package io.realworld.user.api.dto;
 
-import io.realworld.user.domain.Profile;
-import io.realworld.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,25 +8,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserUpdateRequestDto {
     private String email;
-    private String bio;
+    private String username;
+    private String password;
     private String image;
+    private String bio;
 
     @Builder
-    public UserUpdateRequestDto(String email, String bio, String image) {
+    public UserUpdateRequestDto(String email, String username, String password, String image, String bio) {
         this.email = email;
-        this.bio = bio;
+        this.username = username;
+        this.password = password;
         this.image = image;
+        this.bio = bio;
     }
 
-    public User toEntity() {
-        Profile profile = Profile.builder()
-                .bio(this.bio)
-                .image(this.image)
-                .build();
-
-        return User.builder()
-                .profile(profile)
-                .email(this.email)
-                .build();
-    }
 }
