@@ -1,8 +1,10 @@
 package io.realworld.user.app;
 
 import io.realworld.user.api.dto.UserCreateRequestDto;
+import io.realworld.user.api.dto.UserLoginRequestDto;
 import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
+import io.realworld.user.app.enumerate.LoginType;
 import io.realworld.user.app.exception.UserAlreadyExist;
 import io.realworld.user.app.exception.UserNotFoundException;
 import io.realworld.user.domain.Profile;
@@ -18,6 +20,8 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Collections;
 
+import static io.realworld.user.app.enumerate.LoginType.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -37,7 +41,7 @@ public class UserServiceTest {
         //given
         UserCreateRequestDto dto = UserCreateRequestDto.builder()
                 .username("realworld")
-                .email("realworld@gmail.com")
+                .email("realworld@email.com")
                 .password("1234")
                 .build();
 
@@ -47,7 +51,7 @@ public class UserServiceTest {
         em.flush();
         em.clear();
 
-        User findUser = userRepository.findByEmail(user.getEmail()).get();
+        User findUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + user.getEmail()));
 
         //then
         assertThat(user.getEmail()).isEqualTo(findUser.getEmail());
@@ -59,7 +63,7 @@ public class UserServiceTest {
         userRepository.save(getDefaultUser());
         UserCreateRequestDto dto = UserCreateRequestDto.builder()
                 .username("realworld")
-                .email("realworld@gmail.com")
+                .email("realworld@email.com")
                 .password("1234")
                 .build();
 
@@ -73,7 +77,7 @@ public class UserServiceTest {
         userRepository.save(getDefaultUser());
 
         String bio = "update bio";
-        String email = "update@gmail.com";
+        String email = "update@email.com";
         String image = "update image";
 
         UserUpdateRequestDto dto = UserUpdateRequestDto.builder()
@@ -83,8 +87,8 @@ public class UserServiceTest {
                 .build();
 
         //when
-        User user = userService.updateUser(dto);
-        User findUser = userRepository.findById(user.getId()).get();
+        UserResponseDto user = userService.updateUser(dto);
+        User findUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + user.getEmail()));
 
         //then
         assertThat(findUser.getEmail()).isEqualTo(email);
@@ -99,7 +103,7 @@ public class UserServiceTest {
         userRepository.save(user);
 
         //when
-        User findUser = userService.findUserByUsername(user.getProfile().getUsername()).get();
+        User findUser = userService.findUserByUsername(user.getProfile().getUsername()).orElseThrow(() -> new UserNotFoundException(USER_ID.getMessage() + user.getProfile().getUsername()));
 
         //then
         assertThat(user.getId()).isEqualTo(findUser.getId());
@@ -124,6 +128,23 @@ public class UserServiceTest {
         assertThatThrownBy(() -> userService.getCurrentUser()).isInstanceOf(UserNotFoundException.class).hasMessage("User userId:1 dose not found.");
     }
 
+    @Test
+    void login() {
+        //given
+        User user = getDefaultUser();
+        userRepository.save(user);
+        UserLoginRequestDto dto = UserLoginRequestDto.builder()
+                .email("realworld@email.com")
+                .password("1234")
+                .build();
+
+        //when
+        UserResponseDto result = userService.login(dto);
+
+        //then
+        assertThat(result.getEmail()).isEqualTo("realworld@email.com");
+    }
+
     private User getDefaultUser() {
         Profile profile = Profile.builder()
                 .username("realworld")
@@ -131,7 +152,8 @@ public class UserServiceTest {
                 .build();
         return User.builder()
                 .profile(profile)
-                .email("realworld@gmail.com")
+                .email("realworld@email.com")
+                .password("1234")
                 .build();
     }
 

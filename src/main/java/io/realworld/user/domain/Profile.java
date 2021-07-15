@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Transient;
 
 @Embeddable
 @Getter
@@ -15,8 +14,6 @@ public class Profile {
     private String username;
     private String bio;
     private String image;
- //   @Transient
- //   private boolean following;
 
     @Builder
     public Profile(String username, String bio, String image) {

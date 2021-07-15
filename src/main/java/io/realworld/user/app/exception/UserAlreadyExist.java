@@ -2,6 +2,10 @@ package io.realworld.user.app.exception;
 
 public class UserAlreadyExist extends RuntimeException {
     public UserAlreadyExist() {
-        super();
+        this(null);
+    }
+
+    public UserAlreadyExist(String userId) {
+        super("User " + userId + "already exist.");
     }
 }

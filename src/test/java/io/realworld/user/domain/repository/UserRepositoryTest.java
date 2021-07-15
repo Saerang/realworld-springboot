@@ -1,5 +1,6 @@
 package io.realworld.user.domain.repository;
 
+import io.realworld.user.app.exception.UserNotFoundException;
 import io.realworld.user.domain.Profile;
 import io.realworld.user.domain.User;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import static io.realworld.user.app.enumerate.LoginType.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -28,7 +30,7 @@ public class UserRepositoryTest {
                 .build();
         User user = User.builder()
                 .profile(profile)
-                .email("realworld@gmail.com")
+                .email("realworld@email.com")
                 .build();
         assertThat(user.getId()).isNull();
 
@@ -39,7 +41,7 @@ public class UserRepositoryTest {
         em.flush();
         em.clear();
 
-        User findUser = userRepository.findById(user.getId()).get();
+        User findUser = userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException(USER_ID.getMessage() + user.getId()));
 
 
         //then

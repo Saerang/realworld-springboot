@@ -2,6 +2,8 @@ package io.realworld.user.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.realworld.user.api.dto.UserCreateRequestDto;
+import io.realworld.user.api.dto.UserLoginRequestDto;
+import io.realworld.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,32 +27,54 @@ public class UserControllerTest {
     ObjectMapper objectMapper;
     @Autowired
     MockMvc mockMvc;
+    @Autowired
+    UserRepository userRepository;
 
     @Test
     void createUser() throws Exception {
-        //given
+        // given
         UserCreateRequestDto dto = UserCreateRequestDto.builder()
                 .username("realworld")
-                .email("realworld@gmail.com")
+                .email("realworld@email.com")
                 .password("1234")
                 .build();
         String jsonDto = objectMapper.writeValueAsString(dto);
 
+        // when
+        // then
         mockMvc.perform(post("/api/users").contentType(MediaType.APPLICATION_JSON).content(jsonDto))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$..token").isNotEmpty())
                 .andExpect(jsonPath("$..username").value("realworld"))
-                .andExpect(jsonPath("$..email").value("realworld@gmail.com"));
+                .andExpect(jsonPath("$..email").value("realworld@email.com"));
     }
 
     @Test
-    void login() {
-        //given
+    void login() throws Exception {
+        // given
+        UserCreateRequestDto dto = UserCreateRequestDto.builder()
+                .username("realworld")
+                .email("realworld@email.com")
+                .password("1234")
+                .build();
+        userRepository.save(dto.toEntity());
 
+        UserLoginRequestDto loginDto = UserLoginRequestDto.builder()
+                .email("realworld@email.com")
+                .password("1234")
+                .build();
 
-        //when
+        String jsonDto = objectMapper.writeValueAsString(loginDto);
 
-        //then
+        // when
+        // then
+        mockMvc.perform(post("/api/users/login").contentType(MediaType.APPLICATION_JSON).content(jsonDto))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$..token").isNotEmpty())
+                .andExpect(jsonPath("$..username").value("realworld"))
+                .andExpect(jsonPath("$..email").value("realworld@email.com"));
     }
 
 }

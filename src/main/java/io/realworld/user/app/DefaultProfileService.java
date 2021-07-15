@@ -19,6 +19,7 @@ public class DefaultProfileService implements ProfileService {
     @Override
     public ProfileResponseDto getProfile(String username) {
         User user = userService.findUserByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+
         return Mappers.toProfileResponseDto(user, false);
     }
 
