@@ -20,8 +20,8 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Collections;
 
-import static io.realworld.user.app.enumerate.LoginType.*;
-import static org.assertj.core.api.Assertions.*;
+import static io.realworld.user.app.enumerate.LoginType.EMAIL;
+import static io.realworld.user.app.enumerate.LoginType.USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -35,24 +35,6 @@ public class UserServiceTest {
     private EntityManager em;
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Test
-    void encode() {
-        //given
-        String rawPassword = "12345678";
-        // String password = passwordEncoder.encode(rawPassword);
-        String password = "$2a$10$/Hxqaf3ZfncnQGn2/Qg2R.Uacd2ElztD.4viYFF6jPHeBrqoG9M/m";
-
-        //when
-
-        System.out.println(password);
-
-        //
-        assertThat(passwordEncoder.matches(rawPassword, password)).isTrue();
-    }
 
     @Test
     void createUser() {
@@ -80,7 +62,7 @@ public class UserServiceTest {
         //given
         UserCreateRequestDto dto = UserCreateRequestDto.builder()
                 .username("realworld")
-                .email("realworld@email.com")
+                .email("realworld1@email.com")
                 .password("1234")
                 .build();
 
@@ -141,18 +123,18 @@ public class UserServiceTest {
     @Test
     void getCurrentUser_userNotFound() {
         // given
-        authSetUp("2");
+        authSetUp("99");
 
         // when
         // then
-        assertThatThrownBy(() -> userService.getCurrentUser()).isInstanceOf(UserNotFoundException.class).hasMessage("User userId:2 dose not found.");
+        assertThatThrownBy(() -> userService.getCurrentUser()).isInstanceOf(UserNotFoundException.class).hasMessage("User userId:99 dose not found.");
     }
 
     @Test
     void login() {
         //given
         UserLoginRequestDto dto = UserLoginRequestDto.builder()
-                .email("realworld@email.com")
+                .email("realworld1@email.com")
                 .password("12345678")
                 .build();
 
@@ -160,7 +142,7 @@ public class UserServiceTest {
         UserResponseDto result = userService.login(dto);
 
         //then
-        assertThat(result.getEmail()).isEqualTo("realworld@email.com");
+        assertThat(result.getEmail()).isEqualTo("realworld1@email.com");
     }
 
     private void authSetUp(String userId) {
@@ -170,12 +152,12 @@ public class UserServiceTest {
 
     private User getDefaultUser() {
         Profile profile = Profile.builder()
-                .username("realworld")
+                .username("realworld1")
                 .bio("I work at statefarm")
                 .build();
         return User.builder()
                 .profile(profile)
-                .email("realworld@email.com")
+                .email("realworld1@email.com")
                 .password("1234")
                 .build();
     }

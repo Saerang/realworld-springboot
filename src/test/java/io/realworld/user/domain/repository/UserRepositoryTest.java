@@ -30,7 +30,7 @@ public class UserRepositoryTest {
                 .build();
         User user = User.builder()
                 .profile(profile)
-                .email("new_realworld@email.com")
+                .email("new_realworld1@email.com")
                 .build();
         assertThat(user.getId()).isNull();
 

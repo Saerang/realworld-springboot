@@ -62,10 +62,7 @@ public class JwtTokenProvider implements InitializingBean {
             IllegalArgumentException – if the claimsJws string is null or empty or only whitespace
          */
         try {
-            Claims body = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-
-            log.debug(body.getSubject());
-            log.debug(String.valueOf(body.getExpiration()));
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
             return true;
         } catch (SecurityException | MalformedJwtException e) {
         } catch (ExpiredJwtException e) {

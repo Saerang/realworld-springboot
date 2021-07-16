@@ -3,12 +3,10 @@ package io.realworld.user.api;
 import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserLoginRequestDto;
 import io.realworld.user.api.dto.UserResponseDto;
+import io.realworld.user.api.dto.UserUpdateRequestDto;
 import io.realworld.user.app.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -25,5 +23,15 @@ public class UserController {
     @PostMapping("/users/login")
     public UserResponseDto login(@RequestBody UserLoginRequestDto dto) {
         return userService.login(dto);
+    }
+
+    @GetMapping("/user")
+    public UserResponseDto getCurrentUser() {
+        return userService.getCurrentUser();
+    }
+
+    @PutMapping("/user")
+    public UserResponseDto updateUser(@RequestBody UserUpdateRequestDto dto) {
+        return userService.updateUser(dto);
     }
 }

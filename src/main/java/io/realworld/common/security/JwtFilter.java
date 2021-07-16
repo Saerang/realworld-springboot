@@ -1,6 +1,8 @@
 package io.realworld.common.security;
 
+import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -17,8 +19,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
     final private JwtTokenProvider jwtTokenProvider;
 
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = resolveToken(request);
@@ -32,10 +32,11 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        String tokenPrefix = "Token ";
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        if (StringUtils.hasText(token) && token.startsWith(tokenPrefix)) {
+            return token.substring(tokenPrefix.length());
         }
 
         return null;

@@ -62,6 +62,7 @@ public class DefaultUserService implements UserService {
         return getUserResponseDto(user);
     }
 
+    @Override
     @Transactional(readOnly = true)
     public User findCurrentUser() {
         // ToDo: service 분리하는게 좋아보임.
@@ -96,20 +97,20 @@ public class DefaultUserService implements UserService {
     @Override
     public UserResponseDto login(UserLoginRequestDto dto) {
         User user = getUserByEmail(dto.getEmail());
-        //$2a$10$/Hxqaf3ZfncnQGn2/Qg2R.Uacd2ElztD.4viYFF6jPHeBrqoG9M/m
-        if(passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+
+        if(!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new PasswordNotMatchedException(user.getId());
         }
 
         return getUserResponseDto(user);
     }
 
-    private User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + email));
-    }
-
     private UserResponseDto getUserResponseDto(User user) {
         return Mappers.toUserCreateResponseDto(user, jwtTokenProvider.createToken(user.getId()));
+    }
+
+    private User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + email));
     }
 
     private String passwordEncode(String password) {

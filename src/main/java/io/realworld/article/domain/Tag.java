@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -15,10 +16,15 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="tag_id")
     private Long id;
+
     private String tag;
 
+    @OneToMany(mappedBy = "tag")
+    private Set<ArticleTag> articleTags;
+
     @Builder
-    public Tag(String tag) {
+    public Tag(String tag, Set<ArticleTag> articleTags) {
         this.tag = tag;
+        this.articleTags = articleTags;
     }
 }

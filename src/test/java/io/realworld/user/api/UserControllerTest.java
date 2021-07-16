@@ -1,19 +1,24 @@
 package io.realworld.user.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.realworld.common.security.JwtTokenProvider;
 import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserLoginRequestDto;
+import io.realworld.user.api.dto.UserResponseDto;
+import io.realworld.user.api.dto.UserUpdateRequestDto;
 import io.realworld.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,12 +34,14 @@ public class UserControllerTest {
     MockMvc mockMvc;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
     @Test
     void createUser() throws Exception {
         // given
         String username = "new_realworld";
-        String email = "new_realworld@email.com";
+        String email = "new_realworld1@email.com";
         UserCreateRequestDto dto = UserCreateRequestDto.builder()
                 .username(username)
                 .email(email)
@@ -56,7 +63,7 @@ public class UserControllerTest {
     void login() throws Exception {
         // given
         UserLoginRequestDto loginDto = UserLoginRequestDto.builder()
-                .email("realworld@email.com")
+                .email("realworld1@email.com")
                 .password("12345678")
                 .build();
 
@@ -68,8 +75,46 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$..token").isNotEmpty())
-                .andExpect(jsonPath("$..username").value("realworld"))
-                .andExpect(jsonPath("$..email").value("realworld@email.com"));
+                .andExpect(jsonPath("$..username").value("realworld1"))
+                .andExpect(jsonPath("$..email").value("realworld1@email.com"));
+    }
+
+    @Test
+    void getCurrentUser() throws Exception {
+        // given
+        String token = jwtTokenProvider.createToken(1);
+
+        // when
+        // then
+        mockMvc.perform(get("/api/user").contentType(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "Token " + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$..token").isNotEmpty())
+                .andExpect(jsonPath("$..username").value("realworld1"))
+                .andExpect(jsonPath("$..email").value("realworld1@email.com"));
+    }
+
+    @Test
+    void updateUser() throws Exception {
+        // given
+        String token = jwtTokenProvider.createToken(1);
+        UserUpdateRequestDto dto = UserUpdateRequestDto.builder()
+                .email("new_realworld1@email.com")
+                .username("new_realworld")
+                .password("87654321")
+                .build();
+        String jsonRequestDto = objectMapper.writeValueAsString(dto);
+
+        // when
+        // then
+        mockMvc.perform(put("/api/user").contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequestDto)
+                .header(HttpHeaders.AUTHORIZATION, "Token " + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$..token").isNotEmpty())
+                .andExpect(jsonPath("$..username").value("new_realworld"))
+                .andExpect(jsonPath("$..email").value("new_realworld1@email.com"));
     }
 
 }
