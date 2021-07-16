@@ -1,6 +1,7 @@
 package io.realworld.user.domain;
 
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 
@@ -15,6 +16,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
+    @Column(unique = true)
     private String email;
     private String password;
 
@@ -36,5 +38,9 @@ public class User {
         this.email = email;
         this.password = password;
         this.profile.updateProfile(username, bio, image);
+    }
+
+    public boolean isPasswordMatched(String password) {
+        return StringUtils.equals(password, this.password);
     }
 }

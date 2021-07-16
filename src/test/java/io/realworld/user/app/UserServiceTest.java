@@ -14,12 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Collections;
 
 import static io.realworld.user.app.enumerate.LoginType.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -33,6 +35,24 @@ public class UserServiceTest {
     private EntityManager em;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Test
+    void encode() {
+        //given
+        String rawPassword = "12345678";
+        // String password = passwordEncoder.encode(rawPassword);
+        String password = "$2a$10$/Hxqaf3ZfncnQGn2/Qg2R.Uacd2ElztD.4viYFF6jPHeBrqoG9M/m";
+
+        //when
+
+        System.out.println(password);
+
+        //
+        assertThat(passwordEncoder.matches(rawPassword, password)).isTrue();
+    }
 
     @Test
     void createUser() {

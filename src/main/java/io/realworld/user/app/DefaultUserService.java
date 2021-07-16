@@ -41,7 +41,7 @@ public class DefaultUserService implements UserService {
             throw new UserAlreadyExist(optionalUser.get().getId());
         }
 
-        User user = new User(dto.getEmail(), passwordEncoder.encode(dto.getPassword()), dto.getUsername());
+        User user = new User(dto.getEmail(), passwordEncode(dto.getPassword()), dto.getUsername());
         User saveUser = userRepository.save(user);
 
         return getUserResponseDto(saveUser);
@@ -89,15 +89,15 @@ public class DefaultUserService implements UserService {
         }
 
         User user = findCurrentUser();
-        user.updateUserInfo(dto.getEmail(), dto.getUsername(), passwordEncoder.encode(dto.getPassword()), dto.getImage(), dto.getBio());
+        user.updateUserInfo(dto.getEmail(), dto.getUsername(), passwordEncode(dto.getPassword()), dto.getImage(), dto.getBio());
         return getUserResponseDto(user);
     }
 
     @Override
     public UserResponseDto login(UserLoginRequestDto dto) {
         User user = getUserByEmail(dto.getEmail());
-
-        if(!dto.getPassword().equals(user.getPassword())) {
+        //$2a$10$/Hxqaf3ZfncnQGn2/Qg2R.Uacd2ElztD.4viYFF6jPHeBrqoG9M/m
+        if(passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new PasswordNotMatchedException(user.getId());
         }
 
@@ -110,6 +110,10 @@ public class DefaultUserService implements UserService {
 
     private UserResponseDto getUserResponseDto(User user) {
         return Mappers.toUserCreateResponseDto(user, jwtTokenProvider.createToken(user.getId()));
+    }
+
+    private String passwordEncode(String password) {
+        return passwordEncoder.encode(password);
     }
 
 }

@@ -25,12 +25,12 @@ public class UserRepositoryTest {
     void persistence() {
         //given
         Profile profile = Profile.builder()
-                .username("realworld")
+                .username("new realworld")
                 .bio("I work at statefarm")
                 .build();
         User user = User.builder()
                 .profile(profile)
-                .email("realworld@email.com")
+                .email("new_realworld@email.com")
                 .build();
         assertThat(user.getId()).isNull();
 

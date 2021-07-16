@@ -15,6 +15,7 @@ import java.util.List;
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="article_id")
     private Long id;
     private String slug;
     private String title;
