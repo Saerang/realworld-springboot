@@ -1,6 +1,5 @@
 package io.realworld.common.security;
 
-import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
