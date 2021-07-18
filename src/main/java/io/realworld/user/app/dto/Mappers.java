@@ -1,5 +1,8 @@
 package io.realworld.user.app.dto;
 
+import io.realworld.article.api.dto.ArticleResponseDto;
+import io.realworld.article.api.dto.SingleArticleResponseDto;
+import io.realworld.article.domain.Article;
 import io.realworld.user.api.dto.ProfileResponseDto;
 import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.domain.User;
@@ -27,4 +30,28 @@ public class Mappers {
 
         return ProfileResponseDto.builder().profile(profileDto).build();
     }
+
+    public static SingleArticleResponseDto toSingleArticleResponseDto(Article article, User user, boolean isFollowing) {
+        ArticleResponseDto.Author author = ArticleResponseDto.Author.builder()
+                .username(user.getUsername())
+                .bio(user.getProfile().getBio())
+                .image(user.getProfile().getImage())
+                .following(isFollowing)
+                .build();
+
+        ArticleResponseDto articleResponseDto = ArticleResponseDto.builder()
+                .title(article.getTitle())
+                .body(article.getBody())
+                .description(article.getDescription())
+                .favorited(article.isFavorited())
+                .favoritesCount(article.getFavoritesCount())
+                .slug(article.getSlug())
+                .createdAt(article.getCreatedAt())
+                .updatedAt(article.getUpdatedAt())
+                .author(author)
+                .build();
+
+        return SingleArticleResponseDto.builder().article(articleResponseDto).build();
+    }
+
 }

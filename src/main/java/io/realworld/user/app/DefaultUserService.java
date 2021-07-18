@@ -9,6 +9,7 @@ import io.realworld.user.app.dto.Mappers;
 import io.realworld.common.exception.PasswordNotMatchedException;
 import io.realworld.common.exception.UserAlreadyExist;
 import io.realworld.common.exception.UserNotFoundException;
+import io.realworld.user.domain.Profile;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,11 @@ public class DefaultUserService implements UserService {
             throw new UserAlreadyExist(optionalUser.get().getId());
         }
 
-        User user = new User(dto.getEmail(), passwordEncode(dto.getPassword()), dto.getUsername());
+        User user = User.builder()
+                .email(dto.getEmail())
+                .password(passwordEncode(dto.getPassword()))
+                .profile(Profile.builder().username(dto.getUsername()).build())
+                .build();
         User saveUser = userRepository.save(user);
 
         return getUserResponseDto(saveUser);
@@ -58,8 +63,7 @@ public class DefaultUserService implements UserService {
 
         long userId = Long.parseLong(authentication.getName());
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(USER_ID.getMessage() + userId));
-        return getUserResponseDto(user);
+        return getUserResponseDto(getUserById(userId));
     }
 
     @Override
@@ -73,6 +77,11 @@ public class DefaultUserService implements UserService {
 
         long userId = Long.parseLong(authentication.getName());
 
+        return getUserById(userId);
+    }
+
+    @Override
+    public User getUserById(long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(USER_ID.getMessage() + userId));
     }
 

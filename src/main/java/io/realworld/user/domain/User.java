@@ -40,7 +40,8 @@ public class User {
         this.profile.updateProfile(username, bio, image);
     }
 
-    public boolean isPasswordMatched(String password) {
-        return StringUtils.equals(password, this.password);
+    public String getUsername() {
+        return this.getProfile().getUsername();
     }
+
 }

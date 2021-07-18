@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS article (
     slug varchar(255),
     title varchar(255),
     user_id bigint,
+    created_at datetime(3),
+    updated_at datetime(3),
     primary key (article_id),
     foreign key (user_id) references users(user_id)
 );

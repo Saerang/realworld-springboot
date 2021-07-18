@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +29,8 @@ public class Article {
     private boolean favorited;
     private int favoritesCount;
     private Long userId;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @Builder
     public Article(String slug, String title, String description, String body, Set<ArticleTag> articleTags, boolean favorited, int favoritesCount, Long userId) {

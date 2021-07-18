@@ -1,5 +1,6 @@
 package io.realworld.article.api.dto;
 
+import io.realworld.article.domain.Tag;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,5 +11,11 @@ public class TagResponseDto {
     @Builder
     public TagResponseDto(String tag) {
         this.tag = tag;
+    }
+
+    public static Tag toEntity(TagResponseDto dto) {
+        return Tag.builder()
+                .tag(dto.getTag())
+                .build();
     }
 }

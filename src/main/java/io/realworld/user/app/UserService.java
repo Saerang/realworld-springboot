@@ -21,4 +21,6 @@ public interface UserService {
     UserResponseDto login(UserLoginRequestDto dto);
 
     User findCurrentUser();
+
+    User getUserById(long userId);
 }

@@ -32,6 +32,7 @@ public class UserRepositoryTest {
                 .profile(profile)
                 .email("new_realworld1@email.com")
                 .build();
+
         assertThat(user.getId()).isNull();
 
         //when

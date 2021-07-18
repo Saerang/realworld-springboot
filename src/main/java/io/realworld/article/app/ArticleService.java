@@ -1,9 +1,8 @@
 package io.realworld.article.app;
 
 import io.realworld.article.api.dto.ArticleCreateDto;
-import io.realworld.article.api.dto.ArticleResponseDto;
-import io.realworld.article.domain.Article;
+import io.realworld.article.api.dto.SingleArticleResponseDto;
 
 public interface ArticleService {
-    ArticleResponseDto createArticle(ArticleCreateDto article);
+    SingleArticleResponseDto createArticle(ArticleCreateDto article);
 }

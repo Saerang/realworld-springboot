@@ -104,7 +104,8 @@ public class UserServiceTest {
         User user = getDefaultUser();
 
         //when
-        User findUser = userService.findUserByUsername(user.getProfile().getUsername()).orElseThrow(() -> new UserNotFoundException(USERNAME.getMessage() + user.getProfile().getUsername()));
+        User findUser = userService.findUserByUsername(user.getProfile().getUsername())
+                .orElseThrow(() -> new UserNotFoundException(USERNAME.getMessage() + user.getProfile().getUsername()));
 
         //then
         assertThat(user.getEmail()).isEqualTo(findUser.getEmail());
@@ -150,12 +151,8 @@ public class UserServiceTest {
     }
 
     private User getDefaultUser() {
-        Profile profile = Profile.builder()
-                .username("realworld1")
-                .bio("bio")
-                .build();
         return User.builder()
-                .profile(profile)
+                .profile(Profile.builder().username("realworld1").build())
                 .email("realworld1@email.com")
                 .password("1234")
                 .build();
