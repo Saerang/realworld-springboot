@@ -32,12 +32,12 @@ public class Mappers {
     }
 
     public static SingleArticleResponseDto toSingleArticleResponseDto(Article article, User user, boolean isFollowing) {
-        ArticleResponseDto.Author author = ArticleResponseDto.Author.builder()
-                .username(user.getUsername())
-                .bio(user.getProfile().getBio())
-                .image(user.getProfile().getImage())
-                .following(isFollowing)
-                .build();
+//        ArticleResponseDto.Author author = ArticleResponseDto.Author.builder()
+//                .username(user.getUsername())
+//                .bio(user.getProfile().getBio())
+//                .image(user.getProfile().getImage())
+//                .following(isFollowing)
+//                .build();
 
         ArticleResponseDto articleResponseDto = ArticleResponseDto.builder()
                 .title(article.getTitle())
@@ -48,7 +48,7 @@ public class Mappers {
                 .slug(article.getSlug())
                 .createdAt(article.getCreatedAt())
                 .updatedAt(article.getUpdatedAt())
-                .author(author)
+                .author(null)
                 .build();
 
         return SingleArticleResponseDto.builder().article(articleResponseDto).build();
