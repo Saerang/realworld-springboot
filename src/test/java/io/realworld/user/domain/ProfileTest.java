@@ -9,9 +9,8 @@ public class ProfileTest {
     @Test
     void createProfile() {
         //given
-        Profile profile = new Profile("realworld", "bio", "image");
-
         //when
+        Profile profile = new Profile("realworld", "bio", "image");
 
         //then
         assertThat(profile.getUsername()).isEqualTo("realworld");

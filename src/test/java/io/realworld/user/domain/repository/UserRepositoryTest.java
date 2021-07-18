@@ -1,6 +1,6 @@
 package io.realworld.user.domain.repository;
 
-import io.realworld.user.app.exception.UserNotFoundException;
+import io.realworld.common.exception.UserNotFoundException;
 import io.realworld.user.domain.Profile;
 import io.realworld.user.domain.User;
 import org.junit.jupiter.api.Test;

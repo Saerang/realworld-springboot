@@ -32,15 +32,6 @@ class WebSecurityConfigTest {
     }
 
     @Test
-    @WithAnonymousUser
-    void forbidden() throws Exception {
-        mockMvc.perform(post("/profiles/{username}/follow", "username").contentType(APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isForbidden())
-                .andReturn();
-    }
-
-    @Test
     void notFound() throws Exception {
         mockMvc.perform(post("/test/notfound").contentType(APPLICATION_JSON))
                 .andDo(print())

@@ -1,4 +1,4 @@
-package io.realworld.user.app.exception;
+package io.realworld.common.exception;
 
 import org.apache.commons.lang3.StringUtils;
 

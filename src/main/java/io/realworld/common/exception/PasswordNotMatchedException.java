@@ -1,4 +1,4 @@
-package io.realworld.user.app.exception;
+package io.realworld.common.exception;
 
 public class PasswordNotMatchedException extends RuntimeException {
     public PasswordNotMatchedException(long userId) {

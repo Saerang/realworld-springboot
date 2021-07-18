@@ -1,8 +1,5 @@
-package io.realworld.user.domain;
+package io.realworld.article.domain;
 
-import io.realworld.article.domain.Article;
-import io.realworld.article.domain.ArticleTag;
-import io.realworld.article.domain.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

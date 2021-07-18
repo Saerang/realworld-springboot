@@ -2,7 +2,7 @@ package io.realworld.user.app;
 
 import io.realworld.user.api.dto.ProfileResponseDto;
 import io.realworld.user.app.dto.Mappers;
-import io.realworld.user.app.exception.UserNotFoundException;
+import io.realworld.common.exception.UserNotFoundException;
 import io.realworld.user.domain.FollowRelation;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.FollowRelationRepository;

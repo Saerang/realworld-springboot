@@ -1,34 +1,29 @@
-package io.realworld.user.domain.repository;
+package io.realworld.article.domain.repository;
 
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.ArticleTag;
 import io.realworld.article.domain.Tag;
-import io.realworld.user.domain.FollowRelation;
-import org.assertj.core.util.Arrays;
+import io.realworld.user.domain.repository.ArticleTagRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import java.util.List;
-import java.util.Set;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class ArticleRepositoryTest {
+public class ArticleTagRepositoryTest {
+    
     @Autowired
-    ArticleRepository articleRepository;
-    @Autowired
-    TagRepository tagRepository;
+    ArticleTagRepository articleTagRepository;
     @Autowired
     TestEntityManager em;
 
     @Test
-    void persistence() {
-        //given
+    void persistence() throws IllegalAccessException {
+        // given
         Article article = Article.builder()
                 .slug("slug")
                 .body("body")
@@ -38,27 +33,26 @@ public class ArticleRepositoryTest {
                 .title("title")
                 .userId(1L)
                 .build();
+        em.persist(article);
 
-//        Tag tag = Tag.builder().tag("tag").build();
-//        em.persist(tag);
-//
-//        ArticleTag articleTag = ArticleTag.builder()
-//                .article(article)
-//                .tag(tag)
-//                .build();
-//        em.persist(articleTag);
+        Tag tag = Tag.builder().tag("tag").build();
+        em.persist(tag);
 
-        //when
-        articleRepository.save(article);
+        // when
+        ArticleTag articleTag = ArticleTag.builder()
+                .article(article)
+                .tag(tag)
+                .build();
+        ArticleTag saveArticleTag = articleTagRepository.save(articleTag);
+
         em.flush();
         em.clear();
 
-        //then
-        Article findArticle = articleRepository.findByUserId(1L).orElse(Article.builder().build());
+        ArticleTag findArticleTag = articleTagRepository.findById(saveArticleTag.getId()).orElseThrow(IllegalAccessException::new);
 
-        assertThat(findArticle.getSlug()).isEqualTo(article.getSlug());
-        assertThat(findArticle.getBody()).isEqualTo(article.getBody());
-        assertThat(findArticle.getUserId()).isEqualTo(article.getUserId());
+        // then
+        assertThat(findArticleTag.getArticle().getUserId()).isEqualTo(1);
+        assertThat(findArticleTag.getArticle().getBody()).isEqualTo("body");
+        assertThat(findArticleTag.getTag().getTag()).isEqualTo("tag");
     }
-
 }

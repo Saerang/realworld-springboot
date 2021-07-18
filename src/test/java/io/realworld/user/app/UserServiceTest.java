@@ -4,8 +4,8 @@ import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserLoginRequestDto;
 import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
-import io.realworld.user.app.exception.UserAlreadyExist;
-import io.realworld.user.app.exception.UserNotFoundException;
+import io.realworld.common.exception.UserAlreadyExist;
+import io.realworld.common.exception.UserNotFoundException;
 import io.realworld.user.domain.Profile;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.UserRepository;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -51,10 +50,10 @@ public class UserServiceTest {
         em.flush();
         em.clear();
 
-        User findUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + user.getEmail()));
+        User findUser = userRepository.findByEmail(user.getUser().getEmail()).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + user.getUser().getEmail()));
 
         //then
-        assertThat(user.getEmail()).isEqualTo(findUser.getEmail());
+        assertThat(user.getUser().getEmail()).isEqualTo(findUser.getEmail());
     }
 
     @Test
@@ -91,7 +90,7 @@ public class UserServiceTest {
 
         //when
         UserResponseDto user = userService.updateUser(dto);
-        User findUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + user.getEmail()));
+        User findUser = userRepository.findByEmail(user.getUser().getEmail()).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + user.getUser().getEmail()));
 
         //then
         assertThat(findUser.getEmail()).isEqualTo(email);
@@ -142,7 +141,7 @@ public class UserServiceTest {
         UserResponseDto result = userService.login(dto);
 
         //then
-        assertThat(result.getEmail()).isEqualTo("realworld1@email.com");
+        assertThat(result.getUser().getEmail()).isEqualTo("realworld1@email.com");
     }
 
     private void authSetUp(String userId) {
@@ -153,7 +152,7 @@ public class UserServiceTest {
     private User getDefaultUser() {
         Profile profile = Profile.builder()
                 .username("realworld1")
-                .bio("I work at statefarm")
+                .bio("bio")
                 .build();
         return User.builder()
                 .profile(profile)

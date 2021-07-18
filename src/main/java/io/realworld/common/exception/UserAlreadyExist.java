@@ -1,4 +1,4 @@
-package io.realworld.user.app.exception;
+package io.realworld.common.exception;
 
 public class UserAlreadyExist extends RuntimeException {
     public UserAlreadyExist(Long userId) {

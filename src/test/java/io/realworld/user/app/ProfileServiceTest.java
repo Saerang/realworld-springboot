@@ -40,7 +40,7 @@ public class ProfileServiceTest {
         ProfileResponseDto dto = profileService.getProfile(user.getProfile().getUsername());
          
         //then
-        assertThat(dto.getUsername()).isEqualTo(user.getProfile().getUsername());
+        assertThat(dto.getProfile().getUsername()).isEqualTo(user.getProfile().getUsername());
     }
     
     @Test
@@ -57,8 +57,8 @@ public class ProfileServiceTest {
         ProfileResponseDto profileResponseDto = profileService.followUser(follower.getId(), followee.getProfile().getUsername());
 
         //then
-        assertThat(profileResponseDto.getUsername()).isEqualTo(followee.getProfile().getUsername());
-        assertThat(profileResponseDto.isFollowing()).isTrue();
+        assertThat(profileResponseDto.getProfile().isFollowing()).isTrue();
+        assertThat(profileResponseDto.getProfile().getUsername()).isEqualTo(followee.getProfile().getUsername());
     }
 
     @Test
@@ -78,8 +78,8 @@ public class ProfileServiceTest {
         List<FollowRelation> followRelations = followRelationRepository.findByFollowRelationId_FollowerId(follower.getId());
 
         //then
-        assertThat(profileResponseDto.getUsername()).isEqualTo(followee.getProfile().getUsername());
-        assertThat(profileResponseDto.isFollowing()).isFalse();
+        assertThat(profileResponseDto.getProfile().isFollowing()).isFalse();
+        assertThat(profileResponseDto.getProfile().getUsername()).isEqualTo(followee.getProfile().getUsername());
         assertThat(followRelations).hasSize(0);
     }
 }

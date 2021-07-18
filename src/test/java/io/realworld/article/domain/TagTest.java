@@ -1,4 +1,4 @@
-package io.realworld.user.domain;
+package io.realworld.article.domain;
 
 import io.realworld.article.domain.Tag;
 import org.junit.jupiter.api.Test;
@@ -10,9 +10,8 @@ public class TagTest {
     @Test
     void createTag() {
         // given
-        Tag tag = Tag.builder().tag("tag").build();
-
         // when
+        Tag tag = Tag.builder().tag("tag").build();
 
         // then
         assertThat(tag.getTag()).isEqualTo("tag");
