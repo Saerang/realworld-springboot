@@ -42,7 +42,7 @@ public class ProfileController {
     }
 
     private ProfileResponseDto getProfileResponseDto(Pair<User, Boolean> user) {
-        return Mappers.toProfileResponseDto(user.getLeft(), user.getRight());
+        return Mappers.toProfileResponseDto(user.getKey(), user.getValue());
     }
 }
 

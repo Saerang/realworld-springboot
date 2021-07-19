@@ -1,4 +1,4 @@
-package io.realworld.user.domain.repository;
+package io.realworld.article.domain.repository;
 
 import io.realworld.article.domain.ArticleTag;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -4,5 +4,7 @@ import io.realworld.article.api.dto.ArticleCreateDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 
 public interface ArticleService {
-    SingleArticleResponseDto createArticle(ArticleCreateDto article);
+
+    SingleArticleResponseDto createArticle(ArticleCreateDto article, long userId);
+
 }

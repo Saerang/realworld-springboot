@@ -8,6 +8,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -19,13 +21,16 @@ import java.util.Date;
 public class JwtTokenProvider implements InitializingBean {
     private final String secret;
     private final long tokenValidityMilliseconds;
+    private final UserDetailsService userDetailsService;
     private Key key;
 
     public JwtTokenProvider(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.token-validity-in-seconds}") long tokenValidityMilliseconds) {
+            @Value("${jwt.token-validity-in-seconds}") long tokenValidityMilliseconds,
+            UserDetailsService userDetailsService) {
         this.secret = secret;
         this.tokenValidityMilliseconds = tokenValidityMilliseconds;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -42,25 +47,20 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     public Authentication getAuthentication(String token) {
-        Claims claims = Jwts.parserBuilder()
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserEmail(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", Collections.emptyList());
+    }
+
+    public String getUserEmail(String token) {
+        return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
-                .getBody();
-
-        org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User(claims.getSubject(), "", Collections.emptyList());
-
-        return new UsernamePasswordAuthenticationToken(principal, token, Collections.emptyList());
+                .getBody()
+                .getSubject();
     }
 
     public boolean validateToken(String token) {
-        /*
-            UnsupportedJwtException – if the claimsJws argument does not represent an Claims JWS
-            MalformedJwtException – if the claimsJws string is not a valid JWS
-            SignatureException – if the claimsJws JWS signature validation fails -> SecurityException
-            ExpiredJwtException – if the specified JWT is a Claims JWT and the Claims has an expiration time before the time this method is invoked.
-            IllegalArgumentException – if the claimsJws string is null or empty or only whitespace
-         */
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
             return true;

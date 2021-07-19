@@ -17,14 +17,11 @@ public class DefaultProfileService implements ProfileService {
     @Override
     public Pair<User, Boolean> getProfile(String username) {
         User user = userService.getUserByUsername(username);
-        //user.userUnfollow();
         return Pair.of(user, true);
     }
 
     @Override
     public Pair<User, Boolean> followUser(long followerUserId, String username) {
-        // TODO: controller 에서 id를 넘길까, userService 혹은 현제 세션에 있는 유저로 가져올까.
-        // User user = userService.getCurrentUser();
         User followeeUser = userService.getUserByUsername(username);
 
         FollowRelation followRelation = new FollowRelation(followerUserId, followeeUser.getId());
@@ -35,8 +32,6 @@ public class DefaultProfileService implements ProfileService {
 
     @Override
     public Pair<User, Boolean> unfollowUser(long followerUserId, String username) {
-        // TODO: controller 에서 id를 넘길까, userService 혹은 현제 세션에 있는 유저로 가져올까.
-        // User user = userService.getCurrentUser();
         User followeeUser = userService.getUserByUsername(username);
 
         FollowRelation followRelation = new FollowRelation(followerUserId, followeeUser.getId());

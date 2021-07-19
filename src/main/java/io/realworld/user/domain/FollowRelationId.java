@@ -11,6 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FollowRelationId implements Serializable {
     private Long followerId;
+
     private Long followeeId;
 
     public FollowRelationId(Long followerId, Long followeeId) {

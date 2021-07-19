@@ -2,8 +2,8 @@ package io.realworld.article.app;
 
 import io.realworld.article.api.dto.ArticleCreateDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
-import io.realworld.common.exception.ArticleNotFound;
-import io.realworld.user.domain.repository.ArticleRepository;
+import io.realworld.article.domain.repository.ArticleRepository;
+import io.realworld.common.WithDefaultUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,16 +29,16 @@ public class ArticleServiceTest {
     ArticleRepository articleRepository;
 
     @Test
-    void save() {
+    @WithDefaultUser
+    void createArticle() {
         // given
-        authSetUp("1");
         ArticleCreateDto dto = ArticleCreateDto.builder()
                 .title("title")
                 .description("description")
                 .body("body").build();
 
         // when
-        SingleArticleResponseDto savedDto = articleService.createArticle(dto);
+        SingleArticleResponseDto savedDto = articleService.createArticle(dto, 1);
 
         // TODO : DB 확인은 어떤 값으로 할지 고민
         //em.flush();

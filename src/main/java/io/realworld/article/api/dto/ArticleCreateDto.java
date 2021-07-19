@@ -2,6 +2,7 @@ package io.realworld.article.api.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -10,10 +11,13 @@ import java.util.Set;
 public class ArticleCreateDto {
     @NotNull
     private final String title;
+
     @NotNull
     private final String description;
+
     @NotNull
     private final String body;
+
     private final Set<TagResponseDto> tags;
 
     @Builder

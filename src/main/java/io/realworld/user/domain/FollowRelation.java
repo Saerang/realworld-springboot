@@ -11,7 +11,6 @@ import javax.persistence.Entity;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FollowRelation {
-
     @EmbeddedId
     private FollowRelationId followRelationId;
 

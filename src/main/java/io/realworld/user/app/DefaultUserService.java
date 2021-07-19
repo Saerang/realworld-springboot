@@ -1,11 +1,11 @@
 package io.realworld.user.app;
 
-import io.realworld.user.api.dto.UserCreateRequestDto;
-import io.realworld.user.api.dto.UserLoginRequestDto;
-import io.realworld.user.api.dto.UserUpdateRequestDto;
 import io.realworld.common.exception.PasswordNotMatchedException;
 import io.realworld.common.exception.UserAlreadyExist;
 import io.realworld.common.exception.UserNotFoundException;
+import io.realworld.user.api.dto.UserCreateRequestDto;
+import io.realworld.user.api.dto.UserLoginRequestDto;
+import io.realworld.user.api.dto.UserUpdateRequestDto;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,9 +42,8 @@ public class DefaultUserService implements UserService {
                 .password(passwordEncode(dto.getPassword()))
                 .username(dto.getUsername())
                 .build();
-        User saveUser = userRepository.save(user);
 
-        return saveUser;
+        return userRepository.save(user);
     }
 
     @Override
@@ -93,7 +92,6 @@ public class DefaultUserService implements UserService {
         return user;
     }
 
-
     private User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + email));
     }
@@ -101,5 +99,6 @@ public class DefaultUserService implements UserService {
     private String passwordEncode(String password) {
         return passwordEncoder.encode(password);
     }
+
 
 }

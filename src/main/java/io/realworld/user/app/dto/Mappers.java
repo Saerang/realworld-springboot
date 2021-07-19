@@ -21,7 +21,7 @@ public class Mappers {
         return UserResponseDto.builder().user(userDto).build();
     }
 
-    public static ProfileResponseDto toProfileResponseDto(User user, boolean isFollowing) {
+    public static ProfileResponseDto toProfileResponseDto(User user, Boolean isFollowing) {
         ProfileResponseDto.ProfileDto profileDto = ProfileResponseDto.ProfileDto.builder()
                 .bio(user.getBio())
                 .username(user.getUsername())
@@ -32,13 +32,13 @@ public class Mappers {
         return ProfileResponseDto.builder().profile(profileDto).build();
     }
 
-    public static SingleArticleResponseDto toSingleArticleResponseDto(Article article, User user, boolean isFollowing) {
-//        ArticleResponseDto.Author author = ArticleResponseDto.Author.builder()
-//                .username(user.getUsername())
-//                .bio(user.getBio())
-//                .image(user.getImage())
-//                .following(isFollowing)
-//                .build();
+    public static SingleArticleResponseDto toSingleArticleResponseDto(Article article, User user, Boolean isFollowing) {
+        ArticleResponseDto.Author author = ArticleResponseDto.Author.builder()
+                .username(user.getUsername())
+                .bio(user.getBio())
+                .image(user.getImage())
+                .following(isFollowing)
+                .build();
 
         ArticleResponseDto articleResponseDto = ArticleResponseDto.builder()
                 .title(article.getTitle())
@@ -49,7 +49,7 @@ public class Mappers {
                 .slug(article.getSlug())
                 .createdAt(article.getCreatedAt())
                 .updatedAt(article.getUpdatedAt())
-                .author(null)
+                .author(author)
                 .build();
 
         return SingleArticleResponseDto.builder().article(articleResponseDto).build();

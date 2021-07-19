@@ -8,16 +8,24 @@ import java.util.Set;
 
 @Getter
 public class ArticleResponseDto {
-
     private final String slug;
+
     private final String title;
+
     private final String description;
+
     private final String body;
+
     private final Set<TagResponseDto> tagList;
+
     private final boolean favorited;
+
     private final int favoritesCount;
+
     private final Author author;
+
     private final LocalDateTime createdAt;
+
     private final LocalDateTime updatedAt;
 
     @Builder

@@ -20,16 +20,26 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
     private Long id;
+
     private String slug;
+
     private String title;
+
     private String description;
+
     private String body;
+
     @OneToMany(mappedBy = "article")
     private Set<ArticleTag> articleTags = new HashSet<>();
+
     private boolean favorited;
+
     private int favoritesCount;
+
     private Long userId;
+
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
 
     @Builder

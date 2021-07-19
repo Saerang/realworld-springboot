@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Table(uniqueConstraints = {@UniqueConstraint(name = "uix_article_id_tag_id", columnNames = {"article_id", "tag_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArticleTag {
     @Id
