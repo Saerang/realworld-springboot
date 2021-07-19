@@ -1,7 +1,6 @@
 package io.realworld.user.domain.repository;
 
 import io.realworld.common.exception.UserNotFoundException;
-import io.realworld.user.domain.Profile;
 import io.realworld.user.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +23,11 @@ public class UserRepositoryTest {
     @Test
     void persistence() {
         //given
-        Profile profile = Profile.builder()
-                .username("new realworld")
-                .bio("I work at statefarm")
-                .build();
         User user = User.builder()
-                .profile(profile)
+                .username("new_realworld")
+                .bio("bio")
                 .email("new_realworld1@email.com")
+                .password("12345678")
                 .build();
 
         assertThat(user.getId()).isNull();
@@ -47,6 +44,6 @@ public class UserRepositoryTest {
 
         //then
         assertThat(user.getId()).isEqualTo(findUser.getId());
-        assertThat(user.getProfile().getUsername()).isEqualTo(findUser.getProfile().getUsername());
+        assertThat(user.getUsername()).isEqualTo(findUser.getUsername());
     }
 }

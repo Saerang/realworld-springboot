@@ -11,21 +11,21 @@ public class Mappers {
     public static UserResponseDto toUserCreateResponseDto(User user, String token) {
         UserResponseDto.UserDto userDto = UserResponseDto.UserDto.builder()
                 .email(user.getEmail())
-                .username(user.getProfile().getUsername())
-                .bio(user.getProfile().getBio())
-                .image(user.getProfile().getImage())
+                .username(user.getUsername())
+                .bio(user.getBio())
+                .image(user.getImage())
                 .token(token)
                 .build();
 
         return UserResponseDto.builder().user(userDto).build();
     }
 
-    public static ProfileResponseDto toProfileResponseDto(User user, boolean isFollowing) {
+    public static ProfileResponseDto toProfileResponseDto(User user) {
         ProfileResponseDto.ProfileDto profileDto = ProfileResponseDto.ProfileDto.builder()
-                .bio(user.getProfile().getBio())
-                .username(user.getProfile().getUsername())
-                .image(user.getProfile().getImage())
-                .following(isFollowing)
+                .bio(user.getBio())
+                .username(user.getUsername())
+                .image(user.getImage())
+                .following(user.getFollowing())
                 .build();
 
         return ProfileResponseDto.builder().profile(profileDto).build();
@@ -34,8 +34,8 @@ public class Mappers {
     public static SingleArticleResponseDto toSingleArticleResponseDto(Article article, User user, boolean isFollowing) {
 //        ArticleResponseDto.Author author = ArticleResponseDto.Author.builder()
 //                .username(user.getUsername())
-//                .bio(user.getProfile().getBio())
-//                .image(user.getProfile().getImage())
+//                .bio(user.getBio())
+//                .image(user.getImage())
 //                .following(isFollowing)
 //                .build();
 

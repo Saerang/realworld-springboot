@@ -10,17 +10,15 @@ import java.util.Optional;
 
 public interface UserService {
 
-    UserResponseDto createUser(UserCreateRequestDto dto);
+    User createUser(UserCreateRequestDto dto);
 
-    UserResponseDto getCurrentUser();
+    User getCurrentUser();
 
-    Optional<User> findUserByUsername(String username);
+    User getUserByUsername(String username);
 
-    UserResponseDto updateUser(UserUpdateRequestDto dto);
+    User updateUser(UserUpdateRequestDto dto);
 
-    UserResponseDto login(UserLoginRequestDto dto);
-
-    User findCurrentUser();
+    User login(UserLoginRequestDto dto);
 
     User getUserById(long userId);
 }

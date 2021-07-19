@@ -2,6 +2,7 @@ package io.realworld.user.domain;
 
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 
@@ -16,32 +17,54 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
+
     @Column(unique = true)
     private String email;
+
     private String password;
 
-    @Embedded
-    private Profile profile;
+    @Column(unique = true)
+    private String username;
+
+    private String bio;
+
+    private String image;
+
+    @Transient
+    private Boolean following;
 
     public User(String email, String password, String username) {
-        this(email, password, Profile.builder().username(username).build());
+        this(email, password, username, null, null);
+
     }
 
     @Builder
-    public User(String email, String password, Profile profile) {
+    public User(String email, String password, String username, String bio, String image) {
+        Assert.state(StringUtils.isNotBlank(email), "email cannot be null.");
+        Assert.state(StringUtils.isNotBlank(password), "password cannot be null.");
+        Assert.state(StringUtils.isNotBlank(username), "username cannot be null.");
+
         this.email = email;
         this.password = password;
-        this.profile = profile;
+        this.username = username;
+        this.bio = bio;
+        this.image = image;
     }
 
     public void updateUserInfo(String email, String username, String password, String image, String bio) {
         this.email = email;
         this.password = password;
-        this.profile.updateProfile(username, bio, image);
+        this.username = username;
+        this.bio = bio;
+        this.image = image;
     }
 
-    public String getUsername() {
-        return this.getProfile().getUsername();
+    public void userFollow() {
+        this.following = true;
+    }
+
+    public void userUnfollow() {
+        this.following = false;
     }
 
 }

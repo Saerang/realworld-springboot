@@ -1,15 +1,11 @@
 package io.realworld.user.app;
 
-import io.realworld.common.security.JwtTokenProvider;
 import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserLoginRequestDto;
-import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
-import io.realworld.user.app.dto.Mappers;
 import io.realworld.common.exception.PasswordNotMatchedException;
 import io.realworld.common.exception.UserAlreadyExist;
 import io.realworld.common.exception.UserNotFoundException;
-import io.realworld.user.domain.Profile;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,52 +28,35 @@ import static io.realworld.user.app.enumerate.LoginType.USER_ID;
 public class DefaultUserService implements UserService {
 
     final private UserRepository userRepository;
-    final private JwtTokenProvider jwtTokenProvider;
     final private PasswordEncoder passwordEncoder;
 
     @Override
-    public UserResponseDto createUser(UserCreateRequestDto dto) {
-        Optional<User> optionalUser = userRepository.findByEmailOrProfile_Username(dto.getEmail(), dto.getUsername());
-        if(optionalUser.isPresent()) {
+    public User createUser(UserCreateRequestDto dto) {
+        Optional<User> optionalUser = userRepository.findByEmailOrUsername(dto.getEmail(), dto.getUsername());
+        if (optionalUser.isPresent()) {
             throw new UserAlreadyExist(optionalUser.get().getId());
         }
 
         User user = User.builder()
                 .email(dto.getEmail())
                 .password(passwordEncode(dto.getPassword()))
-                .profile(Profile.builder().username(dto.getUsername()).build())
+                .username(dto.getUsername())
                 .build();
         User saveUser = userRepository.save(user);
 
-        return getUserResponseDto(saveUser);
+        return saveUser;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public UserResponseDto getCurrentUser() {
+    public User getCurrentUser() {
         // ToDo: service 분리하는게 좋아보임.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null) {
-            throw new UserNotFoundException ();
-        }
-
-        long userId = Long.parseLong(authentication.getName());
-
-        return getUserResponseDto(getUserById(userId));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public User findCurrentUser() {
-        // ToDo: service 분리하는게 좋아보임.
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null) {
+        if (authentication == null) {
             throw new UserNotFoundException();
         }
 
-        long userId = Long.parseLong(authentication.getName());
-
-        return getUserById(userId);
+        return getUserByEmail(authentication.getName());
     }
 
     @Override
@@ -86,37 +65,34 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public Optional<User> findUserByUsername(String username) {
-        return userRepository.findByProfile_Username(username);
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
     }
 
     @Override
-    public UserResponseDto updateUser(UserUpdateRequestDto dto) {
-        Optional<User> findUser = userRepository.findByEmailOrProfile_Username(dto.getEmail(), dto.getUsername());
+    public User updateUser(UserUpdateRequestDto dto) {
+        Optional<User> findUser = userRepository.findByEmailOrUsername(dto.getEmail(), dto.getUsername());
 
-        if(findUser.isPresent()) {
+        if (findUser.isPresent()) {
             throw new UserAlreadyExist(findUser.get().getId());
         }
 
-        User user = findCurrentUser();
+        User user = getCurrentUser();
         user.updateUserInfo(dto.getEmail(), dto.getUsername(), passwordEncode(dto.getPassword()), dto.getImage(), dto.getBio());
-        return getUserResponseDto(user);
+        return user;
     }
 
     @Override
-    public UserResponseDto login(UserLoginRequestDto dto) {
+    public User login(UserLoginRequestDto dto) {
         User user = getUserByEmail(dto.getEmail());
 
-        if(!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new PasswordNotMatchedException(user.getId());
         }
 
-        return getUserResponseDto(user);
+        return user;
     }
 
-    private UserResponseDto getUserResponseDto(User user) {
-        return Mappers.toUserCreateResponseDto(user, jwtTokenProvider.createToken(user.getId()));
-    }
 
     private User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + email));

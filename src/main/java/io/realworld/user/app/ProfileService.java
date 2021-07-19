@@ -1,11 +1,11 @@
 package io.realworld.user.app;
 
-import io.realworld.user.api.dto.ProfileResponseDto;
+import io.realworld.user.domain.User;
 
 public interface ProfileService {
-    ProfileResponseDto getProfile(String username);
+    User getProfile(String username);
 
-    ProfileResponseDto followUser(long followerUserId, String username);
+    User followUser(long followerUserId, String username);
 
-    ProfileResponseDto unfollowUser(long followerUserId, String username);
+    User unfollowUser(long followerUserId, String username);
 }

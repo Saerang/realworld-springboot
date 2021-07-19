@@ -33,9 +33,9 @@ public class JwtTokenProvider implements InitializingBean {
         key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
-    public String createToken(long userId) {
+    public String createToken(String email) {
         return Jwts.builder()
-                .setSubject(Long.toString(userId))
+                .setSubject(email)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(new Date(System.currentTimeMillis() + this.tokenValidityMilliseconds * 1000))
                 .compact();
@@ -65,9 +65,13 @@ public class JwtTokenProvider implements InitializingBean {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
             return true;
         } catch (SecurityException | MalformedJwtException e) {
+            log.info("Invalid JWT token.");
         } catch (ExpiredJwtException e) {
+            log.info("Expired JWT token.");
         } catch (UnsupportedJwtException e) {
+            log.info("Unsupported JWT token.");
         } catch (IllegalArgumentException e) {
+            log.info("IllegalArgument JWT token.");
         }
 
         return false;

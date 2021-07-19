@@ -12,14 +12,15 @@ public class UserTest {
         //when
         User user = User.builder()
                 .email("realworld@email.com")
-                .profile(Profile.builder().username("realworld").bio("bio").build())
+                .username("realworld")
+                .bio("bio")
                 .password("1234")
                 .build();
 
         //then
         assertThat(user.getEmail()).isEqualTo("realworld@email.com");
         assertThat(user.getPassword()).isEqualTo("1234");
-        assertThat(user.getProfile().getUsername()).isEqualTo("realworld");
-        assertThat(user.getProfile().getBio()).isEqualTo("bio");
+        assertThat(user.getUsername()).isEqualTo("realworld");
+        assertThat(user.getBio()).isEqualTo("bio");
     }
 }

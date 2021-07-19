@@ -1,19 +1,16 @@
 package io.realworld.user.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.realworld.common.security.JwtTokenProvider;
+import io.realworld.common.WithDefaultUser;
 import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserLoginRequestDto;
-import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
 import io.realworld.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
@@ -34,8 +31,6 @@ public class UserControllerTest {
     MockMvc mockMvc;
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
 
     @Test
     void createUser() throws Exception {
@@ -80,13 +75,12 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithDefaultUser
     void getCurrentUser() throws Exception {
         // given
-        String token = jwtTokenProvider.createToken(1);
-
         // when
         // then
-        mockMvc.perform(get("/api/user").contentType(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "Token " + token))
+        mockMvc.perform(get("/api/user").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$..token").isNotEmpty())
@@ -95,9 +89,9 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithDefaultUser
     void updateUser() throws Exception {
         // given
-        String token = jwtTokenProvider.createToken(1);
         UserUpdateRequestDto dto = UserUpdateRequestDto.builder()
                 .email("new_realworld1@email.com")
                 .username("new_realworld")
@@ -107,9 +101,7 @@ public class UserControllerTest {
 
         // when
         // then
-        mockMvc.perform(put("/api/user").contentType(MediaType.APPLICATION_JSON)
-                .content(jsonRequestDto)
-                .header(HttpHeaders.AUTHORIZATION, "Token " + token))
+        mockMvc.perform(put("/api/user").contentType(MediaType.APPLICATION_JSON).content(jsonRequestDto))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$..token").isNotEmpty())

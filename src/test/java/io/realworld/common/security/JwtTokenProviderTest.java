@@ -17,7 +17,7 @@ class JwtTokenProviderTest {
     void createToken() {
         // given
         // when
-        String token = jwtTokenProvider.createToken(1);
+        String token = jwtTokenProvider.createToken("realworld1@email.com");
 
         // then
         assertThat(token).isNotNull();
@@ -26,7 +26,7 @@ class JwtTokenProviderTest {
     @Test
     void validToken() {
         // given
-        String token = jwtTokenProvider.createToken(1);
+        String token = jwtTokenProvider.createToken("realworld1@email.com");
 
         // when
         boolean validateToken = jwtTokenProvider.validateToken(token);
