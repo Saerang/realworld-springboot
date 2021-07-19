@@ -30,12 +30,8 @@ public class User {
 
     private String image;
 
-    @Transient
-    private Boolean following;
-
     public User(String email, String password, String username) {
         this(email, password, username, null, null);
-
     }
 
     @Builder
@@ -57,14 +53,6 @@ public class User {
         this.username = username;
         this.bio = bio;
         this.image = image;
-    }
-
-    public void userFollow() {
-        this.following = true;
-    }
-
-    public void userUnfollow() {
-        this.following = false;
     }
 
 }

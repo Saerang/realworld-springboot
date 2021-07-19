@@ -7,6 +7,7 @@ import io.realworld.user.app.dto.Mappers;
 import io.realworld.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -20,28 +21,28 @@ public class ProfileController {
 
     @GetMapping("/profiles/{username}")
     public ProfileResponseDto getProfile(@PathVariable String username) {
-        User user = profileService.getProfile(username);
+        Pair<User, Boolean> user = profileService.getProfile(username);
         return getProfileResponseDto(user);
     }
 
     @PostMapping("/profiles/{username}/follow")
     public ProfileResponseDto followUser(@PathVariable String username) {
-        User user = profileService.followUser(getCurrenctUserEmail(), username);
+        Pair<User, Boolean> user = profileService.followUser(getCurrentUserEmail(), username);
         return getProfileResponseDto(user);
     }
 
     @DeleteMapping("/profiles/{username}/follow")
     public ProfileResponseDto unfollowUser(@PathVariable String username) {
-        User user = profileService.unfollowUser(getCurrenctUserEmail(), username);
+        Pair<User, Boolean> user = profileService.unfollowUser(getCurrentUserEmail(), username);
         return getProfileResponseDto(user);
     }
 
-    private long getCurrenctUserEmail() {
+    private long getCurrentUserEmail() {
         return authenticationService.getCurrentUser().getId();
     }
 
-    private ProfileResponseDto getProfileResponseDto(User user) {
-        return Mappers.toProfileResponseDto(user);
+    private ProfileResponseDto getProfileResponseDto(Pair<User, Boolean> user) {
+        return Mappers.toProfileResponseDto(user.getLeft(), user.getRight());
     }
 }
 

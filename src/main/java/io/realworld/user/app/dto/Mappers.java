@@ -6,6 +6,7 @@ import io.realworld.article.domain.Article;
 import io.realworld.user.api.dto.ProfileResponseDto;
 import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.domain.User;
+import org.springframework.util.Assert;
 
 public class Mappers {
     public static UserResponseDto toUserCreateResponseDto(User user, String token) {
@@ -20,12 +21,12 @@ public class Mappers {
         return UserResponseDto.builder().user(userDto).build();
     }
 
-    public static ProfileResponseDto toProfileResponseDto(User user) {
+    public static ProfileResponseDto toProfileResponseDto(User user, boolean isFollowing) {
         ProfileResponseDto.ProfileDto profileDto = ProfileResponseDto.ProfileDto.builder()
                 .bio(user.getBio())
                 .username(user.getUsername())
                 .image(user.getImage())
-                .following(user.getFollowing())
+                .following(isFollowing)
                 .build();
 
         return ProfileResponseDto.builder().profile(profileDto).build();

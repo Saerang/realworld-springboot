@@ -4,6 +4,7 @@ import io.realworld.user.domain.FollowRelation;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.FollowRelationRepository;
 import io.realworld.user.domain.repository.UserRepository;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,12 +34,12 @@ public class ProfileServiceTest {
         //given
         User user = new User("user@email.com", "1234", "usrname");
         userRepository.save(user);
-         
+
         //when
-        User result = profileService.getProfile(user.getUsername());
-         
+        Pair<User, Boolean> result = profileService.getProfile(user.getUsername());
+
         //then
-        assertThat(result.getUsername()).isEqualTo(user.getUsername());
+        assertThat(result.getLeft().getUsername()).isEqualTo(user.getUsername());
     }
     
     @Test
@@ -52,11 +53,11 @@ public class ProfileServiceTest {
         // em.clear();
 
         //when
-        User result = profileService.followUser(follower.getId(), followee.getUsername());
+        Pair<User, Boolean> result = profileService.followUser(follower.getId(), followee.getUsername());
 
         //then
-        assertThat(result.getFollowing()).isTrue();
-        assertThat(result.getUsername()).isEqualTo(followee.getUsername());
+        assertThat(result.getRight()).isTrue();
+        assertThat(result.getLeft().getUsername()).isEqualTo(followee.getUsername());
     }
 
     @Test
@@ -72,12 +73,12 @@ public class ProfileServiceTest {
         em.clear();
 
         //when
-        User result = profileService.unfollowUser(follower.getId(), followee.getUsername());
+        Pair<User, Boolean> result = profileService.unfollowUser(follower.getId(), followee.getUsername());
         List<FollowRelation> followRelations = followRelationRepository.findByFollowRelationId_FollowerId(follower.getId());
 
         //then
-        assertThat(result.getFollowing()).isFalse();
-        assertThat(result.getUsername()).isEqualTo(followee.getUsername());
+        assertThat(result.getRight()).isFalse();
+        assertThat(result.getLeft().getUsername()).isEqualTo(followee.getUsername());
         assertThat(followRelations).hasSize(0);
     }
 }

@@ -1,11 +1,12 @@
 package io.realworld.user.app;
 
 import io.realworld.user.domain.User;
+import org.apache.commons.lang3.tuple.Pair;
 
 public interface ProfileService {
-    User getProfile(String username);
+    Pair<User, Boolean> getProfile(String username);
 
-    User followUser(long followerUserId, String username);
+    Pair<User, Boolean> followUser(long followerUserId, String username);
 
-    User unfollowUser(long followerUserId, String username);
+    Pair<User, Boolean> unfollowUser(long followerUserId, String username);
 }
