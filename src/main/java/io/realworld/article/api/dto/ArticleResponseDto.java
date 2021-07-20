@@ -1,5 +1,6 @@
 package io.realworld.article.api.dto;
 
+import io.realworld.tag.app.dto.TagResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 

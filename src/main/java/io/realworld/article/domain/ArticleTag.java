@@ -1,5 +1,6 @@
 package io.realworld.article.domain;
 
+import io.realworld.tag.domain.Tag;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,5 +30,15 @@ public class ArticleTag {
     public ArticleTag(Article article, Tag tag) {
         this.article = article;
         this.tag = tag;
+    }
+
+    public void changeArticle(Article article) {
+        this.article = article;
+        article.getArticleTags().add(this);
+    }
+
+    public void changeTag(Tag tag) {
+        this.tag = tag;
+        tag.getArticleTags().add(this);
     }
 }

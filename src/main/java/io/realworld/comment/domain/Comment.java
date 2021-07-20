@@ -1,4 +1,4 @@
-package io.realworld.article.comment;
+package io.realworld.comment.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;

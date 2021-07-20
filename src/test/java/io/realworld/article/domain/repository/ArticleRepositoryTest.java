@@ -1,7 +1,7 @@
 package io.realworld.article.domain.repository;
 
 import io.realworld.article.domain.Article;
-import io.realworld.user.domain.repository.TagRepository;
+import io.realworld.tag.domain.repository.TagRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

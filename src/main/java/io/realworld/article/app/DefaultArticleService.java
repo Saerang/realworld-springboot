@@ -8,7 +8,7 @@ import io.realworld.user.app.UserService;
 import io.realworld.user.app.dto.Mappers;
 import io.realworld.article.domain.repository.ArticleRepository;
 import io.realworld.user.domain.User;
-import io.realworld.user.domain.repository.FollowRelationRepository;
+import io.realworld.tag.domain.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +19,7 @@ public class DefaultArticleService implements ArticleService{
     final private UserService userService;
     final private FollowRelationService followRelationService;
     final private ArticleRepository articleRepository;
+    final private TagRepository tagRepository;
 
     @Override
     public SingleArticleResponseDto createArticle(ArticleCreateDto dto, long userId) {
@@ -28,6 +29,10 @@ public class DefaultArticleService implements ArticleService{
                 .body(dto.getBody())
                 .userId(userId)
                 .build();
+
+        if (dto.getTags() != null) {
+
+        }
 
         Article savedArticle = articleRepository.save(article);
 

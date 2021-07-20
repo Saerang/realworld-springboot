@@ -1,15 +1,14 @@
-package io.realworld.article.domain;
+package io.realworld.tag.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import io.realworld.article.domain.ArticleTag;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Getter
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag {
     @Id
@@ -23,8 +22,7 @@ public class Tag {
     private Set<ArticleTag> articleTags;
 
     @Builder
-    public Tag(String tag, Set<ArticleTag> articleTags) {
+    public Tag(String tag) {
         this.tag = tag;
-        this.articleTags = articleTags;
     }
 }

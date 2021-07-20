@@ -1,8 +1,8 @@
 package io.realworld.article.api.dto;
 
+import io.realworld.tag.app.dto.TagResponseDto;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.util.Set;

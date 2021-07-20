@@ -1,6 +1,6 @@
-package io.realworld.article.api.dto;
+package io.realworld.tag.app.dto;
 
-import io.realworld.article.domain.Tag;
+import io.realworld.tag.domain.Tag;
 import lombok.Builder;
 import lombok.Getter;
 

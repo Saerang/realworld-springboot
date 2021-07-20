@@ -2,7 +2,7 @@ package io.realworld.article.domain.repository;
 
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.ArticleTag;
-import io.realworld.article.domain.Tag;
+import io.realworld.tag.domain.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
