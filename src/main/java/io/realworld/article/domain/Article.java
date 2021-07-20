@@ -1,5 +1,6 @@
 package io.realworld.article.domain;
 
+import io.realworld.tag.domain.Tag;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,10 +8,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
+import static javax.persistence.CascadeType.PERSIST;
 
 @Entity
 @Getter
@@ -29,7 +31,7 @@ public class Article {
 
     private String body;
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade = PERSIST)
     private Set<ArticleTag> articleTags = new HashSet<>();
 
     private boolean favorited;
@@ -43,14 +45,18 @@ public class Article {
     private LocalDateTime updatedAt;
 
     @Builder
-    public Article(String slug, String title, String description, String body, Set<ArticleTag> articleTags, boolean favorited, int favoritesCount, Long userId) {
+    public Article(String slug, String title, String description, String body, boolean favorited, int favoritesCount, Long userId) {
         this.slug = slug;
         this.title = title;
         this.description = description;
         this.body = body;
-        this.articleTags = articleTags;
         this.favorited = favorited;
         this.favoritesCount = favoritesCount;
         this.userId = userId;
     }
+
+    public void addTags(Set<Tag> tags) {
+        this.articleTags.addAll(tags.stream().map(tag -> new ArticleTag(this, tag)).collect(toSet()));
+    }
+
 }

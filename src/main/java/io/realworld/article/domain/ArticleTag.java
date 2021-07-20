@@ -32,13 +32,4 @@ public class ArticleTag {
         this.tag = tag;
     }
 
-    public void changeArticle(Article article) {
-        this.article = article;
-        article.getArticleTags().add(this);
-    }
-
-    public void changeTag(Tag tag) {
-        this.tag = tag;
-        tag.getArticleTags().add(this);
-    }
 }

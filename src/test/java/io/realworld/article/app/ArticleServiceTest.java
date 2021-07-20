@@ -1,19 +1,18 @@
 package io.realworld.article.app;
 
 import io.realworld.article.api.dto.ArticleCreateDto;
-import io.realworld.article.api.dto.SingleArticleResponseDto;
+import io.realworld.article.domain.Article;
 import io.realworld.article.domain.repository.ArticleRepository;
 import io.realworld.common.WithDefaultUser;
+import io.realworld.common.exception.ArticleNotFound;
+import io.realworld.tag.app.dto.TagRequestDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
-import java.util.Collections;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,27 +31,35 @@ public class ArticleServiceTest {
     @WithDefaultUser
     void createArticle() {
         // given
+        TagRequestDto tagRequestDto = TagRequestDto.builder().tag("tag").build();
         ArticleCreateDto dto = ArticleCreateDto.builder()
                 .title("title")
                 .description("description")
+                .tags(Set.of(tagRequestDto))
                 .body("body").build();
 
         // when
-        SingleArticleResponseDto savedDto = articleService.createArticle(dto, 1);
+        Article savedArticle = articleService.createArticle(dto, 1);
 
         // TODO : DB 확인은 어떤 값으로 할지 고민
-        //em.flush();
-        //em.clear();
-        //articleRepository.findBy(savedDto.getArticle()).orElseThrow(() -> new ArticleNotFound();
+        em.flush();
+        em.clear();
+        Article findArticle = articleRepository.findById(savedArticle.getId()).orElseThrow(() -> new ArticleNotFound(savedArticle.getId()));
 
         // then
-        assertThat(savedDto.getArticle().getTitle()).isEqualTo("title");
-        assertThat(savedDto.getArticle().getDescription()).isEqualTo("description");
-        assertThat(savedDto.getArticle().getBody()).isEqualTo("body");
+        assertThat(savedArticle.getTitle()).isEqualTo(findArticle.getTitle());
+        assertThat(savedArticle.getDescription()).isEqualTo(findArticle.getDescription());
+        assertThat(savedArticle.getBody()).isEqualTo(findArticle.getBody());
     }
 
-    private void authSetUp(String userId) {
-        org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User(userId, "", Collections.emptyList());
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(principal, "token", Collections.emptyList()));
+    @Test
+    void getArticles() {
+        //given
+
+        //when
+//        articleService.getArticles()
+
+        //then
     }
+
 }

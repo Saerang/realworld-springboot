@@ -1,6 +1,6 @@
 package io.realworld.article.api.dto;
 
-import io.realworld.tag.app.dto.TagResponseDto;
+import io.realworld.tag.app.dto.TagRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,10 +18,10 @@ public class ArticleCreateDto {
     @NotNull
     private final String body;
 
-    private final Set<TagResponseDto> tags;
+    private final Set<TagRequestDto> tags;
 
     @Builder
-    public ArticleCreateDto(String title, String description, String body, Set<TagResponseDto> tags) {
+    public ArticleCreateDto(String title, String description, String body, Set<TagRequestDto> tags) {
         this.title = title;
         this.description = description;
         this.body = body;

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,5 +42,19 @@ public class TagServiceMockTest {
 
         //then
         verify(tagRepository).save(any());
+    }
+
+    @Test
+    void getTag() {
+        //given
+        Tag tag = Tag.builder().tag(TAG).build();
+        TagRequestDto dto = TagRequestDto.builder().tag(TAG).build();
+        when(tagRepository.findByTag(tag.getTag())).thenReturn(Optional.of(tag));
+
+        //when
+        tagService.getTag(dto);
+
+        //then
+        verify(tagRepository).findByTag(any());
     }
 }

@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS tag (
     tag varchar(255),
     article_id bigint,
     primary key (tag_id),
+    constraint UK_tag unique (tag),
     foreign key (article_id) references article(article_id)
  );
 

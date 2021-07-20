@@ -2,14 +2,19 @@ package io.realworld.tag.app;
 
 import io.realworld.common.exception.TagNotFoundException;
 import io.realworld.tag.app.dto.TagRequestDto;
+import io.realworld.tag.app.dto.TagResponseDto;
 import io.realworld.tag.domain.Tag;
 import io.realworld.tag.domain.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
-public class DefaultTagService implements TagService{
+public class DefaultTagService implements TagService {
 
     final private TagRepository tagRepository;
 
@@ -17,7 +22,17 @@ public class DefaultTagService implements TagService{
     public Tag createTag(TagRequestDto dto) {
         Tag tag = Tag.builder().tag(dto.getTag()).build();
 
-        return tagRepository.save(tag);
+        Optional<Tag> optionalTag = tagRepository.findByTag(dto.getTag());
+
+        return optionalTag.orElseGet(() -> tagRepository.save(tag));
+
+    }
+
+    @Override
+    public Set<Tag> createTags(Set<TagRequestDto> dtos) {
+        return dtos.stream()
+                .map(this::createTag)
+                .collect(Collectors.toSet());
     }
 
     @Override
