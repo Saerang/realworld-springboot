@@ -9,13 +9,13 @@ spring:
 #    database-platform: org.hibernate.dialect.MySQL8Dialect
 #    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
 #    properties:
 #      show_sql: true
 #      format_sql: true
 
   flyway:
-    enabled: true
+    enabled: false
 
 logging:
   level:

@@ -74,7 +74,7 @@ public class ProfileServiceTest {
 
         //when
         Pair<User, Boolean> result = profileService.unfollowUser(follower.getId(), followee.getUsername());
-        List<FollowRelation> followRelations = followRelationRepository.findByFollowRelationId_FollowerId(follower.getId());
+        List<FollowRelation> followRelations = followRelationRepository.findByFollowerId(follower.getId());
 
         //then
         assertThat(result.getRight()).isFalse();

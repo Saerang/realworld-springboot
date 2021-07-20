@@ -1,7 +1,6 @@
 package io.realworld.user.domain.repository;
 
 import io.realworld.user.domain.FollowRelation;
-import io.realworld.user.domain.FollowRelationId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -32,7 +31,7 @@ public class FollowRelationRepositoryTest {
         em.clear();
 
         //then
-        List<FollowRelation> findFollowerRelation = followRelationRepository.findByFollowRelationId_FollowerId(1L);
+        List<FollowRelation> findFollowerRelation = followRelationRepository.findByFollowerId(1L);
         assertThat(findFollowerRelation.get(0)).isEqualTo(followRelation);
     }
 }

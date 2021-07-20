@@ -1,7 +1,7 @@
 package io.realworld.article.app;
 
 import io.realworld.article.api.dto.ArticleCreateDto;
-import io.realworld.article.api.dto.ArticleSearchDto;
+import io.realworld.article.api.dto.MultipleArticleSearchDto;
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.repository.ArticleRepository;
 import io.realworld.tag.app.TagService;
@@ -16,7 +16,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class DefaultArticleService implements ArticleService{
 
-    // TODO: 주입이 너무 많음 User, Follow 한번에 가져오는 중간 객체 있으면 좋을 듯.
     final private TagService tagService;
     final private ArticleRepository articleRepository;
 
@@ -38,9 +37,8 @@ public class DefaultArticleService implements ArticleService{
     }
 
     @Override
-    public List<Article> getArticles(ArticleSearchDto articleSearchDto, long userId) {
+    public List<Article> getArticles(MultipleArticleSearchDto articleSearchDto, long userId) {
         return null;
     }
-
 
 }

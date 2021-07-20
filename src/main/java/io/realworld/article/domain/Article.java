@@ -36,6 +36,7 @@ public class Article {
 
     private boolean favorited;
 
+
     private int favoritesCount;
 
     private Long userId;
