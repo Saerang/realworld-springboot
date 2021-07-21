@@ -1,6 +1,5 @@
 package io.realworld.article.app;
 
-import io.realworld.article.api.dto.MultipleArticleSearchDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.article.api.dto.SingleArticleSearchDto;
 import org.junit.jupiter.api.Test;
@@ -21,10 +20,10 @@ class ArticleMapperServiceTest {
         SingleArticleSearchDto dto = SingleArticleSearchDto.builder().slug("slug").build();
 
         // when
-        SingleArticleResponseDto result = articleMapperService.getArticle(dto, 1);
+        SingleArticleResponseDto result = articleMapperService.getSingleArticleResponseDto(dto, 1);
 
         // then
-        assertThat(result.getArticle()).isEqualTo(dto.getSlug());
+        assertThat(result.getArticle().getSlug()).isEqualTo(dto.getSlug());
     }
 
 }

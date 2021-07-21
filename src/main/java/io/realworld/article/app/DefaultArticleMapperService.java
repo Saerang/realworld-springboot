@@ -17,12 +17,12 @@ public class DefaultArticleMapperService implements ArticleMapperService{
     final private FollowRelationService followRelationService;
 
     @Override
-    public SingleArticleResponseDto getArticle(SingleArticleSearchDto dto, long userId) {
+    public SingleArticleResponseDto getSingleArticleResponseDto(SingleArticleSearchDto dto, long userId) {
         return null;
     }
 
     @Override
-    public MultipleArticlesResponseDto getArticles(MultipleArticleSearchDto dto, long userId) {
+    public MultipleArticlesResponseDto getMultipleArticleResponseDto(MultipleArticleSearchDto dto, long userId) {
         return null;
     }
 }

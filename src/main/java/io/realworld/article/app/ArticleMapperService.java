@@ -6,6 +6,7 @@ import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.article.api.dto.SingleArticleSearchDto;
 
 public interface ArticleMapperService {
-    SingleArticleResponseDto getArticle(SingleArticleSearchDto dto, long userId);
-    MultipleArticlesResponseDto getArticles(MultipleArticleSearchDto dto, long userId);
+    SingleArticleResponseDto getSingleArticleResponseDto(SingleArticleSearchDto dto, long userId);
+
+    MultipleArticlesResponseDto getMultipleArticleResponseDto(MultipleArticleSearchDto dto, long userId);
 }

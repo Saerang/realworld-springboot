@@ -23,6 +23,7 @@ public class Article {
     @Column(name = "article_id")
     private Long id;
 
+    @Column(unique = true)
     private String slug;
 
     private String title;
@@ -35,7 +36,6 @@ public class Article {
     private Set<ArticleTag> articleTags = new HashSet<>();
 
     private boolean favorited;
-
 
     private int favoritesCount;
 
