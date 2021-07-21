@@ -14,6 +14,7 @@ public class FollowRelationId implements Serializable {
 
     private Long followeeId;
 
+    @Builder
     public FollowRelationId(Long followerId, Long followeeId) {
         this.followerId = followerId;
         this.followeeId = followeeId;

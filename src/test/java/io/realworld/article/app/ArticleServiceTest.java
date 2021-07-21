@@ -30,9 +30,9 @@ public class ArticleServiceTest {
     @Autowired
     TagRepository tagRepository;
     @Autowired
-    EntityManager em;
-    @Autowired
     ArticleRepository articleRepository;
+    @Autowired
+    EntityManager em;
 
     @Test
     @WithDefaultUser
@@ -48,7 +48,6 @@ public class ArticleServiceTest {
         // when
         Article savedArticle = articleService.createArticle(dto, 1);
 
-        // TODO : DB 확인은 어떤 값으로 할지 고민
         em.flush();
         em.clear();
         Article findArticle = articleRepository.findById(savedArticle.getId()).orElseThrow(() -> new ArticleNotFound(savedArticle.getId()));
@@ -81,10 +80,7 @@ public class ArticleServiceTest {
     @Test
     void getArticles_ByTag() {
         //given
-        // TODO: 데이터 저장하는 부분 Tag 관련 영속성 문제 걸림. 일단 디비로 저장. 추후 확인필요.
         Tag tag = tagRepository.save(Tag.builder().tag("tag").build());
-        em.flush();
-        em.clear();
 
         Article article1 = saveArticle("slug1", "title1", "body1", tag);
         Article article2 = saveArticle("slug2", "title2", "body2", tag);
