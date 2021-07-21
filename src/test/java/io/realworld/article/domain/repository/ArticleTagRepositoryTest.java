@@ -27,8 +27,6 @@ public class ArticleTagRepositoryTest {
                 .slug("slug")
                 .body("body")
                 .description("description")
-                .favorited(true)
-                .favoritesCount(1)
                 .title("title")
                 .userId(1L)
                 .build();

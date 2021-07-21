@@ -13,5 +13,5 @@ public interface ArticleService {
 
     Article getArticle(SingleArticleSearchDto dto);
 
-    List<Article> getArticles(MultipleArticleSearchDto articleSearchDto, long userId);
+    List<Article> getArticlesFromSearchDto(MultipleArticleSearchDto articleSearchDto, long userId);
 }

@@ -32,7 +32,7 @@ public class Mappers {
         return ProfileResponseDto.builder().profile(profileDto).build();
     }
 
-    public static SingleArticleResponseDto toSingleArticleResponseDto(Article article, User user, Boolean isFollowing) {
+    public static SingleArticleResponseDto toSingleArticleResponseDto(Article article, User user, boolean isFavorited, int favoritesCount, boolean isFollowing) {
         ArticleResponseDto.Author author = ArticleResponseDto.Author.builder()
                 .username(user.getUsername())
                 .bio(user.getBio())
@@ -44,8 +44,8 @@ public class Mappers {
                 .title(article.getTitle())
                 .body(article.getBody())
                 .description(article.getDescription())
-                .favorited(article.isFavorited())
-                .favoritesCount(article.getFavoritesCount())
+                .favorited(isFavorited)
+                .favoritesCount(favoritesCount)
                 .slug(article.getSlug())
                 .createdAt(article.getCreatedAt())
                 .updatedAt(article.getUpdatedAt())

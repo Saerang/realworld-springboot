@@ -35,10 +35,6 @@ public class Article {
     @OneToMany(mappedBy = "article", cascade = PERSIST)
     private Set<ArticleTag> articleTags = new HashSet<>();
 
-    private boolean favorited;
-
-    private int favoritesCount;
-
     private Long userId;
 
     private LocalDateTime createdAt;
@@ -46,13 +42,11 @@ public class Article {
     private LocalDateTime updatedAt;
 
     @Builder
-    public Article(String slug, String title, String description, String body, boolean favorited, int favoritesCount, Long userId) {
+    public Article(String slug, String title, String description, String body, Long userId) {
         this.slug = slug;
         this.title = title;
         this.description = description;
         this.body = body;
-        this.favorited = favorited;
-        this.favoritesCount = favoritesCount;
         this.userId = userId;
     }
 

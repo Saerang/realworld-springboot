@@ -60,8 +60,6 @@ class ArticleMapperServiceTest {
                 .title(title)
                 .description("description")
                 .body(body)
-                .favorited(false)
-                .favoritesCount(1)
                 .slug(slug)
                 .build();
 

@@ -45,7 +45,7 @@ public class DefaultArticleService implements ArticleService{
 
     // TODO: queryDsl 로 바꿔 보기.
     @Override
-    public List<Article> getArticles(MultipleArticleSearchDto articleSearchDto, long userId) {
+    public List<Article> getArticlesFromSearchDto(MultipleArticleSearchDto articleSearchDto, long userId) {
         String tag = articleSearchDto.getTag();
         return articleRepository.findByTag(tag);
     }

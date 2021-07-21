@@ -89,7 +89,7 @@ public class ArticleServiceTest {
                 .build();
 
         //when
-        List<Article> articles = articleService.getArticles(dto, 2);
+        List<Article> articles = articleService.getArticlesFromSearchDto(dto, 2);
 
         //then
         assertThat(articles).hasSize(2);
@@ -104,8 +104,6 @@ public class ArticleServiceTest {
                 .title(title)
                 .description("description")
                 .body(body)
-                .favorited(false)
-                .favoritesCount(1)
                 .slug(slug)
                 .build();
 

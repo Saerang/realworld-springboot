@@ -30,18 +30,15 @@ public class User {
 
     private String image;
 
-    @Transient
-    private Boolean following;
-
     public User(String email, String password, String username) {
         this(email, password, username, null, null);
     }
 
     @Builder
     public User(String email, String password, String username, String bio, String image) {
-        Assert.state(StringUtils.isNotBlank(email), "email cannot be null.");
-        Assert.state(StringUtils.isNotBlank(password), "password cannot be null.");
-        Assert.state(StringUtils.isNotBlank(username), "username cannot be null.");
+        Assert.state(StringUtils.isNotBlank(email), "email may not be null.");
+        Assert.state(StringUtils.isNotBlank(password), "password may not be null.");
+        Assert.state(StringUtils.isNotBlank(username), "username may not be null.");
 
         this.email = email;
         this.password = password;
@@ -56,10 +53,6 @@ public class User {
         this.username = username;
         this.bio = bio;
         this.image = image;
-    }
-
-    public void isFollowing(boolean following) {
-        this.following = following;
     }
 
 }

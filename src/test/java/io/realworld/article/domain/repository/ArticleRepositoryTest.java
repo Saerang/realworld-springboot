@@ -27,8 +27,6 @@ public class ArticleRepositoryTest {
                 .slug("slug")
                 .body("body")
                 .description("description")
-                .favorited(true)
-                .favoritesCount(1)
                 .title("title")
                 .userId(1L)
                 .build();
