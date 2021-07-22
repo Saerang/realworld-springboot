@@ -27,7 +27,7 @@ public class ArticleTagRepositoryTest {
                 .body("body")
                 .description("description")
                 .title("title")
-                .userId(1L)
+                .userId(101L)
                 .build();
         em.persist(article);
 
@@ -47,7 +47,7 @@ public class ArticleTagRepositoryTest {
         ArticleTag findArticleTag = articleTagRepository.findById(saveArticleTag.getId()).orElseThrow(IllegalAccessException::new);
 
         // then
-        assertThat(findArticleTag.getArticle().getUserId()).isEqualTo(1);
+        assertThat(findArticleTag.getArticle().getUserId()).isEqualTo(101);
         assertThat(findArticleTag.getArticle().getBody()).isEqualTo("body");
         assertThat(findArticleTag.getTag().getTag()).isEqualTo("tag");
     }

@@ -50,7 +50,7 @@ public class ArticleServiceTest {
                 .body("body").build();
 
         // when
-        Article savedArticle = articleService.createArticle(dto, 1);
+        Article savedArticle = articleService.createArticle(dto, 101);
 
         em.flush();
         em.clear();
@@ -88,7 +88,7 @@ public class ArticleServiceTest {
                 .build();
 
         //when
-        Page<Article> articles = articleService.getArticlesFromSearchDto(dto, 2);
+        Page<Article> articles = articleService.getArticlesBySearchDto(dto, 2);
 
         //then
         assertThat(articles).hasSize(2);
@@ -110,7 +110,7 @@ public class ArticleServiceTest {
                 .build();
 
         //when
-        Page<Article> articles = articleService.getArticlesFromSearchDto(dto, 2);
+        Page<Article> articles = articleService.getArticlesBySearchDto(dto, 2);
 
         //then
         assertThat(articles).hasSize(1);
@@ -120,13 +120,17 @@ public class ArticleServiceTest {
     }
 
     @Test
-    void getFeedArticles() {
+    void getArticles_byArticleIds() {
         //given
+        List<Long> articleIds = List.of(101L, 102L, 103L);
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
         //when
-        List<Article> articles = articleService.getFeedArticles(List.of(1L, 2L, 3L));
+        Page<Article> articles = articleService.getArticlesByArticleIds(articleIds, pageRequest);
 
         //then
         assertThat(articles).hasSize(3);
+        assertThat(articles).extracting("id").isEqualTo(articleIds);
     }
 
     @Test
@@ -183,7 +187,7 @@ public class ArticleServiceTest {
 
     private Article saveArticle(String title, String body, Tag tag, String description) {
         Article article = Article.builder()
-                .userId(1L)
+                .userId(101L)
                 .title(title)
                 .description(description)
                 .body(body)

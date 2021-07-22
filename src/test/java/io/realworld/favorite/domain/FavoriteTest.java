@@ -11,7 +11,7 @@ public class FavoriteTest {
     void createFavorite() {
         // given
         // when
-        Favorite favorite = Favorite.builder().userId(1).favoritedId(1).favoriteType(FavoriteType.ARTICLE).build();
+        Favorite favorite = Favorite.builder().userId(1L).favoritedId(1L).favoriteType(FavoriteType.ARTICLE).build();
 
         // then
         assertThat(favorite.getFavoriteId().getUserId()).isEqualTo(1);

@@ -3,6 +3,8 @@ package io.realworld.tag.domain;
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.ArticleTag;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -26,6 +28,7 @@ public class Tag {
 
     @Builder
     public Tag(String tag) {
+        Assert.state(StringUtils.isNotBlank(tag), "tag may not be blank.");
         this.tag = tag;
     }
 }

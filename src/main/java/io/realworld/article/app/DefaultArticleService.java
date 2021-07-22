@@ -10,6 +10,7 @@ import io.realworld.tag.app.TagService;
 import io.realworld.tag.domain.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,9 +49,8 @@ public class DefaultArticleService implements ArticleService {
 
     // TODO: queryDsl 로 바꿔서 동적 쿼리 작성해야됨.
     @Override
-    public Page<Article> getArticlesFromSearchDto(MultipleArticleSearchDto dto, long userId) {
-        String tag = dto.getTag();
-        return articleRepository.findAllWithTagByTag(dto.getPageable(), tag);
+    public Page<Article> getArticlesBySearchDto(MultipleArticleSearchDto dto, long userId) {
+        return articleRepository.findAllWithTagByTag(dto.getTag(), dto.getPageable());
     }
 
     @Override
@@ -68,8 +68,13 @@ public class DefaultArticleService implements ArticleService {
     }
 
     @Override
-    public List<Article> getFeedArticles(List<Long> articleIds) {
-        return articleRepository.findByIdIn(articleIds);
+    public Page<Article> getArticlesByArticleIds(List<Long> articleIds, Pageable pageable) {
+        return articleRepository.findByIdIn(articleIds, pageable);
+    }
+
+    @Override
+    public Page<Article> getArticlesByUserIds(List<Long> userIds, Pageable pageable) {
+        return articleRepository.findAllByUserId(userIds, pageable);
     }
 
 }

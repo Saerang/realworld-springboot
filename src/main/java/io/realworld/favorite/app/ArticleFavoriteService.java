@@ -26,6 +26,25 @@ public class ArticleFavoriteService implements FavoriteService {
         return ARTICLE;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<Favorite> getFavorites(long favoritedId) {
+        return favoriteRepository.findByFavoritedIdAndFavoriteType(favoritedId, getFavoriteType());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Favorite> getFavorites(List<Long> favoritedId) {
+        return favoriteRepository.findByFavoritedIdsAndFavoriteType(favoritedId, getFavoriteType());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Long> getFavoritedIds(long userId) {
+        return favoriteRepository.findFavoritedIdByUserIdAndFavoriteType(userId, getFavoriteType());
+    }
+
+    @Transactional(readOnly = true)
     @Override
     public boolean isFavorited(long userId, long favoriteId) {
         FavoriteId _favoriteId = FavoriteId.builder()
@@ -35,11 +54,6 @@ public class ArticleFavoriteService implements FavoriteService {
                 .build();
 
         return favoriteRepository.findById(_favoriteId).isPresent();
-    }
-
-    @Override
-    public List<Favorite> getFavorites(long favoritedId) {
-        return favoriteRepository.findByFavoritedIdAndFavoriteType(favoritedId, ARTICLE);
     }
 
     @Override

@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static io.realworld.user.app.enumerate.LoginType.EMAIL;
@@ -61,6 +62,11 @@ public class DefaultUserService implements UserService {
     @Override
     public User getUserById(long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(USER_ID.getMessage() + userId));
+    }
+
+    @Override
+    public List<User> getUsersByIds(List<Long> userIds) {
+        return userRepository.findByIdIn(userIds);
     }
 
     @Override

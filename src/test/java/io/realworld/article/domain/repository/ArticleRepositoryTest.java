@@ -28,7 +28,7 @@ public class ArticleRepositoryTest {
                 .body("body")
                 .description("description")
                 .title("title")
-                .userId(1L)
+                .userId(101L)
                 .build();
 
         //when

@@ -22,7 +22,14 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
             "join fetch at.tag t " +
             "where t.tag = :tag",
     countQuery = "select count(a) from Article a join a.articleTags at join at.tag t where t.tag = :tag")
-    Page<Article> findAllWithTagByTag(Pageable pageable, @Param("tag") String tag);
+    Page<Article> findAllWithTagByTag(@Param("tag") String tag, Pageable pageable);
 
-    List<Article> findByIdIn(List<Long> ids);
+    Page<Article> findByIdIn(List<Long> ids, Pageable pageable);
+
+    @Query(value = "select a from Article a " +
+            "join fetch a.articleTags at " +
+            "join fetch at.tag t " +
+            "where a.userId in (:userIds)",
+            countQuery = "select count(a) from Article a join a.articleTags at join at.tag t where a.userId in (:userIds)")
+    Page<Article> findAllByUserId(@Param("userIds") List<Long> userIds, Pageable pageable);
 }

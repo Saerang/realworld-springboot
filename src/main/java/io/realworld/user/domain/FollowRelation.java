@@ -21,5 +21,4 @@ public class FollowRelation {
     public FollowRelation(long followerId, long followeeId) {
         this.followRelationId = new FollowRelationId(followerId, followeeId);
     }
-
 }

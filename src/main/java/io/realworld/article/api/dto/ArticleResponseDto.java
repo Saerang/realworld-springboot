@@ -21,7 +21,7 @@ public class ArticleResponseDto {
 
     private final boolean favorited;
 
-    private final int favoritesCount;
+    private final long favoritesCount;
 
     private final Author author;
 
@@ -30,7 +30,7 @@ public class ArticleResponseDto {
     private final LocalDateTime updatedAt;
 
     @Builder
-    public ArticleResponseDto(String slug, String title, String description, String body, Set<TagResponseDto> tagList, boolean favorited, int favoritesCount, Author author, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public ArticleResponseDto(String slug, String title, String description, String body, Set<TagResponseDto> tagList, boolean favorited, long favoritesCount, Author author, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.slug = slug;
         this.title = title;
         this.description = description;

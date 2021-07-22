@@ -22,13 +22,23 @@ public class CommentFavoriteService implements FavoriteService {
     }
 
     @Override
-    public boolean isFavorited(long userId, long favoriteId) {
-        return false;
+    public List<Favorite> getFavorites(long favoriteId) {
+        return null;
     }
 
     @Override
-    public List<Favorite> getFavorites(long favoriteId) {
+    public List<Favorite> getFavorites(List<Long> favoritedId) {
         return null;
+    }
+
+    @Override
+    public List<Long> getFavoritedIds(long userId) {
+        return null;
+    }
+
+    @Override
+    public boolean isFavorited(long userId, long favoriteId) {
+        return false;
     }
 
     @Override

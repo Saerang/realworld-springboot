@@ -6,6 +6,7 @@ import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
 import io.realworld.user.domain.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -21,4 +22,6 @@ public interface UserService {
     User login(UserLoginRequestDto dto);
 
     User getUserById(long userId);
+
+    List<User> getUsersByIds(List<Long> userIds);
 }

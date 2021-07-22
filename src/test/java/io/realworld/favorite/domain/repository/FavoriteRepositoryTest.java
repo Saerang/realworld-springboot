@@ -23,7 +23,7 @@ public class FavoriteRepositoryTest {
     @Test
     void persistence() {
         // given
-        Favorite favorite = Favorite.builder().userId(1).favoritedId(1).favoriteType(FavoriteType.ARTICLE).build();
+        Favorite favorite = Favorite.builder().userId(1L).favoritedId(1L).favoriteType(FavoriteType.ARTICLE).build();
 
         // when
         Favorite savedFavorite = favoriteRepository.save(favorite);

@@ -31,7 +31,7 @@ public class FollowRelationRepositoryTest {
         em.clear();
 
         //then
-        List<FollowRelation> findFollowerRelation = followRelationRepository.findByFollowerId(1L);
+        List<FollowRelation> findFollowerRelation = followRelationRepository.findByFolloweeId(2L);
         assertThat(findFollowerRelation.get(0)).isEqualTo(followRelation);
     }
 }

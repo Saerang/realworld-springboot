@@ -6,6 +6,7 @@ import io.realworld.user.domain.repository.FollowRelationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -23,5 +24,10 @@ public class DefaultFollowRelationService implements FollowRelationService{
         FollowRelationId followRelationId = FollowRelationId.builder().followerId(followerId).followeeId(followeeId).build();
         Optional<FollowRelation> optionalFollowRelation = followRelationRepository.findById(followRelationId);
         return optionalFollowRelation.isPresent();
+    }
+
+    @Override
+    public List<FollowRelation> getFollowRelations(long followeeId) {
+        return followRelationRepository.findByFolloweeId(followeeId);
     }
 }

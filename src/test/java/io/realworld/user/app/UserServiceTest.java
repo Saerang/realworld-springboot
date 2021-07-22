@@ -1,5 +1,6 @@
 package io.realworld.user.app;
 
+import io.realworld.common.WithDefaultUser;
 import io.realworld.common.exception.UserAlreadyExistException;
 import io.realworld.common.exception.UserNotFoundException;
 import io.realworld.user.api.dto.UserCreateRequestDto;
@@ -10,12 +11,10 @@ import io.realworld.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.util.Collections;
+import java.util.List;
 
 import static io.realworld.user.app.enumerate.LoginType.EMAIL;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,10 +67,9 @@ public class UserServiceTest {
     }
 
     @Test
+    @WithDefaultUser
     void updateUser() {
         //given
-        authSetUp("realworld1@email.com");
-
         String email = "update@email.com";
         String username = "updateUsername";
         String password = "87654321";
@@ -119,16 +117,6 @@ public class UserServiceTest {
     }
 
     @Test
-    void getCurrentUser_userNotFound() {
-        // given
-        authSetUp("realworld99@email.com");
-
-        // when
-        // then
-        assertThatThrownBy(() -> userService.getCurrentUser()).isInstanceOf(UserNotFoundException.class).hasMessage("User email:realworld99@email.com dose not found.");
-    }
-
-    @Test
     void login() {
         //given
         UserLoginRequestDto dto = UserLoginRequestDto.builder()
@@ -143,9 +131,17 @@ public class UserServiceTest {
         assertThat(result.getEmail()).isEqualTo("realworld1@email.com");
     }
 
-    private void authSetUp(String userId) {
-        org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User(userId, "", Collections.emptyList());
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(principal, "token", Collections.emptyList()));
+    @Test
+    void getUsers_byIds() {
+        // given
+        List<Long> userIds = List.of(101L, 102L, 103L);
+
+        // when
+        List<User> users = userService.getUsersByIds(userIds);
+
+        // then
+        assertThat(users).hasSize(3);
+        assertThat(users).extracting("id").isEqualTo(userIds);
     }
 
     private User getDefaultUser() {
