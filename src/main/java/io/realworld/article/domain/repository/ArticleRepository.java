@@ -17,11 +17,11 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Optional<Article> findBySlug(String slug);
 
-    //TODO: fetch 으로 해야되는데 에러남. 해결 필요.
-    @Query("select a from Article a " +
-            "join a.articleTags at " +
-            "join at.tag t " +
-            "where t.tag = :tag")
+    @Query(value = "select a from Article a " +
+            "join fetch a.articleTags at " +
+            "join fetch at.tag t " +
+            "where t.tag = :tag",
+    countQuery = "select count(a) from Article a join a.articleTags at join at.tag t where t.tag = :tag")
     Page<Article> findAllWithTagByTag(Pageable pageable, @Param("tag") String tag);
 
     List<Article> findByIdIn(List<Long> ids);

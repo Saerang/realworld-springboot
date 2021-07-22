@@ -35,7 +35,7 @@ class ArticleMapperServiceTest {
         em.flush();
         em.clear();
 
-        Article savedArticle = saveArticle("title", "body", tag);
+        Article savedArticle = saveArticle("body", tag);
 
         // when
         SingleArticleResponseDto result = articleMapperService.getSingleArticleResponseDto(savedArticle.getSlug(), 1);
@@ -51,10 +51,10 @@ class ArticleMapperServiceTest {
     }
 
 
-    private Article saveArticle(String title, String body, Tag tag) {
+    private Article saveArticle(String body, Tag tag) {
         Article article = Article.builder()
                 .userId(1L)
-                .title(title)
+                .title("title")
                 .description("description")
                 .body(body)
                 .build();

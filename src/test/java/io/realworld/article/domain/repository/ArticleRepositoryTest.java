@@ -37,7 +37,7 @@ public class ArticleRepositoryTest {
         em.clear();
 
         //then
-        Article findArticle = articleRepository.findBySlug(savedArticle.getSlug()).orElseThrow(() -> new ArticleNotFoundException());
+        Article findArticle = articleRepository.findBySlug(savedArticle.getSlug()).orElseThrow(() -> new ArticleNotFoundException(savedArticle.getId()));
 
         assertThat(findArticle.getSlug()).isEqualTo(article.getSlug());
         assertThat(findArticle.getBody()).isEqualTo(article.getBody());
