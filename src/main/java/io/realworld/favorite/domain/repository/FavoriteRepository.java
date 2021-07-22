@@ -12,4 +12,7 @@ import java.util.List;
 public interface FavoriteRepository extends JpaRepository<Favorite, FavoriteId> {
     @Query("select f from Favorite f where f.favoriteId.favoritedId = :favoritedId and f.favoriteId.favoriteType = :favoriteType")
     List<Favorite> findByFavoritedIdAndFavoriteType(@Param("favoritedId") long favoritedId, @Param("favoriteType") FavoriteType favoriteType);
+
+    @Query("select f.favoriteId.favoritedId from Favorite f where f.favoriteId.userId = :userId and f.favoriteId.favoriteType = :favoriteType")
+    List<Long> findFavoritedIdByUserIdAndFavoriteType(@Param("userId") long userId, @Param("favoriteType") FavoriteType favoriteType);
 }

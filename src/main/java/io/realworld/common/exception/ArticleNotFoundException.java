@@ -1,12 +1,12 @@
 package io.realworld.common.exception;
 
-public class ArticleNotFound extends RuntimeException {
+public class ArticleNotFoundException extends RuntimeException {
 
-    public ArticleNotFound() {
+    public ArticleNotFoundException() {
         this(null);
     }
 
-    public ArticleNotFound(Long articleId) {
+    public ArticleNotFoundException(Long articleId) {
         super("Article " + (articleId != null ? articleId + " " : "") + "dose not found.");
     }
 }

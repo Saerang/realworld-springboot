@@ -27,7 +27,7 @@ public class Profile {
 
     @Builder
     public Profile(String username, String bio, String image) {
-        Assert.state(StringUtils.isNotBlank(username), "username is not null");
+        Assert.state(StringUtils.isNotBlank(username), "username may not be blank.");
 
         this.username = username;
         this.bio = bio;

@@ -1,11 +1,10 @@
 package io.realworld.user.app;
 
-import io.realworld.common.exception.UserAlreadyExist;
+import io.realworld.common.exception.UserAlreadyExistException;
 import io.realworld.common.exception.UserNotFoundException;
 import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserLoginRequestDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
-import io.realworld.user.domain.Profile;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,6 @@ import javax.transaction.Transactional;
 import java.util.Collections;
 
 import static io.realworld.user.app.enumerate.LoginType.EMAIL;
-import static io.realworld.user.app.enumerate.LoginType.USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -66,7 +64,7 @@ public class UserServiceTest {
                 .build();
 
         //when
-        assertThatThrownBy(() -> userService.createUser(dto)).isInstanceOf(UserAlreadyExist.class);
+        assertThatThrownBy(() -> userService.createUser(dto)).isInstanceOf(UserAlreadyExistException.class);
     }
 
     @Test

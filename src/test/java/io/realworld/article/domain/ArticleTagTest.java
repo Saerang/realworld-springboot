@@ -11,7 +11,7 @@ public class ArticleTagTest {
     void createArticleTag() {
         // given
         Tag tag = Tag.builder().tag("tag").build();
-        Article article = Article.builder().body("body").build();
+        Article article = Article.builder().userId(1L).title("title").body("body").build();
 
         // when
         ArticleTag articleTag = ArticleTag.builder()

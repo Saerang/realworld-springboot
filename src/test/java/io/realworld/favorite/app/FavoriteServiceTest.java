@@ -50,10 +50,11 @@ public class FavoriteServiceTest {
     }
     
     @Test
-    void getFavorites() {
+    void getFavoritedIds_byUserId() {
         // given 
-        
-        // when 
+        long userId = 1;
+        // when
+        favoriteServiceFactory.getService(ARTICLE).getFavorites(userId);
          
         // then 
     }

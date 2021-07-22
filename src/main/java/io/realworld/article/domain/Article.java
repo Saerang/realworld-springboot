@@ -5,13 +5,18 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.CascadeType.PERSIST;
 
 @Entity
@@ -32,7 +37,7 @@ public class Article {
 
     private String body;
 
-    @OneToMany(mappedBy = "article", cascade = PERSIST)
+    @OneToMany(mappedBy = "article", cascade = ALL)
     private Set<ArticleTag> articleTags = new HashSet<>();
 
     private Long userId;
@@ -42,9 +47,12 @@ public class Article {
     private LocalDateTime updatedAt;
 
     @Builder
-    public Article(String slug, String title, String description, String body, Long userId) {
-        this.slug = slug;
+    public Article(String title, String description, String body, Long userId) {
+        Assert.state(StringUtils.isNotBlank(title), "title may not be blank.");
+        Assert.state(userId != null, "userId may not be null.");
+
         this.title = title;
+        this.slug = this.getReplaceSlug();
         this.description = description;
         this.body = body;
         this.userId = userId;
@@ -54,4 +62,15 @@ public class Article {
         this.articleTags.addAll(tags.stream().map(tag -> new ArticleTag(this, tag)).collect(toSet()));
     }
 
+    public void updateArticle(String title, String body, String description) {
+        this.title = title;
+        this.slug = this.getReplaceSlug();
+        this.body = body;
+        this.description = description;
+    }
+
+    // TODO: slug 로직 찾아보기.
+    private String getReplaceSlug() {
+        return this.title.replaceAll(" ", "-") + "-" + RandomStringUtils.randomAlphanumeric(10);
+    }
 }

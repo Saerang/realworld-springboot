@@ -24,7 +24,6 @@ public class ArticleTagRepositoryTest {
     void persistence() throws IllegalAccessException {
         // given
         Article article = Article.builder()
-                .slug("slug")
                 .body("body")
                 .description("description")
                 .title("title")

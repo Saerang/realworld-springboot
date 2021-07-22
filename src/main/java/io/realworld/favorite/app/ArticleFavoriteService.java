@@ -38,8 +38,8 @@ public class ArticleFavoriteService implements FavoriteService {
     }
 
     @Override
-    public List<Favorite> getFavorites(long favoriteId) {
-        return favoriteRepository.findByFavoritedIdAndFavoriteType(favoriteId, ARTICLE);
+    public List<Favorite> getFavorites(long favoritedId) {
+        return favoriteRepository.findByFavoritedIdAndFavoriteType(favoritedId, ARTICLE);
     }
 
     @Override

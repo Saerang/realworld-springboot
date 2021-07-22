@@ -3,7 +3,6 @@ package io.realworld.article.app;
 import io.realworld.article.api.dto.MultipleArticleSearchDto;
 import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
-import io.realworld.article.api.dto.SingleArticleSearchDto;
 import io.realworld.article.domain.Article;
 import io.realworld.favorite.app.FavoriteServiceFactory;
 import io.realworld.favorite.app.enumerate.FavoriteType;
@@ -23,8 +22,8 @@ public class DefaultArticleMapperService implements ArticleMapperService{
     final private FavoriteServiceFactory favoriteServiceFactory;
 
     @Override
-    public SingleArticleResponseDto getSingleArticleResponseDto(SingleArticleSearchDto dto, long userId) {
-        Article article = articleService.getArticle(dto);
+    public SingleArticleResponseDto getSingleArticleResponseDto(String slug, long userId) {
+        Article article = articleService.getArticle(slug);
         User user = userService.getUserById(userId);
         boolean following = followRelationService.isFollowing(userId, article.getId());
         boolean favorited = favoriteServiceFactory.getService(FavoriteType.ARTICLE).isFavorited(userId, article.getId());

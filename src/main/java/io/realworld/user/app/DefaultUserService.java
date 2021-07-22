@@ -1,7 +1,7 @@
 package io.realworld.user.app;
 
 import io.realworld.common.exception.PasswordNotMatchedException;
-import io.realworld.common.exception.UserAlreadyExist;
+import io.realworld.common.exception.UserAlreadyExistException;
 import io.realworld.common.exception.UserNotFoundException;
 import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserLoginRequestDto;
@@ -34,7 +34,7 @@ public class DefaultUserService implements UserService {
     public User createUser(UserCreateRequestDto dto) {
         Optional<User> optionalUser = userRepository.findByEmailOrUsername(dto.getEmail(), dto.getUsername());
         if (optionalUser.isPresent()) {
-            throw new UserAlreadyExist(optionalUser.get().getId());
+            throw new UserAlreadyExistException(optionalUser.get().getId());
         }
 
         User user = User.builder()
@@ -73,7 +73,7 @@ public class DefaultUserService implements UserService {
         Optional<User> findUser = userRepository.findByEmailOrUsername(dto.getEmail(), dto.getUsername());
 
         if (findUser.isPresent()) {
-            throw new UserAlreadyExist(findUser.get().getId());
+            throw new UserAlreadyExistException(findUser.get().getId());
         }
 
         User user = getCurrentUser();

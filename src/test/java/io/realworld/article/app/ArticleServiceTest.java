@@ -1,22 +1,26 @@
 package io.realworld.article.app;
 
 import io.realworld.article.api.dto.ArticleCreateDto;
+import io.realworld.article.api.dto.ArticleUpdateDto;
 import io.realworld.article.api.dto.MultipleArticleSearchDto;
-import io.realworld.article.api.dto.SingleArticleSearchDto;
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.repository.ArticleRepository;
 import io.realworld.common.WithDefaultUser;
-import io.realworld.common.exception.ArticleNotFound;
+import io.realworld.common.exception.ArticleNotFoundException;
 import io.realworld.tag.app.dto.TagRequestDto;
 import io.realworld.tag.domain.Tag;
 import io.realworld.tag.domain.repository.TagRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,7 +54,7 @@ public class ArticleServiceTest {
 
         em.flush();
         em.clear();
-        Article findArticle = articleRepository.findById(savedArticle.getId()).orElseThrow(() -> new ArticleNotFound(savedArticle.getId()));
+        Article findArticle = articleRepository.findById(savedArticle.getId()).orElseThrow(() -> new ArticleNotFoundException(savedArticle.getId()));
 
         // then
         assertThat(savedArticle.getTitle()).isEqualTo(findArticle.getTitle());
@@ -61,15 +65,10 @@ public class ArticleServiceTest {
     @Test
     void getArticle() {
         //given
-        Tag tag = tagRepository.save(Tag.builder().tag("tag").build());
-        em.flush();
-        em.clear();
-
-        Article savedArticle = saveArticle("slug", "title", "body", tag);
-        SingleArticleSearchDto dto = SingleArticleSearchDto.builder().slug(savedArticle.getSlug()).build();
+        Article savedArticle = saveArticleWithTag();
 
         //when
-        Article article = articleService.getArticle(dto);
+        Article article = articleService.getArticle(savedArticle.getSlug());
 
         //then
         assertThat(article.getId()).isEqualTo(savedArticle.getId());
@@ -78,18 +77,18 @@ public class ArticleServiceTest {
     }
 
     @Test
-    void getArticles_ByTag() {
+    void getAllArticles_ByTag() {
         //given
-        Tag tag = tagRepository.save(Tag.builder().tag("tag").build());
+        Tag tag = saveTag();
+        Article article1 = saveArticle("title1", "body1", tag, "description");
+        Article article2 = saveArticle("title2", "body2", tag, "description");
 
-        Article article1 = saveArticle("slug1", "title1", "body1", tag);
-        Article article2 = saveArticle("slug2", "title2", "body2", tag);
         MultipleArticleSearchDto dto = MultipleArticleSearchDto.builder()
                 .tag("tag")
                 .build();
 
         //when
-        List<Article> articles = articleService.getArticlesFromSearchDto(dto, 2);
+        Page<Article> articles = articleService.getArticlesFromSearchDto(dto, 2);
 
         //then
         assertThat(articles).hasSize(2);
@@ -98,13 +97,96 @@ public class ArticleServiceTest {
         assertThat(articles).extracting("slug").contains(article1.getSlug(), article2.getSlug());
     }
 
-    private Article saveArticle(String slug, String title, String body, Tag tag) {
+    @Test
+    void getPageArticles_ByTag() {
+        //given
+        Tag tag = saveTag();
+        saveArticle("title1", "body1", tag, "description");
+        Article article2 = saveArticle("title2", "body2", tag, "description");
+
+        MultipleArticleSearchDto dto = MultipleArticleSearchDto.builder()
+                .pageable(PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "id")))
+                .tag("tag")
+                .build();
+
+        //when
+        Page<Article> articles = articleService.getArticlesFromSearchDto(dto, 2);
+
+        //then
+        assertThat(articles).hasSize(1);
+        assertThat(articles).extracting("title").contains(article2.getTitle());
+        assertThat(articles).extracting("body").contains(article2.getBody());
+        assertThat(articles).extracting("slug").contains(article2.getSlug());
+    }
+
+    @Test
+    void getFeedArticles() {
+        //given
+        //when
+        List<Article> articles = articleService.getFeedArticles(List.of(1L, 2L, 3L));
+
+        //then
+        assertThat(articles).hasSize(3);
+    }
+
+    @Test
+    void updateArticle() {
+        //given
+        Article savedArticle = saveArticleWithTag();
+        String slug = savedArticle.getSlug();
+
+        ArticleUpdateDto dto = ArticleUpdateDto.builder()
+                .title("title1")
+                .body("body1")
+                .description("description1")
+                .build();
+
+        //when
+        Article updatedArticle = articleService.updateArticle(dto, slug);
+        em.flush();
+        em.clear();
+
+        //then
+        assertThat(updatedArticle.getTitle()).isEqualTo(dto.getTitle());
+        assertThat(updatedArticle.getBody()).isEqualTo(dto.getBody());
+        assertThat(updatedArticle.getDescription()).isEqualTo(dto.getDescription());
+        assertThat(updatedArticle.getSlug()).isNotEqualTo(slug);
+    }
+
+    @Test
+    void deleteArticle() {
+        //given
+        Article savedArticle = saveArticleWithTag();
+        Optional<Article> beforeArticle = articleRepository.findBySlug(savedArticle.getSlug());
+        assertThat(beforeArticle).isNotEmpty();
+
+        //when
+        articleService.deleteArticle(savedArticle.getSlug());
+
+        em.flush();
+        em.clear();
+
+        Optional<Article> afterArticle = articleRepository.findBySlug(savedArticle.getSlug());
+
+        //then
+        assertThat(afterArticle).isEmpty();
+    }
+
+    private Article saveArticleWithTag() {
+        Tag tag = saveTag();
+        return saveArticle("title", "body", tag, "description");
+    }
+
+    private Tag saveTag() {
+        return tagRepository.save(Tag.builder().tag("tag").build());
+    }
+
+    private Article saveArticle(String title, String body, Tag tag, String description) {
         Article article = Article.builder()
                 .userId(1L)
                 .title(title)
-                .description("description")
+                .description(description)
                 .body(body)
-                .slug(slug)
                 .build();
 
         article.addTags(Set.of(tag));

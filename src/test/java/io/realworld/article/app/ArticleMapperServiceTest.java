@@ -1,7 +1,6 @@
 package io.realworld.article.app;
 
 import io.realworld.article.api.dto.SingleArticleResponseDto;
-import io.realworld.article.api.dto.SingleArticleSearchDto;
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.repository.ArticleRepository;
 import io.realworld.tag.domain.Tag;
@@ -36,12 +35,10 @@ class ArticleMapperServiceTest {
         em.flush();
         em.clear();
 
-        Article savedArticle = saveArticle("slug", "title", "body", tag);
-
-        SingleArticleSearchDto dto = SingleArticleSearchDto.builder().slug(savedArticle.getSlug()).build();
+        Article savedArticle = saveArticle("title", "body", tag);
 
         // when
-        SingleArticleResponseDto result = articleMapperService.getSingleArticleResponseDto(dto, 1);
+        SingleArticleResponseDto result = articleMapperService.getSingleArticleResponseDto(savedArticle.getSlug(), 1);
 
         // then
         assertThat(result.getArticle().getSlug()).isEqualTo(savedArticle.getSlug());
@@ -54,13 +51,12 @@ class ArticleMapperServiceTest {
     }
 
 
-    private Article saveArticle(String slug, String title, String body, Tag tag) {
+    private Article saveArticle(String title, String body, Tag tag) {
         Article article = Article.builder()
                 .userId(1L)
                 .title(title)
                 .description("description")
                 .body(body)
-                .slug(slug)
                 .build();
 
         article.addTags(Set.of(tag));

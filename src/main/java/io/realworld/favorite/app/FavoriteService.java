@@ -10,7 +10,7 @@ public interface FavoriteService {
 
     boolean isFavorited(long userId, long favoriteId);
 
-    List<Favorite> getFavorites(long favoriteId);
+    List<Favorite> getFavorites(long favoritedId);
 
     void favoriteAuthor(long userId, long favoriteId);
 

@@ -36,9 +36,9 @@ public class User {
 
     @Builder
     public User(String email, String password, String username, String bio, String image) {
-        Assert.state(StringUtils.isNotBlank(email), "email may not be null.");
-        Assert.state(StringUtils.isNotBlank(password), "password may not be null.");
-        Assert.state(StringUtils.isNotBlank(username), "username may not be null.");
+        Assert.state(StringUtils.isNotBlank(email), "email may not be blank.");
+        Assert.state(StringUtils.isNotBlank(password), "password may not be blank.");
+        Assert.state(StringUtils.isNotBlank(username), "username may not be blank.");
 
         this.email = email;
         this.password = password;

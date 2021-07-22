@@ -1,6 +1,7 @@
 package io.realworld.article.domain.repository;
 
 import io.realworld.article.domain.Article;
+import io.realworld.common.exception.ArticleNotFoundException;
 import io.realworld.tag.domain.repository.TagRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ public class ArticleRepositoryTest {
     void persistence() {
         //given
         Article article = Article.builder()
-                .slug("slug")
                 .body("body")
                 .description("description")
                 .title("title")
@@ -32,12 +32,12 @@ public class ArticleRepositoryTest {
                 .build();
 
         //when
-        articleRepository.save(article);
+        Article savedArticle = articleRepository.save(article);
         em.flush();
         em.clear();
 
         //then
-        Article findArticle = articleRepository.findByUserId(1L).orElse(Article.builder().build());
+        Article findArticle = articleRepository.findBySlug(savedArticle.getSlug()).orElseThrow(() -> new ArticleNotFoundException());
 
         assertThat(findArticle.getSlug()).isEqualTo(article.getSlug());
         assertThat(findArticle.getBody()).isEqualTo(article.getBody());
