@@ -2,6 +2,7 @@ package io.realworld.user.domain;
 
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -47,12 +48,18 @@ public class User {
         this.image = image;
     }
 
-    public void updateUserInfo(String email, String username, String password, String image, String bio) {
+    public void updateUserInfo(String email, String username, String password, PasswordEncoder passwordEncoder, String image, String bio) {
         this.email = email;
-        this.password = password;
+        if (StringUtils.isNotBlank(password)){
+            this.encodePassword(passwordEncoder);
+        }
         this.username = username;
         this.bio = bio;
         this.image = image;
+    }
+
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
     }
 
 }

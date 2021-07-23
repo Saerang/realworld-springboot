@@ -77,8 +77,8 @@ public class FavoriteServiceTest {
         List<Long> favoritedIds = favoriteServiceFactory.getService(ARTICLE).getFavoritedIds(userId);
 
         // then
-        assertThat(favoritedIds).hasSize(3);
-        assertThat(favoritedIds).contains(101L, 102L, 103L);
+        assertThat(favoritedIds).hasSize(4);
+        assertThat(favoritedIds).contains(101L, 102L, 103L, 104L);
     }
 
     @Test

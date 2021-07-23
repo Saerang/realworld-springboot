@@ -21,7 +21,7 @@ public class DefaultProfileService implements ProfileService {
     }
 
     @Override
-    public Pair<User, Boolean> followUser(long followerUserId, String username) {
+    public Pair<User, Boolean> followUser(Long followerUserId, String username) {
         User followeeUser = userService.getUserByUsername(username);
 
         FollowRelation followRelation = new FollowRelation(followerUserId, followeeUser.getId());
@@ -31,7 +31,7 @@ public class DefaultProfileService implements ProfileService {
     }
 
     @Override
-    public Pair<User, Boolean> unfollowUser(long followerUserId, String username) {
+    public Pair<User, Boolean> unfollowUser(Long followerUserId, String username) {
         User followeeUser = userService.getUserByUsername(username);
 
         FollowRelation followRelation = new FollowRelation(followerUserId, followeeUser.getId());

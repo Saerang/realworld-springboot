@@ -37,11 +37,13 @@ public class UserControllerTest {
         // given
         String username = "new_realworld";
         String email = "new_realworld1@email.com";
-        UserCreateRequestDto dto = UserCreateRequestDto.builder()
+        UserCreateRequestDto.UserDto userDto = UserCreateRequestDto.UserDto.builder()
                 .username(username)
                 .email(email)
-                .password("1234")
+                .password("12345678")
                 .build();
+        UserCreateRequestDto dto = UserCreateRequestDto.builder().userDto(userDto).build();
+
         String jsonDto = objectMapper.writeValueAsString(dto);
 
         // when
@@ -57,9 +59,13 @@ public class UserControllerTest {
     @Test
     void login() throws Exception {
         // given
-        UserLoginRequestDto loginDto = UserLoginRequestDto.builder()
+        UserLoginRequestDto.UserDto userDto = UserLoginRequestDto.UserDto.builder()
                 .email("realworld101@email.com")
                 .password("12345678")
+                .build();
+
+        UserLoginRequestDto loginDto = UserLoginRequestDto.builder()
+                .userDto(userDto)
                 .build();
 
         String jsonDto = objectMapper.writeValueAsString(loginDto);
@@ -92,10 +98,13 @@ public class UserControllerTest {
     @WithDefaultUser
     void updateUser() throws Exception {
         // given
-        UserUpdateRequestDto dto = UserUpdateRequestDto.builder()
+        UserUpdateRequestDto.UserDto userDto = UserUpdateRequestDto.UserDto.builder()
                 .email("new_realworld1@email.com")
                 .username("new_realworld")
                 .password("87654321")
+                .build();
+        UserUpdateRequestDto dto = UserUpdateRequestDto.builder()
+                .userDto(userDto)
                 .build();
         String jsonRequestDto = objectMapper.writeValueAsString(dto);
 

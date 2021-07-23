@@ -34,11 +34,12 @@ public class UserServiceTest {
     @Test
     void createUser() {
         //given
-        UserCreateRequestDto dto = UserCreateRequestDto.builder()
+        UserCreateRequestDto.UserDto userDto = UserCreateRequestDto.UserDto.builder()
                 .username("createUser")
                 .email("createUser@email.com")
                 .password("12345678")
                 .build();
+        UserCreateRequestDto dto = UserCreateRequestDto.builder().userDto(userDto).build();
 
         //when
         User user = userService.createUser(dto);
@@ -56,11 +57,12 @@ public class UserServiceTest {
     @Test
     void createUser_dup() {
         //given
-        UserCreateRequestDto dto = UserCreateRequestDto.builder()
+        UserCreateRequestDto.UserDto userDto = UserCreateRequestDto.UserDto.builder()
                 .username("realworld101")
                 .email("realworld101@email.com")
                 .password("1234")
                 .build();
+        UserCreateRequestDto dto = UserCreateRequestDto.builder().userDto(userDto).build();
 
         //when
         assertThatThrownBy(() -> userService.createUser(dto)).isInstanceOf(UserAlreadyExistException.class);
@@ -76,7 +78,7 @@ public class UserServiceTest {
         String bio = "updateBio";
         String image = "updateImage";
 
-        UserUpdateRequestDto dto = UserUpdateRequestDto.builder()
+        UserUpdateRequestDto.UserDto userDto = UserUpdateRequestDto.UserDto.builder()
                 .email(email)
                 .username(username)
                 .password(password)
@@ -84,8 +86,12 @@ public class UserServiceTest {
                 .image(image)
                 .build();
 
+        UserUpdateRequestDto dto = UserUpdateRequestDto.builder()
+                .userDto(userDto)
+                .build();
+
         //when
-        User user = userService.updateUser(dto);
+        User user = userService.updateUser(dto, 101L);
         User findUser = userRepository.findByEmail(user.getEmail())
                 .orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + user.getEmail()));
 
@@ -93,6 +99,71 @@ public class UserServiceTest {
         assertThat(findUser.getEmail()).isEqualTo(email);
         assertThat(findUser.getBio()).isEqualTo(bio);
         assertThat(findUser.getImage()).isEqualTo(image);
+    }
+
+    @Test
+    @WithDefaultUser
+    void updateUser_with_sameValue() {
+        //given
+        String email = "realworld101@email.com";
+        String username = "realworld101";
+        String password = "12345678";
+        String bio = "bio101";
+        String image = "image101";
+
+        UserUpdateRequestDto.UserDto userDto = UserUpdateRequestDto.UserDto.builder()
+                .email(email)
+                .username(username)
+                .password(password)
+                .bio(bio)
+                .image(image)
+                .build();
+
+        UserUpdateRequestDto dto = UserUpdateRequestDto.builder()
+                .userDto(userDto)
+                .build();
+
+        //when
+        User user = userService.updateUser(dto, 101L);
+        User findUser = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + user.getEmail()));
+
+        //then
+        assertThat(findUser.getEmail()).isEqualTo(email);
+        assertThat(findUser.getBio()).isEqualTo(bio);
+        assertThat(findUser.getImage()).isEqualTo(image);
+    }
+
+    @Test
+    @WithDefaultUser
+    void updateUser_with_emptyPassword() {
+        //given
+        String email = "update@email.com";
+        String username = "updateUsername";
+        String bio = "updateBio";
+        String image = "updateImage";
+
+        UserUpdateRequestDto.UserDto userDto = UserUpdateRequestDto.UserDto.builder()
+                .email(email)
+                .username(username)
+                .bio(bio)
+                .image(image)
+                .build();
+
+        UserUpdateRequestDto dto = UserUpdateRequestDto.builder()
+                .userDto(userDto)
+                .build();
+
+        //when
+        User user = userService.updateUser(dto, 101L);
+        User findUser = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + user.getEmail()));
+
+        //then
+        assertThat(findUser.getEmail()).isEqualTo(email);
+        assertThat(findUser.getBio()).isEqualTo(bio);
+        assertThat(findUser.getImage()).isEqualTo(image);
+        assertThat(findUser.getPassword()).isEqualTo("$2a$10$/Hxqaf3ZfncnQGn2/Qg2R.Uacd2ElztD.4viYFF6jPHeBrqoG9M/m");
     }
 
     @Test
@@ -119,10 +190,11 @@ public class UserServiceTest {
     @Test
     void login() {
         //given
-        UserLoginRequestDto dto = UserLoginRequestDto.builder()
+        UserLoginRequestDto.UserDto userDto = UserLoginRequestDto.UserDto.builder()
                 .email("realworld101@email.com")
                 .password("12345678")
                 .build();
+        UserLoginRequestDto dto = UserLoginRequestDto.builder().userDto(userDto).build();
 
         //when
         User result = userService.login(dto);

@@ -5,6 +5,7 @@ import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserLoginRequestDto;
 import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
+import io.realworld.user.app.AuthenticationService;
 import io.realworld.user.app.UserService;
 import io.realworld.user.app.dto.Mappers;
 import io.realworld.user.domain.User;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     final private UserService userService;
+    final private AuthenticationService authenticationService;
     final private JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/users")
@@ -39,8 +41,12 @@ public class UserController {
 
     @PutMapping("/user")
     public UserResponseDto updateUser(@RequestBody UserUpdateRequestDto dto) {
-        User user = userService.updateUser(dto);
+        User user = userService.updateUser(dto, getCurrentUserId());
         return this.getUserResponseDto(user);
+    }
+
+    private Long getCurrentUserId() {
+        return authenticationService.getCurrentUserId();
     }
 
     private UserResponseDto getUserResponseDto(User user) {

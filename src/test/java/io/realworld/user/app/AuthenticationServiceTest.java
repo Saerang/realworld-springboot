@@ -1,6 +1,7 @@
 package io.realworld.user.app;
 
 import io.realworld.common.WithDefaultUser;
+import io.realworld.common.exception.UserNotFoundException;
 import io.realworld.user.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class AuthenticationServiceTest {
         //given
 
         //when
-        User user = authenticationService.getCurrentUser();
+        User user = authenticationService.getCurrentUser().orElseThrow(UserNotFoundException::new);
 
         //then
         assertThat(user.getEmail()).isEqualTo("realworld101@email.com");

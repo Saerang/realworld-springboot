@@ -10,9 +10,11 @@ import io.realworld.common.exception.ArticleNotFoundException;
 import io.realworld.tag.app.dto.TagRequestDto;
 import io.realworld.tag.domain.Tag;
 import io.realworld.tag.domain.repository.TagRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Description;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -77,6 +79,8 @@ public class ArticleServiceTest {
     }
 
     @Test
+    @Disabled
+    @Description("Query Dsl 적용 후 작성 필요.")
     void getAllArticles_ByTag() {
         //given
         Tag tag = saveTag();
@@ -88,7 +92,7 @@ public class ArticleServiceTest {
                 .build();
 
         //when
-        Page<Article> articles = articleService.getArticlesBySearchDto(dto, 2);
+        Page<Article> articles = articleService.getArticles(tag.getTag(), null, null, PageRequest.of(0, 20));
 
         //then
         assertThat(articles).hasSize(2);
@@ -98,19 +102,16 @@ public class ArticleServiceTest {
     }
 
     @Test
-    void getPageArticles_ByTag() {
+    @Disabled
+    @Description("Query DSL 적용 후 다시 작업")
+    void getPageArticles() {
         //given
         Tag tag = saveTag();
         saveArticle("title1", "body1", tag, "description");
         Article article2 = saveArticle("title2", "body2", tag, "description");
 
-        MultipleArticleSearchDto dto = MultipleArticleSearchDto.builder()
-                .pageable(PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "id")))
-                .tag("tag")
-                .build();
-
         //when
-        Page<Article> articles = articleService.getArticlesBySearchDto(dto, 2);
+        Page<Article> articles = articleService.getArticles(tag.getTag(), null, null, PageRequest.of(0, 1));
 
         //then
         assertThat(articles).hasSize(1);

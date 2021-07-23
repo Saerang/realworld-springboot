@@ -15,7 +15,7 @@ public interface ArticleService {
 
     Article getArticle(String slug);
 
-    Page<Article> getArticlesBySearchDto(MultipleArticleSearchDto articleSearchDto, long userId);
+    Page<Article> getArticles(String tag, String author, String favorited, Pageable pageable);
 
     Article updateArticle(ArticleUpdateDto dto, String slug);
 

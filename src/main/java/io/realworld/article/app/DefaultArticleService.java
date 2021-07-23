@@ -49,8 +49,9 @@ public class DefaultArticleService implements ArticleService {
 
     // TODO: queryDsl 로 바꿔서 동적 쿼리 작성해야됨.
     @Override
-    public Page<Article> getArticlesBySearchDto(MultipleArticleSearchDto dto, long userId) {
-        return articleRepository.findAllWithTagByTag(dto.getTag(), dto.getPageable());
+    @Transactional(readOnly = true)
+    public Page<Article> getArticles(String tag, String author, String favorited, Pageable pageable) {
+        return articleRepository.findAllWithTag(pageable);
     }
 
     @Override
@@ -68,11 +69,13 @@ public class DefaultArticleService implements ArticleService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Article> getArticlesByArticleIds(List<Long> articleIds, Pageable pageable) {
         return articleRepository.findByIdIn(articleIds, pageable);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Article> getArticlesByUserIds(List<Long> userIds, Pageable pageable) {
         return articleRepository.findAllByUserId(userIds, pageable);
     }

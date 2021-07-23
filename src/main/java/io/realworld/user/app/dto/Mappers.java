@@ -42,7 +42,7 @@ public class Mappers {
         return ProfileResponseDto.builder().profile(profileDto).build();
     }
 
-    public static SingleArticleResponseDto toSingleArticleResponseDto(Article article, Map<Long, Set<Tag>> tagMap, User user, boolean isFavorited, long favoritesCount, boolean isFollowing) {
+    public static SingleArticleResponseDto toSingleArticleResponseDto(Article article, User user, boolean isFavorited, long favoritesCount, boolean isFollowing) {
         ArticleResponseDto articleResponseDto = toArticleResponseDto(
                 article,
                 article.getArticleTags().stream().map(ArticleTag::getTag).collect(Collectors.toSet()),

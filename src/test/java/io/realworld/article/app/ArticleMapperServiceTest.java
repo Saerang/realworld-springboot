@@ -1,5 +1,6 @@
 package io.realworld.article.app;
 
+import io.realworld.article.api.dto.MultipleArticleSearchDto;
 import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.article.domain.Article;
@@ -40,7 +41,7 @@ class ArticleMapperServiceTest {
         Article savedArticle = saveArticle(tag);
 
         // when
-        SingleArticleResponseDto result = articleMapperService.getSingleArticleResponseDto(savedArticle.getSlug(), 101);
+        SingleArticleResponseDto result = articleMapperService.getSingleArticleResponseDto(savedArticle.getSlug(), 101L);
 
         // then
         assertThat(result.getArticle().getSlug()).isEqualTo(savedArticle.getSlug());
@@ -52,15 +53,25 @@ class ArticleMapperServiceTest {
         assertThat(result.getArticle().getAuthor().getImage()).isEqualTo("image101");
     }
 
+    @Test
+    void getArticles() {
+        // given
+        PageRequest pageRequest = PageRequest.of(0, 20);
 
+        // when
+        MultipleArticlesResponseDto multipleArticlesResponseDto = articleMapperService.getArticles(null, null, null, pageRequest, 101L);
+
+        // then
+        assertThat(multipleArticlesResponseDto.getCount()).isEqualTo(9);
+    }
 
     @Test
     void getArticlesWrittenByAuthorsFollowed() {
         // given
-        PageRequest pageRequest = PageRequest.of(0, 10);
+        PageRequest pageRequest = PageRequest.of(0, 20);
 
         // when
-        MultipleArticlesResponseDto multipleArticlesResponseDtoFeed = articleMapperService.getMultipleArticlesResponseDtoFeed(pageRequest, 202L);
+        MultipleArticlesResponseDto multipleArticlesResponseDtoFeed = articleMapperService.getFeedArticles(pageRequest, 202L);
 
         // then
         assertThat(multipleArticlesResponseDtoFeed.getCount()).isEqualTo(3);

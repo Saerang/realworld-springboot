@@ -1,14 +1,13 @@
 package io.realworld.article.app;
 
-import io.realworld.article.api.dto.MultipleArticleSearchDto;
 import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 import org.springframework.data.domain.Pageable;
 
 public interface ArticleMapperService {
-    SingleArticleResponseDto getSingleArticleResponseDto(String slug, long userId);
+    SingleArticleResponseDto getSingleArticleResponseDto(String slug, Long userId);
 
-    MultipleArticlesResponseDto getMultipleArticlesResponseDto(MultipleArticleSearchDto dto, long userId);
+    MultipleArticlesResponseDto getArticles(String tag, String author, String favorited, Pageable pageable, Long userId);
 
-    MultipleArticlesResponseDto getMultipleArticlesResponseDtoFeed(Pageable pageable, long userId);
+    MultipleArticlesResponseDto getFeedArticles(Pageable pageable, Long userId);
 }

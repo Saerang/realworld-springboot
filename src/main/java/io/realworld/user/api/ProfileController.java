@@ -27,18 +27,18 @@ public class ProfileController {
 
     @PostMapping("/profiles/{username}/follow")
     public ProfileResponseDto followUser(@PathVariable String username) {
-        Pair<User, Boolean> user = profileService.followUser(getCurrentUserEmail(), username);
+        Pair<User, Boolean> user = profileService.followUser(getCurrentUserId(), username);
         return getProfileResponseDto(user);
     }
 
     @DeleteMapping("/profiles/{username}/follow")
     public ProfileResponseDto unfollowUser(@PathVariable String username) {
-        Pair<User, Boolean> user = profileService.unfollowUser(getCurrentUserEmail(), username);
+        Pair<User, Boolean> user = profileService.unfollowUser(getCurrentUserId(), username);
         return getProfileResponseDto(user);
     }
 
-    private long getCurrentUserEmail() {
-        return authenticationService.getCurrentUser().getId();
+    private Long getCurrentUserId() {
+        return authenticationService.getCurrentUserId();
     }
 
     private ProfileResponseDto getProfileResponseDto(Pair<User, Boolean> user) {

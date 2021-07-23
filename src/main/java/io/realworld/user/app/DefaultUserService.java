@@ -33,15 +33,15 @@ public class DefaultUserService implements UserService {
 
     @Override
     public User createUser(UserCreateRequestDto dto) {
-        Optional<User> optionalUser = userRepository.findByEmailOrUsername(dto.getEmail(), dto.getUsername());
+        Optional<User> optionalUser = userRepository.findByEmailOrUsername(dto.getUserDto().getEmail(), dto.getUserDto().getUsername());
         if (optionalUser.isPresent()) {
             throw new UserAlreadyExistException(optionalUser.get().getId());
         }
 
         User user = User.builder()
-                .email(dto.getEmail())
-                .password(passwordEncode(dto.getPassword()))
-                .username(dto.getUsername())
+                .email(dto.getUserDto().getEmail())
+                .password(passwordEncode(dto.getUserDto().getPassword()))
+                .username(dto.getUserDto().getUsername())
                 .build();
 
         return userRepository.save(user);
@@ -75,23 +75,27 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public User updateUser(UserUpdateRequestDto dto) {
-        Optional<User> findUser = userRepository.findByEmailOrUsername(dto.getEmail(), dto.getUsername());
+    public User updateUser(UserUpdateRequestDto dto, long userId) {
+        Optional<User> findUser = userRepository.findByEmailOrUsername(dto.getUserDto().getEmail(), dto.getUserDto().getUsername());
 
-        if (findUser.isPresent()) {
+        if (findUser.isPresent() && findUser.get().getId() != userId) {
             throw new UserAlreadyExistException(findUser.get().getId());
         }
 
         User user = getCurrentUser();
-        user.updateUserInfo(dto.getEmail(), dto.getUsername(), passwordEncode(dto.getPassword()), dto.getImage(), dto.getBio());
+        user.updateUserInfo(
+                dto.getUserDto().getEmail(), dto.getUserDto().getUsername(),
+                dto.getUserDto().getPassword(), passwordEncoder,
+                dto.getUserDto().getImage(), dto.getUserDto().getBio()
+        );
         return user;
     }
 
     @Override
     public User login(UserLoginRequestDto dto) {
-        User user = getUserByEmail(dto.getEmail());
+        User user = getUserByEmail(dto.getUserDto().getEmail());
 
-        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(dto.getUserDto().getPassword(), user.getPassword())) {
             throw new PasswordNotMatchedException(user.getId());
         }
 
