@@ -37,7 +37,7 @@ class ArticleMapperServiceTest {
         em.flush();
         em.clear();
 
-        Article savedArticle = saveArticle("body", tag);
+        Article savedArticle = saveArticle(tag);
 
         // when
         SingleArticleResponseDto result = articleMapperService.getSingleArticleResponseDto(savedArticle.getSlug(), 101);
@@ -52,8 +52,10 @@ class ArticleMapperServiceTest {
         assertThat(result.getArticle().getAuthor().getImage()).isEqualTo("image101");
     }
 
+
+
     @Test
-    void getArticles_written_byAuthors_youFollowed() {
+    void getArticlesWrittenByAuthorsFollowed() {
         // given
         PageRequest pageRequest = PageRequest.of(0, 10);
 
@@ -68,12 +70,12 @@ class ArticleMapperServiceTest {
     }
 
 
-    private Article saveArticle(String body, Tag tag) {
+    private Article saveArticle(Tag tag) {
         Article article = Article.builder()
                 .userId(101L)
                 .title("title")
                 .description("description")
-                .body(body)
+                .body("body")
                 .build();
 
         article.addTags(Set.of(tag));
