@@ -6,7 +6,6 @@ import io.realworld.article.domain.Article;
 import io.realworld.article.domain.repository.ArticleRepository;
 import io.realworld.tag.domain.Tag;
 import io.realworld.tag.domain.repository.TagRepository;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +17,6 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class ArticleMapperServiceTest {
@@ -49,13 +47,13 @@ class ArticleMapperServiceTest {
         assertThat(result.getArticle().getTitle()).isEqualTo(savedArticle.getTitle());
         assertThat(result.getArticle().getBody()).isEqualTo(savedArticle.getBody());
         assertThat(result.getArticle().isFavorited()).isFalse();
-        assertThat(result.getArticle().getAuthor().getUsername()).isEqualTo("realworld1");
-        assertThat(result.getArticle().getAuthor().getBio()).isEqualTo("bio1");
-        assertThat(result.getArticle().getAuthor().getImage()).isEqualTo("image1");
+        assertThat(result.getArticle().getAuthor().getUsername()).isEqualTo("realworld101");
+        assertThat(result.getArticle().getAuthor().getBio()).isEqualTo("bio101");
+        assertThat(result.getArticle().getAuthor().getImage()).isEqualTo("image101");
     }
 
     @Test
-    void getArticles_byFeed() {
+    void getArticles_written_byAuthors_youFollowed() {
         // given
         PageRequest pageRequest = PageRequest.of(0, 10);
 
@@ -64,6 +62,9 @@ class ArticleMapperServiceTest {
 
         // then
         assertThat(multipleArticlesResponseDtoFeed.getCount()).isEqualTo(3);
+        assertThat(multipleArticlesResponseDtoFeed.getArticles()).extracting("title").containsExactly("title201", "title202", "title203");
+        assertThat(multipleArticlesResponseDtoFeed.getArticles()).extracting("body").containsExactly("body201", "body202", "body203");
+        assertThat(multipleArticlesResponseDtoFeed.getArticles()).extracting("author.following").containsOnly(true);
     }
 
 

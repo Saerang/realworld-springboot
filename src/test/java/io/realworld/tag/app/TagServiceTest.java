@@ -65,8 +65,8 @@ public class TagServiceTest {
     @Test
     void createTags_alreadyTag() {
         //given
-        tagRepository.save(Tag.builder().tag("tag101").build());
-        Set<TagRequestDto> dtos = Set.of(toTagRequestDto("tag101"), toTagRequestDto("tag102"), toTagRequestDto("tag103"));
+        tagRepository.save(Tag.builder().tag("tag1").build());
+        Set<TagRequestDto> dtos = Set.of(toTagRequestDto("tag1"), toTagRequestDto("tag2"), toTagRequestDto("tag3"));
 
         //when
         Set<Tag> tags = tagService.createTags(dtos);
@@ -74,10 +74,10 @@ public class TagServiceTest {
         em.flush();
         em.clear();
 
-        Set<Tag> findTags = tagRepository.findByTagIn(Set.of("tag101", "tag102", "tag103"));
+        Set<Tag> findTags = tagRepository.findByTagIn(Set.of("tag1", "tag2", "tag3"));
 
         //then
-        assertThat(tags).hasSize(3).extracting("tag").contains("tag101", "tag102", "tag103");
+        assertThat(tags).hasSize(3).extracting("tag").contains("tag1", "tag2", "tag3");
         assertThat(findTags).hasSize(3);
     }
 

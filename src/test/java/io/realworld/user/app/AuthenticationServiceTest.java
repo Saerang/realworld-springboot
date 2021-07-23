@@ -25,6 +25,6 @@ public class AuthenticationServiceTest {
         User user = authenticationService.getCurrentUser();
 
         //then
-        assertThat(user.getEmail()).isEqualTo("realworld1@email.com");
+        assertThat(user.getEmail()).isEqualTo("realworld101@email.com");
     }
 }

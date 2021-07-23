@@ -57,8 +57,8 @@ public class UserServiceTest {
     void createUser_dup() {
         //given
         UserCreateRequestDto dto = UserCreateRequestDto.builder()
-                .username("realworld")
-                .email("realworld1@email.com")
+                .username("realworld101")
+                .email("realworld101@email.com")
                 .password("1234")
                 .build();
 
@@ -120,7 +120,7 @@ public class UserServiceTest {
     void login() {
         //given
         UserLoginRequestDto dto = UserLoginRequestDto.builder()
-                .email("realworld1@email.com")
+                .email("realworld101@email.com")
                 .password("12345678")
                 .build();
 
@@ -128,7 +128,7 @@ public class UserServiceTest {
         User result = userService.login(dto);
 
         //then
-        assertThat(result.getEmail()).isEqualTo("realworld1@email.com");
+        assertThat(result.getEmail()).isEqualTo("realworld101@email.com");
     }
 
     @Test
@@ -146,8 +146,8 @@ public class UserServiceTest {
 
     private User getDefaultUser() {
         return User.builder()
-                .username("realworld1")
-                .email("realworld1@email.com")
+                .username("realworld101")
+                .email("realworld101@email.com")
                 .password("12345678")
                 .build();
     }

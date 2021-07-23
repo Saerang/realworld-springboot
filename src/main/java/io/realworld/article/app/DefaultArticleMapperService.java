@@ -1,16 +1,15 @@
 package io.realworld.article.app;
 
+import io.realworld.article.api.dto.ArticleTagDto;
 import io.realworld.article.api.dto.MultipleArticleSearchDto;
 import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.ArticleTag;
-import io.realworld.article.domain.repository.ArticleTagRepository;
 import io.realworld.favorite.app.FavoriteServiceFactory;
 import io.realworld.favorite.app.enumerate.FavoriteType;
 import io.realworld.favorite.domain.Favorite;
 import io.realworld.favorite.domain.FavoriteId;
-import io.realworld.tag.app.TagService;
 import io.realworld.tag.domain.Tag;
 import io.realworld.user.app.FollowRelationService;
 import io.realworld.user.app.UserService;
@@ -28,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -72,7 +72,6 @@ public class DefaultArticleMapperService implements ArticleMapperService {
         }
 
         List<Long> articleIds = articles.stream().map(Article::getId).collect(Collectors.toList());
-//        articleTagService.getArticleTagsByArticleIds(articleIds).stream().collect(Collectors.toMap(articleTag -> articleTag.getArticle().get))
 
         List<Favorite> favorites = favoriteServiceFactory.getService(FavoriteType.ARTICLE).getFavorites(articleIds);
         Map<Long, Long> favoritesCount = favorites.stream().map(Favorite::getFavoriteId)
@@ -82,6 +81,6 @@ public class DefaultArticleMapperService implements ArticleMapperService {
 
         List<Long> favoritedIds = favoriteServiceFactory.getService(FavoriteType.ARTICLE).getFavoritedIds(userId);
 
-        return Mappers.toMultipleArticlesResponseDto(articles, null, userMap, favoritesCount, favoritedIds, followerIds);
+        return Mappers.toMultipleArticlesResponseDto(articles, userMap, favoritesCount, favoritedIds, followerIds);
     }
 }

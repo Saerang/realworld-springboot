@@ -31,4 +31,5 @@ public class Tag {
         Assert.state(StringUtils.isNotBlank(tag), "tag may not be blank.");
         this.tag = tag;
     }
+
 }

@@ -1,9 +1,11 @@
 package io.realworld.user.app.dto;
 
 import io.realworld.article.api.dto.ArticleResponseDto;
+import io.realworld.article.api.dto.ArticleTagDto;
 import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.article.domain.Article;
+import io.realworld.article.domain.ArticleTag;
 import io.realworld.tag.app.dto.TagResponseDto;
 import io.realworld.tag.domain.Tag;
 import io.realworld.user.api.dto.ProfileResponseDto;
@@ -41,16 +43,23 @@ public class Mappers {
     }
 
     public static SingleArticleResponseDto toSingleArticleResponseDto(Article article, Map<Long, Set<Tag>> tagMap, User user, boolean isFavorited, long favoritesCount, boolean isFollowing) {
-        ArticleResponseDto articleResponseDto = toArticleResponseDto(article, tagMap.get(article.getId()), user, isFavorited, favoritesCount, isFollowing);
+        ArticleResponseDto articleResponseDto = toArticleResponseDto(
+                article,
+                article.getArticleTags().stream().map(ArticleTag::getTag).collect(Collectors.toSet()),
+                user,
+                isFavorited,
+                favoritesCount,
+                isFollowing
+        );
 
         return SingleArticleResponseDto.builder().article(articleResponseDto).build();
     }
 
-    public static MultipleArticlesResponseDto toMultipleArticlesResponseDto(Page<Article> articles, Map<Long, Set<Tag>> tagMap, Map<Long, User> userMap, Map<Long, Long> favoritesCount, List<Long> favoritedIds, List<Long> followerIds) {
+    public static MultipleArticlesResponseDto toMultipleArticlesResponseDto(Page<Article> articles, Map<Long, User> userMap, Map<Long, Long> favoritesCount, List<Long> favoritedIds, List<Long> followerIds) {
         List<ArticleResponseDto> articleResponseDtos = articles.stream()
                 .map(article -> toArticleResponseDto(
                         article,
-                        tagMap.get(article.getId()),
+                        article.getArticleTags().stream().map(ArticleTag::getTag).collect(Collectors.toSet()),
                         userMap.get(article.getUserId()),
                         favoritedIds.contains(article.getId()),
                         favoritesCount.getOrDefault(article.getId(), 0L),
@@ -84,5 +93,12 @@ public class Mappers {
 
     public static TagResponseDto toTagResponseDtos(Tag tag) {
         return TagResponseDto.builder().tag(tag.getTag()).build();
+    }
+
+    public static ArticleTagDto toArticleTagDto(ArticleTag articleTag) {
+        return ArticleTagDto.builder()
+                .articleId(articleTag.getArticle().getId())
+                .tag(articleTag.getTag().getTag())
+                .build();
     }
 }

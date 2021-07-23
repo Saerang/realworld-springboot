@@ -1,8 +1,8 @@
 insert into users (user_id, email, password, bio, image, username)
 values
-(101, 'realworld1@email.com', '$2a$10$/Hxqaf3ZfncnQGn2/Qg2R.Uacd2ElztD.4viYFF6jPHeBrqoG9M/m', 'bio1', 'image1', 'realworld1'),
-(102, 'realworld2@email.com', '$2a$10$/Hxqaf3ZfncnQGn2/Qg2R.Uacd2ElztD.4viYFF6jPHeBrqoG9M/m', 'bio2', 'image2', 'realworld2'),
-(103, 'realworld3@email.com', '$2a$10$/Hxqaf3ZfncnQGn2/Qg2R.Uacd2ElztD.4viYFF6jPHeBrqoG9M/m', 'bio3', 'image3', 'realworld3'),
+(101, 'realworld101@email.com', '$2a$10$/Hxqaf3ZfncnQGn2/Qg2R.Uacd2ElztD.4viYFF6jPHeBrqoG9M/m', 'bio101', 'image101', 'realworld101'),
+(102, 'realworld102@email.com', '$2a$10$/Hxqaf3ZfncnQGn2/Qg2R.Uacd2ElztD.4viYFF6jPHeBrqoG9M/m', 'bio102', 'image102', 'realworld102'),
+(103, 'realworld103@email.com', '$2a$10$/Hxqaf3ZfncnQGn2/Qg2R.Uacd2ElztD.4viYFF6jPHeBrqoG9M/m', 'bio103', 'image103', 'realworld103'),
 
 (201, 'realworld201@email.com', '$2a$10$/Hxqaf3ZfncnQGn2/Qg2R.Uacd2ElztD.4viYFF6jPHeBrqoG9M/m', 'bio201', 'image201', 'realworld201'),
 (202, 'realworld202@email.com', '$2a$10$/Hxqaf3ZfncnQGn2/Qg2R.Uacd2ElztD.4viYFF6jPHeBrqoG9M/m', 'bio202', 'image202', 'realworld202'),
@@ -16,18 +16,18 @@ values
 -- Article List
 insert into tag (tag_id, tag)
 values
-(101, 'tag1'),
-(102, 'tag2'),
-(103, 'tag3');
+(101, 'tag101'),
+(102, 'tag102'),
+(103, 'tag103');
 
 insert into article (article_id, body, created_at, description, slug, title, updated_at, user_id)
 values
-(101, 'body1', NULL, 'description', 'slug1', 'title1', NULL, 101),
-(102, 'body2', NULL, 'description', 'slug2', 'title2', NULL, 101),
-(103, 'body3', NULL, 'description', 'slug3', 'title3', NULL, 101),
-(201, 'body21', NULL, 'description', 'slug21', 'title21', NULL, 201),
-(202, 'body22', NULL, 'description', 'slug22', 'title22', NULL, 201),
-(203, 'body23', NULL, 'description', 'slug23', 'title23', NULL, 201);
+(101, 'body101', NULL, 'description', 'slug101', 'title101', NULL, 101),
+(102, 'body102', NULL, 'description', 'slug102', 'title102', NULL, 101),
+(103, 'body103', NULL, 'description', 'slug103', 'title103', NULL, 101),
+(201, 'body201', NULL, 'description', 'slug201', 'title201', NULL, 201),
+(202, 'body202', NULL, 'description', 'slug202', 'title202', NULL, 201),
+(203, 'body203', NULL, 'description', 'slug203', 'title203', NULL, 201);
 
 insert into article_tag (article_tag_id, article_id, tag_id)
 values

@@ -12,12 +12,10 @@ import org.springframework.util.Assert;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
 import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.CascadeType.PERSIST;
 
 @Entity
 @Getter
@@ -38,7 +36,7 @@ public class Article {
     private String body;
 
     @OneToMany(mappedBy = "article", cascade = ALL)
-    private Set<ArticleTag> articleTags = new HashSet<>();
+    private final Set<ArticleTag> articleTags = new HashSet<>();
 
     private Long userId;
 

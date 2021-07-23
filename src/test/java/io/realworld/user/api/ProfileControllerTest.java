@@ -36,9 +36,9 @@ public class ProfileControllerTest {
         //given
         //when
         //then
-        mockMvc.perform(get("/api/profiles/{username}", "realworld1").contentType(APPLICATION_JSON))
+        mockMvc.perform(get("/api/profiles/{username}", "realworld101").contentType(APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(jsonPath("$..username").value("realworld1"));
+                .andExpect(jsonPath("$..username").value("realworld101"));
     }
 
     @Test
@@ -47,9 +47,9 @@ public class ProfileControllerTest {
         // given
         // when
         // then
-        mockMvc.perform(post("/api/profiles/{username}/follow", "realworld2").contentType(APPLICATION_JSON))
+        mockMvc.perform(post("/api/profiles/{username}/follow", "realworld102").contentType(APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(jsonPath("$..username").value("realworld2"))
+                .andExpect(jsonPath("$..username").value("realworld102"))
                 .andExpect(jsonPath("$..following").value(true));
     }
 
@@ -59,9 +59,9 @@ public class ProfileControllerTest {
         // given
         // when
         // then
-        mockMvc.perform(delete("/api/profiles/{username}/follow", "realworld2").contentType(APPLICATION_JSON))
+        mockMvc.perform(delete("/api/profiles/{username}/follow", "realworld102").contentType(APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(jsonPath("$..username").value("realworld2"))
+                .andExpect(jsonPath("$..username").value("realworld102"))
                 .andExpect(jsonPath("$..following").value(false));
     }
 }

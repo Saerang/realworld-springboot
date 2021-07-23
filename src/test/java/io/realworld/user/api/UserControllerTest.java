@@ -58,7 +58,7 @@ public class UserControllerTest {
     void login() throws Exception {
         // given
         UserLoginRequestDto loginDto = UserLoginRequestDto.builder()
-                .email("realworld1@email.com")
+                .email("realworld101@email.com")
                 .password("12345678")
                 .build();
 
@@ -70,8 +70,8 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$..token").isNotEmpty())
-                .andExpect(jsonPath("$..username").value("realworld1"))
-                .andExpect(jsonPath("$..email").value("realworld1@email.com"));
+                .andExpect(jsonPath("$..username").value("realworld101"))
+                .andExpect(jsonPath("$..email").value("realworld101@email.com"));
     }
 
     @Test
@@ -84,8 +84,8 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$..token").isNotEmpty())
-                .andExpect(jsonPath("$..username").value("realworld1"))
-                .andExpect(jsonPath("$..email").value("realworld1@email.com"));
+                .andExpect(jsonPath("$..username").value("realworld101"))
+                .andExpect(jsonPath("$..email").value("realworld101@email.com"));
     }
 
     @Test
