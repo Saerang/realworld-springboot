@@ -3,13 +3,15 @@ package io.realworld.user.api.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
-@NoArgsConstructor
+@ToString
 public class UserResponseDto {
-    private UserDto user;
+    private final UserDto user;
 
     @Getter
+    @ToString
     public static class UserDto {
         private final String email;
         private final String token;

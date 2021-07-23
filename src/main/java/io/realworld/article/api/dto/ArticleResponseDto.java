@@ -3,11 +3,13 @@ package io.realworld.article.api.dto;
 import io.realworld.tag.app.dto.TagResponseDto;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
+@ToString
 public class ArticleResponseDto {
     private final String slug;
 
