@@ -36,7 +36,6 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     runtimeOnly 'com.h2database:h2'
 
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation group: 'org.dbunit', name: 'dbunit', version: '2.7.0'

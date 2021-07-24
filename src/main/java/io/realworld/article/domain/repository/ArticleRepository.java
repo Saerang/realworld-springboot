@@ -1,7 +1,6 @@
 package io.realworld.article.domain.repository;
 
 import io.realworld.article.domain.Article;
-import io.realworld.favorite.app.enumerate.FavoriteType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

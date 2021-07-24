@@ -9,7 +9,6 @@ import org.springframework.util.Assert;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Transient;
 
 @Embeddable
 @Getter
@@ -21,9 +20,6 @@ public class Profile {
     private String bio;
 
     private String image;
-
-    @Transient
-    private boolean following;
 
     @Builder
     public Profile(String username, String bio, String image) {
