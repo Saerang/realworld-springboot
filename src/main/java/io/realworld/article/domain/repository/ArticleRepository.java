@@ -19,7 +19,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query(value = "select distinct a from Article a " +
             "left join fetch a.articleTags at " +
             "left join fetch at.tag t ",
-    countQuery = "select count(distinct a) from Article a left join a.articleTags at left join at.tag t")
+    countQuery = "select count(distinct a) from Article a")
     Page<Article> findAllWithTag(Pageable pageable);
 
     Page<Article> findByIdIn(List<Long> ids, Pageable pageable);
