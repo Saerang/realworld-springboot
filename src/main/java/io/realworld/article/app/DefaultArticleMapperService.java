@@ -1,5 +1,6 @@
 package io.realworld.article.app;
 
+import io.realworld.article.api.dto.ArticleCreateDto;
 import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.article.domain.Article;
@@ -17,7 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -47,13 +50,12 @@ public class DefaultArticleMapperService implements ArticleMapperService {
         return Mappers.toSingleArticleResponseDto(article, author, favorited, favorites.size(), following);
     }
 
-    // TODO: 하나의 select 로 가져오는게 좋아보이는데 ..
     @Override
     public MultipleArticlesResponseDto getArticles(String tag, String author, String favorited, Pageable pageable, Long userId) {
         Page<Article> articles = articleService.getArticles(tag, author, favorited, pageable);
 
         if(articles.getTotalElements() == 0) {
-            return MultipleArticlesResponseDto.builder().count(0).build();
+            return MultipleArticlesResponseDto.builder().articlesCount(0).build();
         }
 
         List<Long> authorIds = articles.stream().map(Article::getUserId).collect(Collectors.toList());
@@ -68,29 +70,52 @@ public class DefaultArticleMapperService implements ArticleMapperService {
 
         Page<Article> articles = articleService.getArticlesByUserIds(followerIds, pageable);
         if(articles.getTotalElements() == 0) {
-            return MultipleArticlesResponseDto.builder().count(0).build();
+            return MultipleArticlesResponseDto.builder().articlesCount(0).build();
         }
 
         return Mappers.toMultipleArticlesResponseDto(articles, getUserMap(followerIds), getFavorites(articles), getFavoritedIds(userId), followerIds);
     }
 
-    private List<Long> getFavoritedIds(long userId) {
+    @Override
+    public SingleArticleResponseDto createArticle(ArticleCreateDto articleCreateDto, Long currentUserId) {
+        Article article = articleService.createArticle(articleCreateDto, currentUserId);
+        User user = userService.getUserById(article.getUserId());
+
+        return Mappers.toSingleArticleResponseDto(article, user, false, 0, false);
+    }
+
+    private List<Long> getFavoritedIds(Long userId) {
+        if (userId == null) {
+            return Collections.emptyList();
+        }
         return favoriteServiceFactory.getService(FavoriteType.ARTICLE).getFavoritedIds(userId);
     }
 
     private Map<Long, User> getUserMap(List<Long> userIds) {
+        if (CollectionUtils.isEmpty(userIds)) {
+            return Collections.emptyMap();
+        }
+
         return userService.getUsersByIds(userIds).stream().collect(Collectors.toMap(User::getId, Function.identity()));
     }
 
     private Map<Long, Long> getFavorites(Page<Article> articles) {
-        List<Long> articleIds = articles.stream().map(Article::getId).collect(Collectors.toList());
+        if (articles.isEmpty()) {
+            return Collections.emptyMap();
+        }
 
+        List<Long> articleIds = articles.stream().map(Article::getId).collect(Collectors.toList());
         List<Favorite> favorites = favoriteServiceFactory.getService(FavoriteType.ARTICLE).getFavorites(articleIds);
+
         return favorites.stream().map(Favorite::getFavoriteId)
                 .collect(Collectors.groupingBy(FavoriteId::getFavoritedId, Collectors.counting()));
     }
 
-    private List<Long> getFollower(long userId) {
+    private List<Long> getFollower(Long userId) {
+        if (userId == null) {
+            return Collections.emptyList();
+        }
+
         return followRelationService.getFollowRelations(userId).stream()
                 .map(FollowRelation::getFollowRelationId)
                 .map(FollowRelationId::getFollowerId)

@@ -36,6 +36,23 @@ public class ArticleControllerTest {
                 .andExpect(jsonPath("$.articles.length()").value(5))
                 .andExpect(jsonPath("$.articles[0].title").value("title203"))
                 .andExpect(jsonPath("$.articles[1].title").value("title202"))
+                .andExpect(jsonPath("$.articles[2].title").value("title201"))
+                .andExpect(jsonPath("$.articlesCount").value(5));
+    }
+
+    @Test
+    void getArticles_no_login() throws Exception {
+        // given
+        // when
+        // then
+        mockMvc.perform(get("/api/articles").contentType(MediaType.APPLICATION_JSON)
+                .param("offset", "0" )
+                .param("limit", "5"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.articles.length()").value(5))
+                .andExpect(jsonPath("$.articles[0].title").value("title203"))
+                .andExpect(jsonPath("$.articles[1].title").value("title202"))
                 .andExpect(jsonPath("$.articles[2].title").value("title201"));
     }
 

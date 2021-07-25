@@ -66,7 +66,7 @@ public class Mappers {
                         followerIds.contains(article.getUserId()))
                 ).collect(Collectors.toList());
 
-        return MultipleArticlesResponseDto.builder().articles(articleResponseDtos).count(articles.getTotalElements()).build();
+        return MultipleArticlesResponseDto.builder().articles(articleResponseDtos).articlesCount(articleResponseDtos.size()).build();
     }
 
     public static ArticleResponseDto toArticleResponseDto(Article article, Set<Tag> tags, User user, boolean isFavorited, long favoritesCount, boolean isFollowing) {

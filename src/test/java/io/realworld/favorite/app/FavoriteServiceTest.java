@@ -62,7 +62,7 @@ public class FavoriteServiceTest {
         em.clear();
 
         // when
-        List<Favorite> favorites = favoriteServiceFactory.getService(ARTICLE).getFavorites(102);
+        List<Favorite> favorites = favoriteServiceFactory.getService(ARTICLE).getFavorites(102L);
 
         // then
         assertThat(favorites).hasSize(2);

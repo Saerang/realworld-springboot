@@ -4,6 +4,7 @@ import io.realworld.favorite.app.enumerate.FavoriteType;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @Getter
 @EqualsAndHashCode
 @Embeddable
+@ToString
 public class FavoriteId implements Serializable {
     private static final long serialVersionUID = 8441319845505079586L;
 

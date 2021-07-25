@@ -8,15 +8,15 @@ import java.util.List;
 public interface FavoriteService {
     FavoriteType getFavoriteType();
 
-    List<Favorite> getFavorites(long favoritedId);
+    List<Favorite> getFavorites(Long favoritedId);
 
     List<Favorite> getFavorites(List<Long> favoritedId);
 
-    List<Long> getFavoritedIds(long userId);
+    List<Long> getFavoritedIds(Long userId);
 
-    boolean isFavorited(long userId, long favoriteId);
+    boolean isFavorited(Long userId, Long favoriteId);
 
-    void favoriteAuthor(long userId, long favoriteId);
+    void favoriteAuthor(Long userId, Long favoriteId);
 
-    void unfavoriteAuthor(long userId, long favoriteId);
+    void unfavoriteAuthor(Long userId, Long favoriteId);
 }

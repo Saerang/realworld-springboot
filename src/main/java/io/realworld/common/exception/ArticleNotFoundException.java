@@ -6,7 +6,7 @@ public class ArticleNotFoundException extends RuntimeException {
         this(null);
     }
 
-    public ArticleNotFoundException(Long articleId) {
-        super("Article " + (articleId != null ? articleId + " " : "") + "dose not found.");
+    public ArticleNotFoundException(String slug) {
+        super("Article " + (slug != null ? slug + " " : "") + "dose not found.");
     }
 }

@@ -22,7 +22,7 @@ public class CommentFavoriteService implements FavoriteService {
     }
 
     @Override
-    public List<Favorite> getFavorites(long favoriteId) {
+    public List<Favorite> getFavorites(Long favoriteId) {
         return null;
     }
 
@@ -32,20 +32,20 @@ public class CommentFavoriteService implements FavoriteService {
     }
 
     @Override
-    public List<Long> getFavoritedIds(long userId) {
+    public List<Long> getFavoritedIds(Long userId) {
         return null;
     }
 
     @Override
-    public boolean isFavorited(long userId, long favoriteId) {
+    public boolean isFavorited(Long userId, Long favoriteId) {
         return false;
     }
 
     @Override
-    public void favoriteAuthor(long userId, long favoriteId) {
+    public void favoriteAuthor(Long userId, Long favoriteId) {
     }
 
     @Override
-    public void unfavoriteAuthor(long userId, long favoriteId) {
+    public void unfavoriteAuthor(Long userId, Long favoriteId) {
     }
 }

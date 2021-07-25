@@ -28,7 +28,7 @@ public class ArticleFavoriteService implements FavoriteService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Favorite> getFavorites(long favoritedId) {
+    public List<Favorite> getFavorites(Long favoritedId) {
         return favoriteRepository.findByFavoritedIdAndFavoriteType(favoritedId, getFavoriteType());
     }
 
@@ -40,13 +40,13 @@ public class ArticleFavoriteService implements FavoriteService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Long> getFavoritedIds(long userId) {
+    public List<Long> getFavoritedIds(Long userId) {
         return favoriteRepository.findFavoritedIdByUserIdAndFavoriteType(userId, getFavoriteType());
     }
 
     @Transactional(readOnly = true)
     @Override
-    public boolean isFavorited(long userId, long favoriteId) {
+    public boolean isFavorited(Long userId, Long favoriteId) {
         FavoriteId _favoriteId = FavoriteId.builder()
                 .userId(userId)
                 .favoritedId(favoriteId)
@@ -57,7 +57,7 @@ public class ArticleFavoriteService implements FavoriteService {
     }
 
     @Override
-    public void favoriteAuthor(long userId, long favoritedId) {
+    public void favoriteAuthor(Long userId, Long favoritedId) {
         Favorite favorite = Favorite.builder()
                 .userId(userId)
                 .favoritedId(favoritedId)
@@ -68,7 +68,7 @@ public class ArticleFavoriteService implements FavoriteService {
     }
 
     @Override
-    public void unfavoriteAuthor(long userId, long favoritedId) {
+    public void unfavoriteAuthor(Long userId, Long favoritedId) {
         Favorite favorite = Favorite.builder()
                 .userId(userId)
                 .favoritedId(favoritedId)

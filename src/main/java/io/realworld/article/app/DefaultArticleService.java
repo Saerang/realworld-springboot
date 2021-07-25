@@ -25,7 +25,7 @@ public class DefaultArticleService implements ArticleService {
     final private ArticleRepository articleRepository;
 
     @Override
-    public Article createArticle(ArticleCreateDto dto, long userId) {
+    public Article createArticle(ArticleCreateDto dto, Long userId) {
         Article article = Article.builder()
                 .title(dto.getTitle())
                 .description(dto.getDescription())
@@ -44,7 +44,7 @@ public class DefaultArticleService implements ArticleService {
     @Override
     @Transactional(readOnly = true)
     public Article getArticle(String slug) {
-        return articleRepository.findBySlug(slug).orElseThrow(ArticleNotFoundException::new);
+        return articleRepository.findBySlug(slug).orElseThrow(() -> new ArticleNotFoundException(slug));
     }
 
     // TODO: queryDsl 로 바꿔서 동적 쿼리 작성해야됨.

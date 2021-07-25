@@ -1,10 +1,12 @@
 package io.realworld.article.app;
 
-import io.realworld.article.api.dto.MultipleArticleSearchDto;
+import io.realworld.article.api.dto.ArticleCreateDto;
 import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.repository.ArticleRepository;
+import io.realworld.common.exception.ArticleNotFoundException;
+import io.realworld.tag.app.dto.TagRequestDto;
 import io.realworld.tag.domain.Tag;
 import io.realworld.tag.domain.repository.TagRepository;
 import org.junit.jupiter.api.Test;
@@ -62,7 +64,7 @@ class ArticleMapperServiceTest {
         MultipleArticlesResponseDto multipleArticlesResponseDto = articleMapperService.getArticles(null, null, null, pageRequest, 101L);
 
         // then
-        assertThat(multipleArticlesResponseDto.getCount()).isEqualTo(9);
+        assertThat(multipleArticlesResponseDto.getArticlesCount()).isEqualTo(9);
     }
 
     @Test
@@ -74,12 +76,41 @@ class ArticleMapperServiceTest {
         MultipleArticlesResponseDto multipleArticlesResponseDtoFeed = articleMapperService.getFeedArticles(pageRequest, 202L);
 
         // then
-        assertThat(multipleArticlesResponseDtoFeed.getCount()).isEqualTo(3);
+        assertThat(multipleArticlesResponseDtoFeed.getArticlesCount()).isEqualTo(3);
         assertThat(multipleArticlesResponseDtoFeed.getArticles()).extracting("title").containsExactly("title201", "title202", "title203");
         assertThat(multipleArticlesResponseDtoFeed.getArticles()).extracting("body").containsExactly("body201", "body202", "body203");
         assertThat(multipleArticlesResponseDtoFeed.getArticles()).extracting("author.following").containsOnly(true);
     }
 
+    @Test
+    void createArticle() {
+        // given
+        String title = "title";
+        String body = "body";
+        String description = "description";
+        TagRequestDto tag1 = TagRequestDto.builder().tag("tag1").build();
+        TagRequestDto tag2 = TagRequestDto.builder().tag("tag2").build();
+        Long userId = 101L;
+        ArticleCreateDto dto = ArticleCreateDto.builder()
+                .title(title)
+                .body(body)
+                .description(description)
+                .tags(Set.of(tag1, tag2))
+                .build();
+
+        // when
+        SingleArticleResponseDto result = articleMapperService.createArticle(dto, userId);
+
+        Article article = articleRepository.findBySlug(result.getArticle().getSlug())
+                .orElseThrow(() -> new ArticleNotFoundException(result.getArticle().getSlug()));
+
+        // then
+        assertThat(article.getTitle()).isEqualTo(title);
+        assertThat(article.getBody()).isEqualTo(body);
+        assertThat(article.getDescription()).isEqualTo(description);
+        assertThat(article.getSlug()).isEqualTo(result.getArticle().getSlug());
+        assertThat(article.getUserId()).isEqualTo(userId);
+    }
 
     private Article saveArticle(Tag tag) {
         Article article = Article.builder()

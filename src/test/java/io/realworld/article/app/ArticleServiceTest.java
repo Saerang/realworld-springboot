@@ -52,11 +52,11 @@ public class ArticleServiceTest {
                 .body("body").build();
 
         // when
-        Article savedArticle = articleService.createArticle(dto, 101);
+        Article savedArticle = articleService.createArticle(dto, 101L);
 
         em.flush();
         em.clear();
-        Article findArticle = articleRepository.findById(savedArticle.getId()).orElseThrow(() -> new ArticleNotFoundException(savedArticle.getId()));
+        Article findArticle = articleRepository.findBySlug(savedArticle.getSlug()).orElseThrow(() -> new ArticleNotFoundException(savedArticle.getSlug()));
 
         // then
         assertThat(savedArticle.getTitle()).isEqualTo(findArticle.getTitle());

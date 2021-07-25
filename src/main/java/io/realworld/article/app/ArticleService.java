@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ArticleService {
 
-    Article createArticle(ArticleCreateDto articleCreateDto, long userId);
+    Article createArticle(ArticleCreateDto articleCreateDto, Long userId);
 
     Article getArticle(String slug);
 

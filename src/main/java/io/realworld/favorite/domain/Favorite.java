@@ -3,6 +3,7 @@ package io.realworld.favorite.domain;
 import io.realworld.favorite.app.enumerate.FavoriteType;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.util.Assert;
 
 import javax.persistence.EmbeddedId;
@@ -10,6 +11,7 @@ import javax.persistence.Entity;
 
 @Getter
 @Entity
+@ToString
 public class Favorite {
     @EmbeddedId
     private FavoriteId favoriteId;
