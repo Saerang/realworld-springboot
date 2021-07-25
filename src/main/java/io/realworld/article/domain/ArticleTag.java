@@ -1,5 +1,6 @@
 package io.realworld.article.domain;
 
+import io.realworld.common.base.BaseTimeEntity;
 import io.realworld.tag.domain.Tag;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @Table(uniqueConstraints = {@UniqueConstraint(name = "uix_article_id_tag_id", columnNames = {"article_id", "tag_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ArticleTag {
+public class ArticleTag extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_tag_id")

@@ -1,5 +1,6 @@
 package io.realworld.user.domain;
 
+import io.realworld.common.base.BaseTimeEntity;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +51,7 @@ public class User {
 
     public void updateUserInfo(String email, String username, String password, PasswordEncoder passwordEncoder, String image, String bio) {
         this.email = email;
-        if (StringUtils.isNotBlank(password)){
+        if (StringUtils.isNotBlank(password)) {
             this.encodePassword(passwordEncoder);
         }
         this.username = username;

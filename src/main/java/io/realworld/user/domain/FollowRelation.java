@@ -1,5 +1,6 @@
 package io.realworld.user.domain;
 
+import io.realworld.common.base.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.EmbeddedId;
@@ -7,10 +8,10 @@ import javax.persistence.Entity;
 
 @Getter
 @Entity
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FollowRelation {
+public class FollowRelation extends BaseTimeEntity {
     @EmbeddedId
     private FollowRelationId followRelationId;
 

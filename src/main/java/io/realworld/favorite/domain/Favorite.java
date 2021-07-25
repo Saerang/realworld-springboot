@@ -1,5 +1,6 @@
 package io.realworld.favorite.domain;
 
+import io.realworld.common.base.BaseTimeEntity;
 import io.realworld.favorite.app.enumerate.FavoriteType;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import javax.persistence.Entity;
 @Getter
 @Entity
 @ToString
-public class Favorite {
+public class Favorite extends BaseTimeEntity {
     @EmbeddedId
     private FavoriteId favoriteId;
 

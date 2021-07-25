@@ -1,5 +1,6 @@
 package io.realworld.article.domain;
 
+import io.realworld.common.base.BaseTimeEntity;
 import io.realworld.tag.domain.Tag;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,7 +20,7 @@ import static javax.persistence.CascadeType.ALL;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Article {
+public class Article extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
@@ -39,10 +39,6 @@ public class Article {
     private final Set<ArticleTag> articleTags = new HashSet<>();
 
     private Long userId;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
     @Builder
     public Article(String title, String description, String body, Long userId) {
