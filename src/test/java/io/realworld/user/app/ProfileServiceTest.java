@@ -1,5 +1,6 @@
 package io.realworld.user.app;
 
+import io.realworld.user.api.UserPasswordEncoder;
 import io.realworld.user.domain.FollowRelation;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.FollowRelationRepository;
@@ -25,6 +26,8 @@ public class ProfileServiceTest {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    UserPasswordEncoder userPasswordEncoder;
+    @Autowired
     FollowRelationRepository followRelationRepository;
     @Autowired
     EntityManager em;
@@ -32,7 +35,7 @@ public class ProfileServiceTest {
     @Test 
     void getProfile() {
         //given
-        User user = new User("user@email.com", "1234", "usrname");
+        User user = new User("user@email.com", "1234", userPasswordEncoder, "usrname");
         userRepository.save(user);
 
         //when
@@ -45,8 +48,8 @@ public class ProfileServiceTest {
     @Test
     void userFollow() {
         //given
-        User follower = new User("followerd@email.com", "1234", "follower");
-        User followee = new User("followee@email.com", "1234", "followee");
+        User follower = new User("followerd@email.com", "1234", userPasswordEncoder, "follower");
+        User followee = new User("followee@email.com", "1234", userPasswordEncoder, "followee");
         userRepository.saveAll(Arrays.asList(follower, followee));
 
         // em.flush();
@@ -63,8 +66,8 @@ public class ProfileServiceTest {
     @Test
     void userUnfollow() {
         //given
-        User follower = new User("followerd@email.com", "1234", "follower");
-        User followee = new User("followee@email.com", "1234", "followee");
+        User follower = new User("followerd@email.com", "1234", userPasswordEncoder, "follower");
+        User followee = new User("followee@email.com", "1234", userPasswordEncoder, "followee");
         userRepository.saveAll(Arrays.asList(follower, followee));
         FollowRelation followRelation = new FollowRelation(follower.getId(), followee.getId());
         followRelationRepository.save(followRelation);

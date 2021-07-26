@@ -3,6 +3,7 @@ package io.realworld.user.app;
 import io.realworld.common.WithDefaultUser;
 import io.realworld.common.exception.UserAlreadyExistException;
 import io.realworld.common.exception.UserNotFoundException;
+import io.realworld.user.api.UserPasswordEncoder;
 import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserLoginRequestDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
@@ -26,6 +27,8 @@ public class UserServiceTest {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserPasswordEncoder userPasswordEncoder;
     @Autowired
     private EntityManager em;
     @Autowired
@@ -221,6 +224,7 @@ public class UserServiceTest {
                 .username("realworld101")
                 .email("realworld101@email.com")
                 .password("12345678")
+                .userPasswordEncoder(userPasswordEncoder)
                 .build();
     }
 

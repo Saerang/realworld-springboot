@@ -1,9 +1,10 @@
 package io.realworld.user.domain;
 
 import io.realworld.common.base.BaseTimeEntity;
+import io.realworld.common.exception.PasswordNotMatchedException;
+import io.realworld.user.api.UserPasswordEncoder;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -32,35 +33,41 @@ public class User extends BaseTimeEntity {
 
     private String image;
 
-    public User(String email, String password, String username) {
-        this(email, password, username, null, null);
+    public User(String email, String password, UserPasswordEncoder userPasswordEncoder, String username) {
+        this(email, password, userPasswordEncoder, username, null, null);
     }
 
     @Builder
-    public User(String email, String password, String username, String bio, String image) {
+    public User(String email, String password, UserPasswordEncoder userPasswordEncoder, String username, String bio, String image) {
         Assert.state(StringUtils.isNotBlank(email), "email may not be blank.");
         Assert.state(StringUtils.isNotBlank(password), "password may not be blank.");
         Assert.state(StringUtils.isNotBlank(username), "username may not be blank.");
+        Assert.state(userPasswordEncoder != null, "userPasswordEncoder may not be null.");
 
         this.email = email;
-        this.password = password;
+        this.password = this.encodePassword(password, userPasswordEncoder);
         this.username = username;
         this.bio = bio;
         this.image = image;
     }
 
-    public void updateUserInfo(String email, String username, String password, PasswordEncoder passwordEncoder, String image, String bio) {
+    public void updateUserInfo(String email, String username, String password, UserPasswordEncoder passwordEncoder, String image, String bio) {
         this.email = email;
         if (StringUtils.isNotBlank(password)) {
-            this.encodePassword(passwordEncoder);
+            this.password = this.encodePassword(password, passwordEncoder);
         }
         this.username = username;
         this.bio = bio;
         this.image = image;
     }
 
-    public void encodePassword(PasswordEncoder passwordEncoder) {
-        this.password = passwordEncoder.encode(this.password);
+    public String encodePassword(String password, UserPasswordEncoder passwordEncoder) {
+        return passwordEncoder.encode(password);
     }
 
+    public void checkPassword(String password, UserPasswordEncoder passwordEncoder) {
+        if (!passwordEncoder.matches(password, this.password)) {
+            throw new PasswordNotMatchedException(this.getId());
+        }
+    }
 }

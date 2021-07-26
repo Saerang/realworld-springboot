@@ -1,8 +1,8 @@
 package io.realworld.user.app;
 
-import io.realworld.common.exception.PasswordNotMatchedException;
 import io.realworld.common.exception.UserAlreadyExistException;
 import io.realworld.common.exception.UserNotFoundException;
+import io.realworld.user.api.UserPasswordEncoder;
 import io.realworld.user.api.dto.UserCreateRequestDto;
 import io.realworld.user.api.dto.UserLoginRequestDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +28,7 @@ import static io.realworld.user.app.enumerate.LoginType.USER_ID;
 public class DefaultUserService implements UserService {
 
     final private UserRepository userRepository;
-    final private PasswordEncoder passwordEncoder;
+    final private UserPasswordEncoder userPasswordEncoder;
 
     @Override
     public User createUser(UserCreateRequestDto dto) {
@@ -40,7 +39,8 @@ public class DefaultUserService implements UserService {
 
         User user = User.builder()
                 .email(dto.getUserDto().getEmail())
-                .password(passwordEncode(dto.getUserDto().getPassword()))
+                .password(dto.getUserDto().getPassword())
+                .userPasswordEncoder(this.userPasswordEncoder)
                 .username(dto.getUserDto().getUsername())
                 .build();
 
@@ -85,7 +85,7 @@ public class DefaultUserService implements UserService {
         User user = getCurrentUser();
         user.updateUserInfo(
                 dto.getUserDto().getEmail(), dto.getUserDto().getUsername(),
-                dto.getUserDto().getPassword(), passwordEncoder,
+                dto.getUserDto().getPassword(), userPasswordEncoder,
                 dto.getUserDto().getImage(), dto.getUserDto().getBio()
         );
         return user;
@@ -95,9 +95,7 @@ public class DefaultUserService implements UserService {
     public User login(UserLoginRequestDto dto) {
         User user = getUserByEmail(dto.getUserDto().getEmail());
 
-        if (!passwordEncoder.matches(dto.getUserDto().getPassword(), user.getPassword())) {
-            throw new PasswordNotMatchedException(user.getId());
-        }
+        user.checkPassword(dto.getUserDto().getPassword(), userPasswordEncoder);
 
         return user;
     }
@@ -105,10 +103,5 @@ public class DefaultUserService implements UserService {
     private User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + email));
     }
-
-    private String passwordEncode(String password) {
-        return passwordEncoder.encode(password);
-    }
-
 
 }
