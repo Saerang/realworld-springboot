@@ -1,4 +1,4 @@
-package io.realworld.user.app.dto;
+package io.realworld.common.mapper;
 
 import io.realworld.article.api.dto.ArticleResponseDto;
 import io.realworld.article.api.dto.ArticleTagDto;

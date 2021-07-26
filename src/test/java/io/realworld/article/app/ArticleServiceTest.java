@@ -2,7 +2,6 @@ package io.realworld.article.app;
 
 import io.realworld.article.api.dto.ArticleCreateDto;
 import io.realworld.article.api.dto.ArticleUpdateDto;
-import io.realworld.article.api.dto.MultipleArticleSearchDto;
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.repository.ArticleRepository;
 import io.realworld.common.WithDefaultUser;
@@ -17,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Description;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -86,10 +84,6 @@ public class ArticleServiceTest {
         Tag tag = saveTag();
         Article article1 = saveArticle("title1", "body1", tag, "description");
         Article article2 = saveArticle("title2", "body2", tag, "description");
-
-        MultipleArticleSearchDto dto = MultipleArticleSearchDto.builder()
-                .tag("tag")
-                .build();
 
         //when
         Page<Article> articles = articleService.getArticles(tag.getTag(), null, null, PageRequest.of(0, 20));

@@ -3,8 +3,10 @@ package io.realworld.tag.app.dto;
 import io.realworld.tag.domain.Tag;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class TagResponseDto {
     private final String tag;
 

@@ -2,7 +2,6 @@ package io.realworld.article.app;
 
 import io.realworld.article.api.dto.ArticleCreateDto;
 import io.realworld.article.api.dto.ArticleUpdateDto;
-import io.realworld.article.api.dto.MultipleArticleSearchDto;
 import io.realworld.article.domain.Article;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -43,7 +43,7 @@ public class ServiceAspect {
             result = ((Collection) result).stream().limit(100).collect(Collectors.toList());
         }
 
-        log.info("[" + joinPoint.getSignature().toShortString() + "] Service Returned: " + result);
+        log.debug("[" + joinPoint.getSignature().toShortString() + "] Service Returned: " + result);
         log.debug("[" + joinPoint.getSignature().toShortString() + "] -------------------------- Service FINISH --------------------------");
     }
 }

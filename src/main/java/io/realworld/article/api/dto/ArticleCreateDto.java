@@ -3,22 +3,26 @@ package io.realworld.article.api.dto;
 import io.realworld.tag.app.dto.TagRequestDto;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Getter
+@ToString
+@NoArgsConstructor
 public class ArticleCreateDto {
     @NotNull
-    private final String title;
+    private  String title;
 
     @NotNull
-    private final String description;
+    private String description;
 
     @NotNull
-    private final String body;
+    private String body;
 
-    private final Set<TagRequestDto> tags;
+    private Set<TagRequestDto> tags;
 
     @Builder
     public ArticleCreateDto(String title, String description, String body, Set<TagRequestDto> tags) {

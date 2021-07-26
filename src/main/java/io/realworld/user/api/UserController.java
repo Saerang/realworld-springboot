@@ -7,7 +7,7 @@ import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.api.dto.UserUpdateRequestDto;
 import io.realworld.user.app.AuthenticationService;
 import io.realworld.user.app.UserService;
-import io.realworld.user.app.dto.Mappers;
+import io.realworld.common.mapper.Mappers;
 import io.realworld.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

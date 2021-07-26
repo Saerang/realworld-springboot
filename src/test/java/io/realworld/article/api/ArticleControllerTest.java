@@ -1,7 +1,10 @@
 package io.realworld.article.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.realworld.article.api.dto.ArticleCreateDto;
+import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.common.WithDefaultUser;
+import io.realworld.tag.app.dto.TagRequestDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -9,7 +12,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Set;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -107,5 +113,31 @@ public class ArticleControllerTest {
                 .andExpect(jsonPath("$.article.favoritesCount").value(2))
                 .andExpect(jsonPath("$.article.author.following").value(false))
                 .andExpect(jsonPath("$.article.author.username").value("realworld102"));
+    }
+
+    @Test
+    @WithDefaultUser
+    void createArticle() throws Exception {
+        // given
+        ArticleCreateDto dto = ArticleCreateDto.builder()
+                .body("body")
+                .title("title")
+                .description("description")
+                .tags(Set.of(TagRequestDto.builder().tag("tag").build()))
+                .build();
+
+        String jsonDto = objectMapper.writeValueAsString(dto);
+
+        // when
+        // then
+        mockMvc.perform(post("/api/articles").contentType(MediaType.APPLICATION_JSON).content(jsonDto))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.article.title").value(dto.getTitle()))
+                .andExpect(jsonPath("$.article.slug").isNotEmpty())
+                .andExpect(jsonPath("$.article.favorited").value(false))
+                .andExpect(jsonPath("$.article.favoritesCount").value(0))
+                .andExpect(jsonPath("$.article.author.following").value(false))
+                .andExpect(jsonPath("$.article.author.username").value("realworld101"));
     }
 }

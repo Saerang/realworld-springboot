@@ -10,7 +10,7 @@ import io.realworld.favorite.domain.Favorite;
 import io.realworld.favorite.domain.FavoriteId;
 import io.realworld.user.app.FollowRelationService;
 import io.realworld.user.app.UserService;
-import io.realworld.user.app.dto.Mappers;
+import io.realworld.common.mapper.Mappers;
 import io.realworld.user.domain.FollowRelation;
 import io.realworld.user.domain.FollowRelationId;
 import io.realworld.user.domain.User;

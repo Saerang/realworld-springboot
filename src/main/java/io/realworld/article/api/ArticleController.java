@@ -52,7 +52,7 @@ public class ArticleController {
     }
 
     @PostMapping("/articles")
-    public SingleArticleResponseDto createArticle(@RequestParam ArticleCreateDto articleCreateDto) {
+    public SingleArticleResponseDto createArticle(@RequestBody ArticleCreateDto articleCreateDto) {
         return articleMapperService.createArticle(articleCreateDto, getCurrentUserId());
     }
 

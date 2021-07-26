@@ -2,16 +2,13 @@ package io.realworld.article.app;
 
 import io.realworld.article.api.dto.ArticleTagDto;
 import io.realworld.article.domain.ArticleTag;
-import io.realworld.tag.domain.Tag;
-import io.realworld.user.app.dto.Mappers;
+import io.realworld.common.mapper.Mappers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;

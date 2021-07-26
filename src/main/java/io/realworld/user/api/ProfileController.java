@@ -3,7 +3,7 @@ package io.realworld.user.api;
 import io.realworld.user.api.dto.ProfileResponseDto;
 import io.realworld.user.app.AuthenticationService;
 import io.realworld.user.app.ProfileService;
-import io.realworld.user.app.dto.Mappers;
+import io.realworld.common.mapper.Mappers;
 import io.realworld.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
