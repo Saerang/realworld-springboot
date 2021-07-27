@@ -33,12 +33,20 @@ public class User extends BaseTimeEntity {
 
     private String image;
 
-    public User(String email, String password, UserPasswordEncoder userPasswordEncoder, String username) {
-        this(email, password, userPasswordEncoder, username, null, null);
+    public static User createWithUserPasswordEncoder(String email, String password, UserPasswordEncoder userPasswordEncoder, String username) {
+        return new User(email, password, userPasswordEncoder, username);
     }
 
     @Builder
-    public User(String email, String password, UserPasswordEncoder userPasswordEncoder, String username, String bio, String image) {
+    public static User createWithUserPasswordEncoder(String email, String password, UserPasswordEncoder userPasswordEncoder, String username, String bio, String image) {
+        return new User(email, password, userPasswordEncoder, username, bio, image);
+    }
+
+    private User(String email, String password, UserPasswordEncoder userPasswordEncoder, String username) {
+        this(email, password, userPasswordEncoder, username, null, null);
+    }
+
+    private User(String email, String password, UserPasswordEncoder userPasswordEncoder, String username, String bio, String image) {
         Assert.state(StringUtils.isNotBlank(email), "email may not be blank.");
         Assert.state(StringUtils.isNotBlank(password), "password may not be blank.");
         Assert.state(StringUtils.isNotBlank(username), "username may not be blank.");
