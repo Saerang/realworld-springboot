@@ -95,7 +95,7 @@ public class TagServiceTest {
     }
 
     @Test
-    void getTagNotFound() {
+    void getTag_notFound() {
         //given
         TagRequestDto dto = TagRequestDto.builder().tag("notFoundTag").build();
 
@@ -104,6 +104,21 @@ public class TagServiceTest {
         //then
         assertThatThrownBy(() -> tagService.getTag(dto))
                 .isInstanceOf(TagNotFoundException.class).hasMessage("Tag notFoundTag not found.");
+    }
+
+    @Test
+    void getTags() {
+        //given
+        String tag1 = "tag1";
+        String tag2 = "tag2";
+        Set<Tag> saveTags = Set.of(Tag.builder().tag(tag1).build(), Tag.builder().tag("tag2").build());
+        tagRepository.saveAll(saveTags);
+
+        //when
+        Set<Tag> tags = tagService.getTags();
+
+        //then
+        assertThat(tags).extracting("tag").contains(tag1, tag2);
     }
 
     private TagRequestDto toTagRequestDto(String tag) {

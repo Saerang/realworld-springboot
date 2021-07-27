@@ -7,6 +7,7 @@ import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.ArticleTag;
 import io.realworld.tag.app.dto.TagResponseDto;
+import io.realworld.tag.app.dto.TagResponseDtos;
 import io.realworld.tag.domain.Tag;
 import io.realworld.user.api.dto.ProfileResponseDto;
 import io.realworld.user.api.dto.UserResponseDto;
@@ -99,6 +100,18 @@ public class Mappers {
         return ArticleTagDto.builder()
                 .articleId(articleTag.getArticle().getId())
                 .tag(articleTag.getTag().getTag())
+                .build();
+    }
+
+    public static TagResponseDto toTagResponseDto(Tag tag) {
+        return TagResponseDto.builder()
+                .tag(tag.getTag())
+                .build();
+    }
+
+    public static TagResponseDtos toTagResponseDtos(Set<Tag> tags) {
+        return TagResponseDtos.builder()
+                .tags(tags.stream().map(Tag::getTag).collect(Collectors.toSet()))
                 .build();
     }
 }

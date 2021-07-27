@@ -12,6 +12,7 @@ import java.util.Set;
 
 @Entity
 @Getter
+@ToString(exclude = "articles")
 @EqualsAndHashCode(of = {"tag"}, callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag extends BaseTimeEntity {
