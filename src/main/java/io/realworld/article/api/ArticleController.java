@@ -1,12 +1,14 @@
 package io.realworld.article.api;
 
 import io.realworld.article.api.dto.ArticleCreateDto;
+import io.realworld.article.api.dto.ArticleUpdateDto;
 import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.article.app.ArticleMapperService;
 import io.realworld.user.app.AuthenticationService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -54,6 +56,18 @@ public class ArticleController {
     @PostMapping("/articles")
     public SingleArticleResponseDto createArticle(@RequestBody ArticleCreateDto articleCreateDto) {
         return articleMapperService.createArticle(articleCreateDto, getCurrentUserId());
+    }
+
+    @PutMapping("/articles/{slug}")
+    public SingleArticleResponseDto updateArticle(
+            @RequestBody ArticleUpdateDto articleUpdateDto,
+            @PathVariable String slug) {
+        return articleMapperService.updateArticle(articleUpdateDto, slug, getCurrentUserId());
+    }
+
+    @DeleteMapping("/articles/{slug}")
+    public void deleteArticle(@PathVariable String slug) {
+        articleMapperService.deleteArticle(slug, getCurrentUserId());
     }
 
     private Long getCurrentUserId() {

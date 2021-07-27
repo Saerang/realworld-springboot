@@ -5,6 +5,7 @@ import io.realworld.article.api.dto.ArticleUpdateDto;
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.repository.ArticleRepository;
 import io.realworld.common.exception.ArticleNotFoundException;
+import io.realworld.common.exception.ArticleUserNotMatchedException;
 import io.realworld.tag.app.TagService;
 import io.realworld.tag.domain.Tag;
 import lombok.RequiredArgsConstructor;
@@ -54,16 +55,31 @@ public class DefaultArticleService implements ArticleService {
     }
 
     @Override
-    public Article updateArticle(ArticleUpdateDto dto, String slug) {
+    public Article updateArticle(ArticleUpdateDto dto, String slug, Long userId) {
         Article article = articleRepository.findBySlug(slug).orElseThrow(ArticleNotFoundException::new);
+
+        if (article.getUserId().compareTo(userId) != 0) {
+            throw new ArticleUserNotMatchedException();
+        }
+
+        if (dto.getTags() != null) {
+            Set<Tag> tags = tagService.createTags(dto.getTags());
+            article.updateTags(tags);
+        }
+
         article.updateArticle(dto.getTitle(), dto.getBody(), dto.getDescription());
 
         return article;
     }
 
     @Override
-    public void deleteArticle(String slug) {
+    public void deleteArticle(String slug, Long userId) {
         Article article = articleRepository.findBySlug(slug).orElseThrow(ArticleNotFoundException::new);
+
+        if (article.getUserId().compareTo(userId) != 0) {
+            throw new ArticleUserNotMatchedException();
+        }
+
         articleRepository.delete(article);
     }
 

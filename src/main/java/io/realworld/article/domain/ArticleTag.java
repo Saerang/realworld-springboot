@@ -2,10 +2,7 @@ package io.realworld.article.domain;
 
 import io.realworld.common.base.BaseTimeEntity;
 import io.realworld.tag.domain.Tag;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -13,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(uniqueConstraints = {@UniqueConstraint(name = "uix_article_id_tag_id", columnNames = {"article_id", "tag_id"})})
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArticleTag extends BaseTimeEntity {
     @Id

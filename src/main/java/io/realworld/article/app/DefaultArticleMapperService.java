@@ -1,6 +1,7 @@
 package io.realworld.article.app;
 
 import io.realworld.article.api.dto.ArticleCreateDto;
+import io.realworld.article.api.dto.ArticleUpdateDto;
 import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.article.domain.Article;
@@ -44,7 +45,8 @@ public class DefaultArticleMapperService implements ArticleMapperService {
         boolean favorited = false;
         if (userId != null) {
             following = followRelationService.isFollowing(userId, article.getUserId());
-            favorited = favoriteServiceFactory.getService(FavoriteType.ARTICLE).isFavorited(userId, article.getId());
+            List<Long> favoriteUserIds = favorites.stream().map(Favorite::getFavoriteId).map(FavoriteId::getUserId).collect(Collectors.toList());
+            favorited = favoriteUserIds.contains(userId);
         }
 
         return Mappers.toSingleArticleResponseDto(article, author, favorited, favorites.size(), following);
@@ -82,6 +84,23 @@ public class DefaultArticleMapperService implements ArticleMapperService {
         User user = userService.getUserById(article.getUserId());
 
         return Mappers.toSingleArticleResponseDto(article, user, false, 0, false);
+    }
+
+    @Override
+    public SingleArticleResponseDto updateArticle(ArticleUpdateDto dto, String slug, Long userId) {
+        Article article = articleService.updateArticle(dto, slug, userId);
+        User author = userService.getUserById(article.getUserId());
+
+        List<Favorite> favorites = favoriteServiceFactory.getService(FavoriteType.ARTICLE).getFavorites(article.getId());
+        List<Long> favoriteUserIds = favorites.stream().map(Favorite::getFavoriteId).map(FavoriteId::getUserId).collect(Collectors.toList());
+        boolean favorited = favoriteUserIds.contains(userId);
+
+        return Mappers.toSingleArticleResponseDto(article, author, favorited, favorites.size(), false);
+    }
+
+    @Override
+    public void deleteArticle(String slug, Long userId) {
+        articleService.deleteArticle(slug, userId);
     }
 
     private List<Long> getFavoritedIds(Long userId) {

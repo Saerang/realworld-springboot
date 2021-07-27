@@ -35,7 +35,7 @@ public class ProfileServiceTest {
     @Test 
     void getProfile() {
         //given
-        User user = new User("user@email.com", "1234", userPasswordEncoder, "usrname");
+        User user = User.createWithUserPasswordEncoder("user@email.com", "1234", userPasswordEncoder, "usrname");
         userRepository.save(user);
 
         //when
@@ -48,8 +48,8 @@ public class ProfileServiceTest {
     @Test
     void userFollow() {
         //given
-        User follower = new User("followerd@email.com", "1234", userPasswordEncoder, "follower");
-        User followee = new User("followee@email.com", "1234", userPasswordEncoder, "followee");
+        User follower = User.createWithUserPasswordEncoder("followerd@email.com", "1234", userPasswordEncoder, "follower");
+        User followee = User.createWithUserPasswordEncoder("followee@email.com", "1234", userPasswordEncoder, "followee");
         userRepository.saveAll(Arrays.asList(follower, followee));
 
         // em.flush();
@@ -66,8 +66,8 @@ public class ProfileServiceTest {
     @Test
     void userUnfollow() {
         //given
-        User follower = new User("followerd@email.com", "1234", userPasswordEncoder, "follower");
-        User followee = new User("followee@email.com", "1234", userPasswordEncoder, "followee");
+        User follower = User.createWithUserPasswordEncoder("followerd@email.com", "1234", userPasswordEncoder, "follower");
+        User followee = User.createWithUserPasswordEncoder("followee@email.com", "1234", userPasswordEncoder, "followee");
         userRepository.saveAll(Arrays.asList(follower, followee));
         FollowRelation followRelation = new FollowRelation(follower.getId(), followee.getId());
         followRelationRepository.save(followRelation);

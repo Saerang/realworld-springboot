@@ -2,6 +2,7 @@ package io.realworld.article.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.realworld.article.api.dto.ArticleCreateDto;
+import io.realworld.article.api.dto.ArticleUpdateDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.common.WithDefaultUser;
 import io.realworld.tag.app.dto.TagRequestDto;
@@ -11,15 +12,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ArticleControllerTest {
@@ -104,7 +106,7 @@ public class ArticleControllerTest {
         // given
         // when
         // then
-        mockMvc.perform(get("/api/articles/slug104").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/articles/{slug}", "slug104").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.article.title").value("title104"))
@@ -139,5 +141,42 @@ public class ArticleControllerTest {
                 .andExpect(jsonPath("$.article.favoritesCount").value(0))
                 .andExpect(jsonPath("$.article.author.following").value(false))
                 .andExpect(jsonPath("$.article.author.username").value("realworld101"));
+    }
+
+    @Test
+    @WithDefaultUser
+    void updateArticle() throws Exception {
+        // given
+        ArticleUpdateDto dto = ArticleUpdateDto.builder()
+                .body("new_body")
+                .title("new_title")
+                .description("new_description")
+                .tags(Set.of(TagRequestDto.builder().tag("new_tag").build()))
+                .build();
+
+        String jsonDto = objectMapper.writeValueAsString(dto);
+
+        // when
+        // then
+        mockMvc.perform(post("/api/articles").contentType(MediaType.APPLICATION_JSON).content(jsonDto))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.article.title").value(dto.getTitle()))
+                .andExpect(jsonPath("$.article.slug").isNotEmpty())
+                .andExpect(jsonPath("$.article.favorited").value(false))
+                .andExpect(jsonPath("$.article.favoritesCount").value(0))
+                .andExpect(jsonPath("$.article.author.following").value(false))
+                .andExpect(jsonPath("$.article.author.username").value("realworld101"));
+    }
+
+    @Test
+    @WithDefaultUser
+    void deleteArticle() throws Exception {
+        //given
+        //when
+        //then
+        mockMvc.perform(delete("/api/articles/{slug}", "slug101").contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }

@@ -2,12 +2,12 @@ package io.realworld.tag.app;
 
 import io.realworld.common.exception.TagNotFoundException;
 import io.realworld.tag.app.dto.TagRequestDto;
-import io.realworld.tag.app.dto.TagResponseDto;
 import io.realworld.tag.domain.Tag;
 import io.realworld.tag.domain.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -39,6 +39,11 @@ public class DefaultTagService implements TagService {
     @Override
     public Tag getTag(TagRequestDto dto) {
         return tagRepository.findByTag(dto.getTag()).orElseThrow(() -> new TagNotFoundException(dto.getTag()));
+    }
+
+    @Override
+    public Set<Tag> getTags() {
+        return new HashSet<>(tagRepository.findAll());
     }
 
 }

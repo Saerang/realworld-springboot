@@ -16,9 +16,9 @@ public interface ArticleService {
 
     Page<Article> getArticles(String tag, String author, String favorited, Pageable pageable);
 
-    Article updateArticle(ArticleUpdateDto dto, String slug);
+    Article updateArticle(ArticleUpdateDto dto, String slug, Long userId);
 
-    void deleteArticle(String slug);
+    void deleteArticle(String slug, Long userId);
 
     Page<Article> getArticlesByArticleIds(List<Long> articleIds, Pageable pageable);
 

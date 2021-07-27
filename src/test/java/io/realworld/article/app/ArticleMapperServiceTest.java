@@ -1,6 +1,7 @@
 package io.realworld.article.app;
 
 import io.realworld.article.api.dto.ArticleCreateDto;
+import io.realworld.article.api.dto.ArticleUpdateDto;
 import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.article.domain.Article;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -85,16 +87,13 @@ class ArticleMapperServiceTest {
     @Test
     void createArticle() {
         // given
-        String title = "title";
-        String body = "body";
-        String description = "description";
         TagRequestDto tag1 = TagRequestDto.builder().tag("tag1").build();
         TagRequestDto tag2 = TagRequestDto.builder().tag("tag2").build();
         Long userId = 101L;
         ArticleCreateDto dto = ArticleCreateDto.builder()
-                .title(title)
-                .body(body)
-                .description(description)
+                .title("title")
+                .body("body")
+                .description("description")
                 .tags(Set.of(tag1, tag2))
                 .build();
 
@@ -105,10 +104,39 @@ class ArticleMapperServiceTest {
                 .orElseThrow(() -> new ArticleNotFoundException(result.getArticle().getSlug()));
 
         // then
-        assertThat(article.getTitle()).isEqualTo(title);
-        assertThat(article.getBody()).isEqualTo(body);
-        assertThat(article.getDescription()).isEqualTo(description);
+        assertThat(article.getTitle()).isEqualTo(dto.getTitle());
+        assertThat(article.getBody()).isEqualTo(dto.getBody());
+        assertThat(article.getDescription()).isEqualTo(dto.getDescription());
         assertThat(article.getSlug()).isEqualTo(result.getArticle().getSlug());
+        assertThat(article.getUserId()).isEqualTo(userId);
+    }
+
+    @Test
+    void updateArticle() {
+        // given
+        String slug = "slug101";
+        Long userId = 101L;
+        TagRequestDto tag1 = TagRequestDto.builder().tag("new_tag1").build();
+        TagRequestDto tag2 = TagRequestDto.builder().tag("new_tag2").build();
+        ArticleUpdateDto dto = ArticleUpdateDto.builder()
+                .title("new_title")
+                .body("new_body")
+                .description("new_description")
+                .tags(Set.of(tag1, tag2))
+                .build();
+
+        // when
+        SingleArticleResponseDto result = articleMapperService.updateArticle(dto, slug, userId);
+
+        Article article = articleRepository.findBySlug(result.getArticle().getSlug())
+                .orElseThrow(() -> new ArticleNotFoundException(result.getArticle().getSlug()));
+
+        // then
+        assertThat(article.getTitle()).isEqualTo(dto.getTitle());
+        assertThat(article.getBody()).isEqualTo(dto.getBody());
+        assertThat(article.getDescription()).isEqualTo(dto.getDescription());
+        assertThat(article.getSlug()).isEqualTo(result.getArticle().getSlug());
+        assertThat(article.getArticleTags()).extracting("tag.tag").contains(tag1.getTag(), tag2.getTag());
         assertThat(article.getUserId()).isEqualTo(userId);
     }
 

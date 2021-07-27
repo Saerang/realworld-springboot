@@ -2,10 +2,7 @@ package io.realworld.article.domain;
 
 import io.realworld.common.base.BaseTimeEntity;
 import io.realworld.tag.domain.Tag;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
@@ -19,6 +16,7 @@ import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Getter
+@ToString(exclude = {"articleTags"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Article extends BaseTimeEntity {
     @Id
@@ -53,6 +51,11 @@ public class Article extends BaseTimeEntity {
     }
 
     public void addTags(Set<Tag> tags) {
+        this.articleTags.addAll(tags.stream().map(tag -> new ArticleTag(this, tag)).collect(toSet()));
+    }
+
+    public void updateTags(Set<Tag> tags) {
+        this.articleTags.clear();
         this.articleTags.addAll(tags.stream().map(tag -> new ArticleTag(this, tag)).collect(toSet()));
     }
 

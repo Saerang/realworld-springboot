@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 );
     }
 
-    /*
+    /* 별도 정리 필요.
     User
         Auth:
         GET /api/user : current user

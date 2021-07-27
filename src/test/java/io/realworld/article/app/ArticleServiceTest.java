@@ -141,7 +141,7 @@ public class ArticleServiceTest {
                 .build();
 
         //when
-        Article updatedArticle = articleService.updateArticle(dto, slug);
+        Article updatedArticle = articleService.updateArticle(dto, slug, savedArticle.getUserId());
         em.flush();
         em.clear();
 
@@ -160,7 +160,7 @@ public class ArticleServiceTest {
         assertThat(beforeArticle).isNotEmpty();
 
         //when
-        articleService.deleteArticle(savedArticle.getSlug());
+        articleService.deleteArticle(savedArticle.getSlug(), savedArticle.getUserId());
 
         em.flush();
         em.clear();
