@@ -33,6 +33,7 @@ public class DefaultArticleService implements ArticleService {
                 .userId(userId)
                 .build();
 
+        // TODO: 도메인 이벤트 생각해보기
         if (dto.getTags() != null) {
             Set<Tag> tags = tagService.createTags(dto.getTags());
             article.addTags(tags);

@@ -1,19 +1,18 @@
 package io.realworld.tag.domain;
 
-import io.realworld.article.domain.ArticleTag;
 import io.realworld.common.base.BaseTimeEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Objects;
 
 @Entity
 @Getter
-@ToString(exclude = "articles")
-@EqualsAndHashCode(of = {"tag"}, callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag extends BaseTimeEntity {
     @Id
@@ -24,13 +23,30 @@ public class Tag extends BaseTimeEntity {
     @Column(unique = true)
     private String tag;
 
-    @OneToMany(mappedBy = "tag")
-    private Set<ArticleTag> articles = new HashSet<>();
-
     @Builder
     public Tag(String tag) {
         Assert.state(StringUtils.isNotBlank(tag), "tag may not be blank.");
         this.tag = tag;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tag tag1 = (Tag) o;
+        return Objects.equals(getTag(), tag1.getTag());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTag());
+    }
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "id=" + id +
+                ", tag='" + tag + '\'' +
+                '}';
+    }
 }

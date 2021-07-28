@@ -6,8 +6,9 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Getter
+@ToString
 @Embeddable
-@EqualsAndHashCode @ToString
+@EqualsAndHashCode(of = {"followerId", "followeeId"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FollowRelationId implements Serializable {
     private Long followerId;

@@ -16,7 +16,6 @@ import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Getter
-@ToString(exclude = {"articleTags"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Article extends BaseTimeEntity {
     @Id
@@ -69,5 +68,17 @@ public class Article extends BaseTimeEntity {
     // TODO: slug 로직 찾아보기.
     private String getReplaceSlug() {
         return this.title.replaceAll(" ", "-") + "-" + RandomStringUtils.randomAlphanumeric(10);
+    }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id=" + id +
+                ", slug='" + slug + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", body='" + body + '\'' +
+                ", userId=" + userId +
+                '}';
     }
 }

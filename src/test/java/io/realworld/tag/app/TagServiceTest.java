@@ -111,7 +111,7 @@ public class TagServiceTest {
         //given
         String tag1 = "tag1";
         String tag2 = "tag2";
-        Set<Tag> saveTags = Set.of(Tag.builder().tag(tag1).build(), Tag.builder().tag("tag2").build());
+        Set<Tag> saveTags = Set.of(Tag.builder().tag(tag1).build(), Tag.builder().tag(tag2).build());
         tagRepository.saveAll(saveTags);
 
         //when
