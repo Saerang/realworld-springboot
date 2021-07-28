@@ -6,6 +6,9 @@ import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.ArticleTag;
+import io.realworld.comment.api.dto.CommentResponseDto;
+import io.realworld.comment.api.dto.CommentsResponseDto;
+import io.realworld.comment.domain.Comment;
 import io.realworld.tag.app.dto.TagResponseDto;
 import io.realworld.tag.app.dto.TagResponseDtos;
 import io.realworld.tag.domain.Tag;
@@ -113,5 +116,53 @@ public class Mappers {
         return TagResponseDtos.builder()
                 .tags(tags.stream().map(Tag::getTag).collect(Collectors.toSet()))
                 .build();
+    }
+
+    public static CommentResponseDto toCommentResponseDto(Comment comment, User user, boolean following) {
+        CommentResponseDto.UserDto userDto = CommentResponseDto.UserDto.builder()
+                .username(user.getUsername())
+                .bio(user.getBio())
+                .image(user.getImage())
+                .following(following)
+                .build();
+        CommentResponseDto.CommentDto commentDto = CommentResponseDto.CommentDto.builder()
+                .id(comment.getId())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
+                .body(comment.getBody())
+                .userDto(userDto)
+                .build();
+
+        return CommentResponseDto.builder()
+                .commentDto(commentDto)
+                .build();
+    }
+
+    public static CommentsResponseDto.CommentDto toCommentDto(Comment comment, User user, boolean following) {
+        CommentsResponseDto.UserDto userDto = CommentsResponseDto.UserDto.builder()
+                .username(user.getUsername())
+                .bio(user.getBio())
+                .image(user.getImage())
+                .following(following)
+                .build();
+
+        return CommentsResponseDto.CommentDto.builder()
+                .id(comment.getId())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
+                .body(comment.getBody())
+                .userDto(userDto)
+                .build();
+    }
+
+    public static CommentsResponseDto toCommentsResponseDto(List<Comment> comments, Map<Long, User> userMap, List<Long> followerIds) {
+        List<CommentsResponseDto.CommentDto> commentsDto = comments.stream()
+                .map(comment -> toCommentDto(
+                        comment,
+                        userMap.get(comment.getUserId()),
+                        followerIds.contains(comment.getUserId()))
+                ).collect(Collectors.toList());
+
+        return CommentsResponseDto.builder().commentsDto(commentsDto).build();
     }
 }

@@ -24,6 +24,9 @@ public class CommentRepositoryTest {
     void persistence() {
         //given
         Comment comment = Comment.builder()
+                .articleId(101L)
+                .userId(1L)
+                .body("body")
                 .build();
 
         assertThat(comment.getId()).isNull();

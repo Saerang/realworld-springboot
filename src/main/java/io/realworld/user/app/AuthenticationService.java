@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface AuthenticationService {
 
-    Optional<User> getCurrentUser();
+    User getCurrentUser();
 
     Long getCurrentUserId();
 }

@@ -3,9 +3,12 @@ package io.realworld.article.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.realworld.article.api.dto.ArticleCreateDto;
 import io.realworld.article.api.dto.ArticleUpdateDto;
-import io.realworld.article.api.dto.SingleArticleResponseDto;
+import io.realworld.article.domain.Article;
+import io.realworld.article.domain.repository.ArticleRepository;
 import io.realworld.common.WithDefaultUser;
 import io.realworld.tag.app.dto.TagRequestDto;
+import io.realworld.user.domain.User;
+import io.realworld.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,10 +28,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ArticleControllerTest {
+
     @Autowired
     ObjectMapper objectMapper;
     @Autowired
     MockMvc mockMvc;
+    @Autowired
+    ArticleRepository articleRepository;
+    @Autowired
+    UserRepository userRepository;
+
 
     @Test
     @WithDefaultUser
@@ -179,4 +188,5 @@ public class ArticleControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
 }

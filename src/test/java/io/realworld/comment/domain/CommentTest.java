@@ -2,6 +2,7 @@ package io.realworld.comment.domain;
 
 import org.junit.jupiter.api.Test;
 
+import static io.realworld.Fixtures.aComment;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommentTest {
@@ -12,7 +13,7 @@ public class CommentTest {
         String body = "body";
 
         //when
-        Comment comment = new Comment(body);
+        Comment comment = aComment().body("body").build();
 
         //then
         assertThat(comment.getBody()).isEqualTo(body);

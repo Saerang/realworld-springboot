@@ -20,7 +20,20 @@ public class DefaultAuthenticationService implements AuthenticationService {
     final private UserRepository userRepository;
 
     @Override
-    public Optional<User> getCurrentUser() {
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new UserNotFoundException();
+        }
+
+        if (authentication.getPrincipal().equals("anonymousUser")) {
+            throw new UserNotFoundException();
+        }
+
+        return userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new UserNotFoundException(EMAIL.getMessage() + authentication.getName()));
+    }
+
+    private Optional<User> findCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             return Optional.empty();
@@ -37,7 +50,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
 
     @Override
     public Long getCurrentUserId() {
-        Optional<User> currentUser = this.getCurrentUser();
+        Optional<User> currentUser = this.findCurrentUser();
 
         if (currentUser.isEmpty()) {
             return null;

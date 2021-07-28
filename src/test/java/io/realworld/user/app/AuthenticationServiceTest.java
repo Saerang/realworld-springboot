@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import static io.realworld.Fixtures.defaultUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -23,9 +24,9 @@ public class AuthenticationServiceTest {
         //given
 
         //when
-        User user = authenticationService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        User user = authenticationService.getCurrentUser();
 
         //then
-        assertThat(user.getEmail()).isEqualTo("realworld101@email.com");
+        assertThat(user.getEmail()).isEqualTo(defaultUser().getEmail());
     }
 }

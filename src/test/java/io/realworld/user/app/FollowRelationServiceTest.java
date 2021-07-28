@@ -18,7 +18,7 @@ class FollowRelationServiceTest {
     void getFolloweeUser() {
         // given
         // when
-        boolean isFollowing = followRelationService.isFollowing(101, 102);
+        boolean isFollowing = followRelationService.isFollowing(101L, 102L);
 
         // then
         assertThat(isFollowing).isTrue();

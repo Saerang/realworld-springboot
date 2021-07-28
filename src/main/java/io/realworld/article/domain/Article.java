@@ -37,11 +37,16 @@ public class Article extends BaseTimeEntity {
 
     private Long userId;
 
-    @Builder
     public Article(String title, String description, String body, Long userId) {
+        this(null, title, description, body, userId);
+    }
+
+    @Builder
+    public Article(Long id, String title, String description, String body, Long userId) {
         Assert.state(StringUtils.isNotBlank(title), "title may not be blank.");
         Assert.state(userId != null, "userId may not be null.");
 
+        this.id = id;
         this.title = title;
         this.slug = this.getReplaceSlug();
         this.description = description;

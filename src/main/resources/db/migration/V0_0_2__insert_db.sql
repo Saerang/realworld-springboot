@@ -55,3 +55,9 @@ values
 (201, 201, 'ARTICLE'),
 (201, 202, 'ARTICLE'),
 (201, 203, 'ARTICLE');
+
+
+insert into comments (comment_id, article_id, user_id, body, created_at, updated_at)
+values
+(101, 101, 101, 'body101', '2021-07-29 00:01', '2021-07-29 00:01'),
+(102, 101, 102, 'body102', '2021-07-29 00:02', '2021-07-29 00:02');

@@ -104,17 +104,10 @@ public class DefaultArticleMapperService implements ArticleMapperService {
     }
 
     private List<Long> getFavoritedIds(Long userId) {
-        if (userId == null) {
-            return Collections.emptyList();
-        }
         return favoriteServiceFactory.getService(FavoriteType.ARTICLE).getFavoritedIds(userId);
     }
 
     private Map<Long, User> getUserMap(List<Long> userIds) {
-        if (CollectionUtils.isEmpty(userIds)) {
-            return Collections.emptyMap();
-        }
-
         return userService.getUsersByIds(userIds).stream().collect(Collectors.toMap(User::getId, Function.identity()));
     }
 
@@ -131,10 +124,6 @@ public class DefaultArticleMapperService implements ArticleMapperService {
     }
 
     private List<Long> getFollower(Long userId) {
-        if (userId == null) {
-            return Collections.emptyList();
-        }
-
         return followRelationService.getFollowRelations(userId).stream()
                 .map(FollowRelation::getFollowRelationId)
                 .map(FollowRelationId::getFollowerId)

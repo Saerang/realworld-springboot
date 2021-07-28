@@ -7,10 +7,12 @@ import io.realworld.favorite.domain.repository.FavoriteRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 import static io.realworld.favorite.app.enumerate.FavoriteType.ARTICLE;
 
+// TODO: User 가 실제 존재하는지 체크 필요함.
 @Service
 @Transactional
 public class ArticleFavoriteService implements FavoriteService {
@@ -41,6 +43,10 @@ public class ArticleFavoriteService implements FavoriteService {
     @Transactional(readOnly = true)
     @Override
     public List<Long> getFavoritedIds(Long userId) {
+        if (userId == null) {
+            return Collections.emptyList();
+        }
+
         return favoriteRepository.findFavoritedIdByUserIdAndFavoriteType(userId, getFavoriteType());
     }
 
