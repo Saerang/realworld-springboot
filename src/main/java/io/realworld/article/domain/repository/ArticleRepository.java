@@ -16,6 +16,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Optional<Article> findBySlug(String slug);
 
+    // TODO: join fetch 는 생각해보자
     @Query(value = "select distinct a from Article a " +
             "left join fetch a.articleTags at " +
             "left join fetch at.tag t ",
@@ -24,6 +25,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Page<Article> findByIdIn(List<Long> ids, Pageable pageable);
 
+    // TODO: join fetch 는 생각해보자
     @Query(value = "select a from Article a " +
             "left join fetch a.articleTags at " +
             "left join fetch at.tag t " +
