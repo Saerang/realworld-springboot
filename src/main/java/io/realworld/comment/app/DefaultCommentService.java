@@ -5,15 +5,16 @@ import io.realworld.article.domain.Article;
 import io.realworld.comment.domain.Comment;
 import io.realworld.comment.domain.CommentValidator;
 import io.realworld.comment.domain.repository.CommentRepository;
-import io.realworld.common.exception.CommentNotFoundException;
 import io.realworld.user.app.UserService;
 import io.realworld.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class DefaultCommentService implements CommentService {
     final private CommentRepository commentRepository;
@@ -36,6 +37,7 @@ public class DefaultCommentService implements CommentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Comment> getComments(String slug) {
         Article article = articleService.getArticle(slug);
 
@@ -45,13 +47,9 @@ public class DefaultCommentService implements CommentService {
     @Override
     public void deleteComment(Long commentId, String slug) {
         Article article = articleService.getArticle(slug);
-        Comment comment = getComment(commentId);
+        Comment comment = commentRepository.findById(commentId).orElseThrow();
 
         commentRepository.deleteByIdAndArticleId(comment.getId(), article.getId());
-    }
-
-    public Comment getComment(Long commentId) {
-        return commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException(commentId));
     }
 
 }

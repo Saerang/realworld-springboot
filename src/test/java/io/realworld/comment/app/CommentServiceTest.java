@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static io.realworld.Fixtures.aComment;
@@ -94,6 +95,6 @@ public class CommentServiceTest {
 
         // when
         // then
-        assertThatThrownBy(() -> commentService.deleteComment(commentId, slug)).isInstanceOf(CommentNotFoundException.class);
+        assertThatThrownBy(() -> commentService.deleteComment(commentId, slug)).isInstanceOf(NoSuchElementException.class);
     }
 }

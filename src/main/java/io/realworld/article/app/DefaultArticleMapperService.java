@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultArticleMapperService implements ArticleMapperService {
+public class DefaultArticleMapperService implements ArticleMapperService, ArticleFavoriteMapper {
     final private ArticleService articleService;
     final private UserService userService;
     final private FollowRelationService followRelationService;
@@ -103,6 +103,32 @@ public class DefaultArticleMapperService implements ArticleMapperService {
         articleService.deleteArticle(slug, userId);
     }
 
+    @Override
+    public SingleArticleResponseDto favoriteArticle(String slug, Long userId) {
+        Article article = articleService.getArticle(slug);
+        User author = userService.getUserById(article.getUserId());
+
+        favoriteServiceFactory.getService(FavoriteType.ARTICLE).favoriteAuthor(userId, article.getId());
+
+        List<Favorite> favorites = favoriteServiceFactory.getService(FavoriteType.ARTICLE).getFavorites(article.getId());
+        boolean following = followRelationService.isFollowing(userId, article.getUserId());
+
+        return Mappers.toSingleArticleResponseDto(article, author, true, favorites.size(), following);
+    }
+
+    @Override
+    public SingleArticleResponseDto unfavoriteArticle(String slug, Long userId) {
+        Article article = articleService.getArticle(slug);
+        User author = userService.getUserById(article.getUserId());
+
+        favoriteServiceFactory.getService(FavoriteType.ARTICLE).unfavoriteAuthor(userId, article.getId());
+
+        List<Favorite> favorites = favoriteServiceFactory.getService(FavoriteType.ARTICLE).getFavorites(article.getId());
+        boolean following = followRelationService.isFollowing(userId, article.getUserId());
+
+        return Mappers.toSingleArticleResponseDto(article, author, false, favorites.size(), following);
+    }
+
     private List<Long> getFavoritedIds(Long userId) {
         return favoriteServiceFactory.getService(FavoriteType.ARTICLE).getFavoritedIds(userId);
     }
@@ -129,5 +155,6 @@ public class DefaultArticleMapperService implements ArticleMapperService {
                 .map(FollowRelationId::getFollowerId)
                 .collect(Collectors.toList());
     }
+
 
 }

@@ -1,5 +1,6 @@
 package io.realworld.article.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.realworld.tag.app.dto.TagRequestDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,17 +14,30 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 public class ArticleUpdateDto {
-    private  String title;
-    private String description;
-    private String body;
-    private Set<TagRequestDto> tags;
-
+    @NotNull
+    @JsonProperty("article")
+    private ArticleDto articleDto;
 
     @Builder
-    public ArticleUpdateDto(String title, String description, String body, Set<TagRequestDto> tags) {
-        this.title = title;
-        this.description = description;
-        this.body = body;
-        this.tags = tags;
+    public ArticleUpdateDto(ArticleDto articleDto) {
+        this.articleDto = articleDto;
+    }
+
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    public static class ArticleDto {
+        private String title;
+        private String description;
+        private String body;
+        private Set<TagRequestDto> tags;
+
+        @Builder
+        public ArticleDto(String title, String description, String body, Set<TagRequestDto> tags) {
+            this.title = title;
+            this.description = description;
+            this.body = body;
+            this.tags = tags;
+        }
     }
 }

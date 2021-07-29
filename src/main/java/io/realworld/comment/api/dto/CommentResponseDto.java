@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @ToString
@@ -25,15 +26,14 @@ public class CommentResponseDto {
     @NoArgsConstructor
     public static class CommentDto {
         private Long id;
-
-        private LocalDateTime createdAt;
-        private LocalDateTime updatedAt;
+        private ZonedDateTime createdAt;
+        private ZonedDateTime updatedAt;
         private String body;
         @JsonProperty("author")
         private UserDto userDto;
 
         @Builder
-        public CommentDto(Long id, String body, LocalDateTime createdAt, LocalDateTime updatedAt, UserDto userDto) {
+        public CommentDto(Long id, String body, ZonedDateTime createdAt, ZonedDateTime updatedAt, UserDto userDto) {
             this.id = id;
             this.body = body;
             this.createdAt = createdAt;

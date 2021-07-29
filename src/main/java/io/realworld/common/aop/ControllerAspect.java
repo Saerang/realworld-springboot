@@ -2,10 +2,7 @@ package io.realworld.common.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -32,6 +29,12 @@ public class ControllerAspect {
     public void controllerAdvice() {
     }
 
+    @AfterThrowing(pointcut = "controllerAdvice()", throwing = "e")
+    public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
+        log.error("Exception in {}.{}() with cause = \'{}\' and exception = \'{}\'", joinPoint.getSignature().getDeclaringTypeName(),
+                joinPoint.getSignature().getName(), e.getCause() != null ? e.getCause() : "NULL", e.getMessage(), e);
+    }
+
     @Before("controllerAdvice()")
     public void requestLogging(JoinPoint joinPoint) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
@@ -42,7 +45,7 @@ public class ControllerAspect {
 
     @AfterReturning(pointcut = "controllerAdvice()", returning = "result")
     public void requestLogging(JoinPoint joinPoint, Object result) {
-        log.debug("[" + joinPoint.getSignature().toShortString() + "] Controller Returned: " + Arrays.stream(joinPoint.getArgs()).map(String::valueOf).collect(Collectors.joining(",", "[", "]")));
+        log.debug("[" + joinPoint.getSignature().toShortString() + "] Controller Returned: " + result);
         log.debug("[" + joinPoint.getSignature().toShortString() + "] -------------------------- Controller FINISH --------------------------");
 
     }

@@ -89,11 +89,16 @@ class ArticleMapperServiceTest {
         TagRequestDto tag1 = TagRequestDto.builder().tag("tag1").build();
         TagRequestDto tag2 = TagRequestDto.builder().tag("tag2").build();
         Long userId = 101L;
-        ArticleCreateDto dto = ArticleCreateDto.builder()
+
+        ArticleCreateDto.ArticleDto articleDto = ArticleCreateDto.ArticleDto.builder()
                 .title("title")
                 .body("body")
                 .description("description")
                 .tags(Set.of(tag1, tag2))
+                .build();
+
+        ArticleCreateDto dto = ArticleCreateDto.builder()
+                .articleDto(articleDto)
                 .build();
 
         // when
@@ -103,9 +108,9 @@ class ArticleMapperServiceTest {
                 .orElseThrow(() -> new ArticleNotFoundException(result.getArticle().getSlug()));
 
         // then
-        assertThat(article.getTitle()).isEqualTo(dto.getTitle());
-        assertThat(article.getBody()).isEqualTo(dto.getBody());
-        assertThat(article.getDescription()).isEqualTo(dto.getDescription());
+        assertThat(article.getTitle()).isEqualTo(dto.getArticleDto().getTitle());
+        assertThat(article.getBody()).isEqualTo(dto.getArticleDto().getBody());
+        assertThat(article.getDescription()).isEqualTo(dto.getArticleDto().getDescription());
         assertThat(article.getSlug()).isEqualTo(result.getArticle().getSlug());
         assertThat(article.getUserId()).isEqualTo(userId);
     }
@@ -117,11 +122,15 @@ class ArticleMapperServiceTest {
         Long userId = 101L;
         TagRequestDto tag1 = TagRequestDto.builder().tag("new_tag1").build();
         TagRequestDto tag2 = TagRequestDto.builder().tag("new_tag2").build();
-        ArticleUpdateDto dto = ArticleUpdateDto.builder()
+
+        ArticleUpdateDto.ArticleDto articleDto = ArticleUpdateDto.ArticleDto.builder()
                 .title("new_title")
                 .body("new_body")
                 .description("new_description")
                 .tags(Set.of(tag1, tag2))
+                .build();
+        ArticleUpdateDto dto = ArticleUpdateDto.builder()
+                .articleDto(articleDto)
                 .build();
 
         // when
@@ -131,9 +140,9 @@ class ArticleMapperServiceTest {
                 .orElseThrow(() -> new ArticleNotFoundException(result.getArticle().getSlug()));
 
         // then
-        assertThat(article.getTitle()).isEqualTo(dto.getTitle());
-        assertThat(article.getBody()).isEqualTo(dto.getBody());
-        assertThat(article.getDescription()).isEqualTo(dto.getDescription());
+        assertThat(article.getTitle()).isEqualTo(dto.getArticleDto().getTitle());
+        assertThat(article.getBody()).isEqualTo(dto.getArticleDto().getBody());
+        assertThat(article.getDescription()).isEqualTo(dto.getArticleDto().getDescription());
         assertThat(article.getSlug()).isEqualTo(result.getArticle().getSlug());
         assertThat(article.getArticleTags()).extracting("tag.tag").contains(tag1.getTag(), tag2.getTag());
         assertThat(article.getUserId()).isEqualTo(userId);

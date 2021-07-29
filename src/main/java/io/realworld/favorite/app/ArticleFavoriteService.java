@@ -74,6 +74,11 @@ public class ArticleFavoriteService implements FavoriteService {
     }
 
     @Override
+    public void favoriteAuthor(Long userId, String slug) {
+
+    }
+
+    @Override
     public void unfavoriteAuthor(Long userId, Long favoritedId) {
         Favorite favorite = Favorite.builder()
                 .userId(userId)
@@ -82,6 +87,11 @@ public class ArticleFavoriteService implements FavoriteService {
                 .build();
 
         favoriteRepository.delete(favorite);
+    }
+
+    @Override
+    public void unfavoriteAuthor(Long userId, String slug) {
+
     }
 
 }

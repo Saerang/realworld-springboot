@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS article (
     slug varchar(255),
     title varchar(255),
     user_id bigint,
-    created_at datetime(6),
-    updated_at datetime(6),
+    created_at datetime,
+    updated_at datetime,
     primary key (article_id)
    -- foreign key (user_id) references users(user_id)
 );
@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS comments (
     article_id bigint,
     body varchar(255),
     user_id bigint,
-    created_at datetime(6),
-    updated_at datetime(6),
+    created_at datetime,
+    updated_at datetime,
     primary key (comment_id)
     --foreign key (article_id) references article(article_id)
 );

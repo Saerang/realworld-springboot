@@ -46,6 +46,16 @@ public class CommentFavoriteService implements FavoriteService {
     }
 
     @Override
+    public void favoriteAuthor(Long userId, String slug) {
+
+    }
+
+    @Override
     public void unfavoriteAuthor(Long userId, Long favoriteId) {
+    }
+
+    @Override
+    public void unfavoriteAuthor(Long userId, String slug) {
+
     }
 }

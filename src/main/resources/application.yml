@@ -4,6 +4,10 @@ spring:
 #    username: root
 #    password: 1234
 #    driver-class-name: com.mysql.cj.jdbc.Driver
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/realworld
+#    username: sa
+#    password:
 #    driver-class-name: org.h2.Driver
   jpa:
 #    database-platform: org.hibernate.dialect.MySQL8Dialect

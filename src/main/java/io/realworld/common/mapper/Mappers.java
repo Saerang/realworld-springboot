@@ -17,6 +17,7 @@ import io.realworld.user.api.dto.UserResponseDto;
 import io.realworld.user.domain.User;
 import org.springframework.data.domain.Page;
 
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -89,8 +90,8 @@ public class Mappers {
                 .favorited(isFavorited)
                 .favoritesCount(favoritesCount)
                 .slug(article.getSlug())
-                .createdAt(article.getCreatedAt())
-                .updatedAt(article.getUpdatedAt())
+                .createdAt(article.getCreatedAt().atZone(ZoneId.of("Asia/Seoul")))
+                .updatedAt(article.getUpdatedAt().atZone(ZoneId.of("Asia/Seoul")))
                 .author(author)
                 .build();
     }
@@ -127,8 +128,8 @@ public class Mappers {
                 .build();
         CommentResponseDto.CommentDto commentDto = CommentResponseDto.CommentDto.builder()
                 .id(comment.getId())
-                .createdAt(comment.getCreatedAt())
-                .updatedAt(comment.getUpdatedAt())
+                .createdAt(comment.getCreatedAt().atZone(ZoneId.of("Asia/Seoul")))
+                .updatedAt(comment.getUpdatedAt().atZone(ZoneId.of("Asia/Seoul")))
                 .body(comment.getBody())
                 .userDto(userDto)
                 .build();
@@ -148,8 +149,8 @@ public class Mappers {
 
         return CommentsResponseDto.CommentDto.builder()
                 .id(comment.getId())
-                .createdAt(comment.getCreatedAt())
-                .updatedAt(comment.getUpdatedAt())
+                .createdAt(comment.getCreatedAt().atZone(ZoneId.of("Asia/Seoul")))
+                .updatedAt(comment.getUpdatedAt().atZone(ZoneId.of("Asia/Seoul")))
                 .body(comment.getBody())
                 .userDto(userDto)
                 .build();

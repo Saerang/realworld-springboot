@@ -43,11 +43,16 @@ public class ArticleServiceTest {
     void createArticle() {
         // given
         TagRequestDto tagRequestDto = TagRequestDto.builder().tag("tag").build();
-        ArticleCreateDto dto = ArticleCreateDto.builder()
+        ArticleCreateDto.ArticleDto articleDto = ArticleCreateDto.ArticleDto.builder()
                 .title("title")
                 .description("description")
                 .tags(Set.of(tagRequestDto))
-                .body("body").build();
+                .body("body")
+                .build();
+
+        ArticleCreateDto dto = ArticleCreateDto.builder()
+                .articleDto(articleDto)
+                .build();
 
         // when
         Article savedArticle = articleService.createArticle(dto, 101L);
@@ -134,10 +139,13 @@ public class ArticleServiceTest {
         Article savedArticle = saveArticleWithTag();
         String slug = savedArticle.getSlug();
 
-        ArticleUpdateDto dto = ArticleUpdateDto.builder()
+        ArticleUpdateDto.ArticleDto articleDto = ArticleUpdateDto.ArticleDto.builder()
                 .title("title1")
                 .body("body1")
                 .description("description1")
+                .build();
+        ArticleUpdateDto dto = ArticleUpdateDto.builder()
+                .articleDto(articleDto)
                 .build();
 
         //when
@@ -146,9 +154,9 @@ public class ArticleServiceTest {
         em.clear();
 
         //then
-        assertThat(updatedArticle.getTitle()).isEqualTo(dto.getTitle());
-        assertThat(updatedArticle.getBody()).isEqualTo(dto.getBody());
-        assertThat(updatedArticle.getDescription()).isEqualTo(dto.getDescription());
+        assertThat(updatedArticle.getTitle()).isEqualTo(dto.getArticleDto().getTitle());
+        assertThat(updatedArticle.getBody()).isEqualTo(dto.getArticleDto().getBody());
+        assertThat(updatedArticle.getDescription()).isEqualTo(dto.getArticleDto().getDescription());
         assertThat(updatedArticle.getSlug()).isNotEqualTo(slug);
     }
 

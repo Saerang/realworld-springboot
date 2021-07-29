@@ -63,6 +63,12 @@ public class CommentController {
         return toCommentsResponseDto(comments, userMap, followerIds);
     }
 
+    @DeleteMapping("/articles/{slug}/comments/{id}")
+    public void deleteComment(@PathVariable String slug, @PathVariable Long id) {
+        commentService.deleteComment(id, slug);
+    }
+
+
     private CommentResponseDto toCommentResponseDto(Comment comment) {
         return Mappers.toCommentResponseDto(comment, authenticationService.getCurrentUser(), false);
     }

@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Getter
@@ -28,14 +29,14 @@ public class CommentsResponseDto {
     public static class CommentDto {
         private Long id;
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-        private LocalDateTime createdAt;
-        private LocalDateTime updatedAt;
+        private ZonedDateTime createdAt;
+        private ZonedDateTime updatedAt;
         private String body;
         @JsonProperty("author")
         private UserDto userDto;
 
         @Builder
-        public CommentDto(Long id, String body, LocalDateTime createdAt, LocalDateTime updatedAt, UserDto userDto) {
+        public CommentDto(Long id, String body, ZonedDateTime createdAt, ZonedDateTime updatedAt, UserDto userDto) {
             this.id = id;
             this.body = body;
             this.createdAt = createdAt;

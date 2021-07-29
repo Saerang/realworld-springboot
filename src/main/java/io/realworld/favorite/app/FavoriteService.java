@@ -18,5 +18,9 @@ public interface FavoriteService {
 
     void favoriteAuthor(Long userId, Long favoriteId);
 
+    void favoriteAuthor(Long userId, String searchFavorite);
+
     void unfavoriteAuthor(Long userId, Long favoriteId);
+
+    void unfavoriteAuthor(Long userId, String searchFavorite);
 }

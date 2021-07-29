@@ -31,7 +31,6 @@ public class Comment  {
 
     private LocalDateTime updatedAt;
 
-
     public Comment(Long articleId, Long userId, String body) {
         this(null, articleId, userId, body);
     }

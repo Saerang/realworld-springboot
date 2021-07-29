@@ -3,12 +3,11 @@ package io.realworld.article.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.realworld.article.api.dto.ArticleCreateDto;
 import io.realworld.article.api.dto.ArticleUpdateDto;
-import io.realworld.article.domain.Article;
 import io.realworld.article.domain.repository.ArticleRepository;
 import io.realworld.common.WithDefaultUser;
 import io.realworld.tag.app.dto.TagRequestDto;
-import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.UserRepository;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -130,11 +129,15 @@ public class ArticleControllerTest {
     @WithDefaultUser
     void createArticle() throws Exception {
         // given
-        ArticleCreateDto dto = ArticleCreateDto.builder()
+        ArticleCreateDto.ArticleDto articleDto = ArticleCreateDto.ArticleDto.builder()
                 .body("body")
                 .title("title")
                 .description("description")
                 .tags(Set.of(TagRequestDto.builder().tag("tag").build()))
+                .build();
+
+        ArticleCreateDto dto = ArticleCreateDto.builder()
+                .articleDto(articleDto)
                 .build();
 
         String jsonDto = objectMapper.writeValueAsString(dto);
@@ -144,7 +147,7 @@ public class ArticleControllerTest {
         mockMvc.perform(post("/api/articles").contentType(MediaType.APPLICATION_JSON).content(jsonDto))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.article.title").value(dto.getTitle()))
+                .andExpect(jsonPath("$.article.title").value(dto.getArticleDto().getTitle()))
                 .andExpect(jsonPath("$.article.slug").isNotEmpty())
                 .andExpect(jsonPath("$.article.favorited").value(false))
                 .andExpect(jsonPath("$.article.favoritesCount").value(0))
@@ -156,11 +159,14 @@ public class ArticleControllerTest {
     @WithDefaultUser
     void updateArticle() throws Exception {
         // given
-        ArticleUpdateDto dto = ArticleUpdateDto.builder()
+        ArticleUpdateDto.ArticleDto articleDto = ArticleUpdateDto.ArticleDto.builder()
                 .body("new_body")
                 .title("new_title")
                 .description("new_description")
                 .tags(Set.of(TagRequestDto.builder().tag("new_tag").build()))
+                .build();
+        ArticleUpdateDto dto = ArticleUpdateDto.builder()
+                .articleDto(articleDto)
                 .build();
 
         String jsonDto = objectMapper.writeValueAsString(dto);
@@ -170,7 +176,7 @@ public class ArticleControllerTest {
         mockMvc.perform(post("/api/articles").contentType(MediaType.APPLICATION_JSON).content(jsonDto))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.article.title").value(dto.getTitle()))
+                .andExpect(jsonPath("$.article.title").value(dto.getArticleDto().getTitle()))
                 .andExpect(jsonPath("$.article.slug").isNotEmpty())
                 .andExpect(jsonPath("$.article.favorited").value(false))
                 .andExpect(jsonPath("$.article.favoritesCount").value(0))

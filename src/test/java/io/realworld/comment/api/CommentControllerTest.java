@@ -12,8 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static io.realworld.Fixtures.defaultUser;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,5 +68,13 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.comments[0].author.image").value(defaultUser().getImage()))
                 .andExpect(jsonPath("$.comments[0].author.following").value(false))
                 .andExpect(jsonPath("$.comments[1].author.following").value(true));
+    }
+
+    @Test
+    @WithDefaultUser
+    void deleteComment() throws Exception {
+        mockMvc.perform(delete("/api/articles/{slug}/comments/{id}", "slug101", 101L).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }

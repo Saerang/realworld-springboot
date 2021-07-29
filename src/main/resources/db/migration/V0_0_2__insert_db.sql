@@ -22,15 +22,16 @@ values
 
 insert into article (article_id, user_id, body, description, slug, title, created_at, updated_at)
 values
-(101, 101, 'body101', 'description', 'slug101', 'title101', '2021-07-24 00:01', NULL),
-(102, 101, 'body102', 'description', 'slug102', 'title102', '2021-07-24 00:02', NULL),
-(103, 101, 'body103', 'description', 'slug103', 'title103', '2021-07-24 00:03', NULL),
-(104, 102, 'body104', 'description', 'slug104', 'title104', '2021-07-24 00:04', NULL),
-(105, 102, 'body105', 'description', 'slug105', 'title105', '2021-07-24 00:05', NULL),
-(106, 102, 'body106', 'description', 'slug106', 'title106', '2021-07-24 00:06', NULL),
-(201, 201, 'body201', 'description', 'slug201', 'title201', '2021-07-24 02:01', NULL),
-(202, 201, 'body202', 'description', 'slug202', 'title202', '2021-07-24 02:02', NULL),
-(203, 201, 'body203', 'description', 'slug203', 'title203', '2021-07-24 02:03', NULL);
+
+(101, 101, 'body101', 'description', 'slug101', 'title101', '2021-07-30T00:01:00.838', '2021-07-30T00:01:00.838'),
+(102, 101, 'body102', 'description', 'slug102', 'title102', '2021-07-30T00:01:00.838', '2021-07-30T00:01:00.838'),
+(103, 101, 'body103', 'description', 'slug103', 'title103', '2021-07-30T00:01:00.838', '2021-07-30T00:01:00.838'),
+(104, 102, 'body104', 'description', 'slug104', 'title104', '2021-07-30T00:01:00.838', '2021-07-30T00:01:00.838'),
+(105, 102, 'body105', 'description', 'slug105', 'title105', '2021-07-30T00:01:00.838', '2021-07-30T00:01:00.838'),
+(106, 102, 'body106', 'description', 'slug106', 'title106', '2021-07-30T00:01:00.838', '2021-07-30T00:01:00.838'),
+(201, 201, 'body201', 'description', 'slug201', 'title201', '2021-07-30T00:01:00.838', '2021-07-30T00:01:00.838'),
+(202, 201, 'body202', 'description', 'slug202', 'title202', '2021-07-30T00:01:00.838', '2021-07-30T00:01:00.838'),
+(203, 201, 'body203', 'description', 'slug203', 'title203', '2021-07-30T00:01:00.838', '2021-07-30T00:01:00.838');
 
 insert into article_tag (article_tag_id, article_id, tag_id)
 values
@@ -59,5 +60,5 @@ values
 
 insert into comments (comment_id, article_id, user_id, body, created_at, updated_at)
 values
-(101, 101, 101, 'body101', '2021-07-29 00:01', '2021-07-29 00:01'),
-(102, 101, 102, 'body102', '2021-07-29 00:02', '2021-07-29 00:02');
+(101, 101, 101, 'body101', '2021-07-30T00:01:00.838', '2021-07-30T00:01:00.838'),
+(102, 101, 102, 'body102', '2021-07-30T00:01:00.838', '2021-07-30T00:01:00.838');

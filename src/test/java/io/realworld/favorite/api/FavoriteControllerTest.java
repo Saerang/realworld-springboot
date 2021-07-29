@@ -5,16 +5,15 @@ import io.realworld.article.domain.repository.ArticleRepository;
 import io.realworld.common.WithDefaultUser;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.UserRepository;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -34,10 +33,9 @@ public class FavoriteControllerTest {
 
     @Test
     @WithDefaultUser
-    @Disabled("작업중")
     void favoriteArticle() throws Exception {
         // given
-        String slug = "slug105";
+        String slug = "slug203";
         Article article = articleRepository.findBySlug(slug).orElseThrow();
         User user = userRepository.findById(article.getUserId()).orElseThrow();
 
@@ -49,7 +47,28 @@ public class FavoriteControllerTest {
                 .andExpect(jsonPath("$.article.title").value(article.getTitle()))
                 .andExpect(jsonPath("$.article.slug").isNotEmpty())
                 .andExpect(jsonPath("$.article.favorited").value(true))
-                .andExpect(jsonPath("$.article.favoritesCount").value(1))
+                .andExpect(jsonPath("$.article.favoritesCount").value(2))
+                .andExpect(jsonPath("$.article.author.following").value(false))
+                .andExpect(jsonPath("$.article.author.username").value(user.getUsername()));
+    }
+
+    @Test
+    @WithDefaultUser
+    void unfavoriteArticle() throws Exception {
+        // given
+        String slug = "slug101";
+        Article article = articleRepository.findBySlug(slug).orElseThrow();
+        User user = userRepository.findById(article.getUserId()).orElseThrow();
+
+        // when
+        // then
+        mockMvc.perform(delete("/api/articles/{slug}/favorite", slug).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.article.title").value(article.getTitle()))
+                .andExpect(jsonPath("$.article.slug").isNotEmpty())
+                .andExpect(jsonPath("$.article.favorited").value(false))
+                .andExpect(jsonPath("$.article.favoritesCount").value(0))
                 .andExpect(jsonPath("$.article.author.following").value(false))
                 .andExpect(jsonPath("$.article.author.username").value(user.getUsername()));
     }

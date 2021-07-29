@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Set;
 
 @Getter
@@ -27,12 +27,12 @@ public class ArticleResponseDto {
 
     private final Author author;
 
-    private final LocalDateTime createdAt;
+    private final ZonedDateTime createdAt;
 
-    private final LocalDateTime updatedAt;
+    private final ZonedDateTime updatedAt;
 
     @Builder
-    public ArticleResponseDto(String slug, String title, String description, String body, Set<TagResponseDto> tagList, boolean favorited, long favoritesCount, Author author, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public ArticleResponseDto(String slug, String title, String description, String body, Set<TagResponseDto> tagList, boolean favorited, long favoritesCount, Author author, ZonedDateTime createdAt, ZonedDateTime updatedAt) {
         this.slug = slug;
         this.title = title;
         this.description = description;
@@ -46,6 +46,7 @@ public class ArticleResponseDto {
     }
 
     @Getter
+    @ToString
     public static class Author {
         private final String username;
         private final String bio;

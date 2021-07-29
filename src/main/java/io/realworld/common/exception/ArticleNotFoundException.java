@@ -1,6 +1,18 @@
 package io.realworld.common.exception;
 
-public class ArticleNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class ArticleNotFoundException extends AbstractBaseException {
+
+    @Override
+    public HttpStatus getHttpStatus() {
+        return HttpStatus.NOT_FOUND;
+    }
+
+    @Override
+    public ErrorCode getErrorCode() {
+        return ErrorCode.ARTICLE_NOT_FOUND;
+    }
 
     public ArticleNotFoundException() {
         this(null, null);

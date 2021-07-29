@@ -27,15 +27,15 @@ public class DefaultArticleService implements ArticleService {
     @Override
     public Article createArticle(ArticleCreateDto dto, Long userId) {
         Article article = Article.builder()
-                .title(dto.getTitle())
-                .description(dto.getDescription())
-                .body(dto.getBody())
+                .title(dto.getArticleDto().getTitle())
+                .description(dto.getArticleDto().getDescription())
+                .body(dto.getArticleDto().getBody())
                 .userId(userId)
                 .build();
 
         // TODO: 도메인 이벤트 생각해보기
-        if (dto.getTags() != null) {
-            Set<Tag> tags = tagService.createTags(dto.getTags());
+        if (dto.getArticleDto().getTags() != null) {
+            Set<Tag> tags = tagService.createTags(dto.getArticleDto().getTags());
             article.addTags(tags);
         }
 
@@ -63,12 +63,12 @@ public class DefaultArticleService implements ArticleService {
             throw new ArticleUserNotMatchedException();
         }
 
-        if (dto.getTags() != null) {
-            Set<Tag> tags = tagService.createTags(dto.getTags());
+        if (dto.getArticleDto().getTags() != null) {
+            Set<Tag> tags = tagService.createTags(dto.getArticleDto().getTags());
             article.updateTags(tags);
         }
 
-        article.updateArticle(dto.getTitle(), dto.getBody(), dto.getDescription());
+        article.updateArticle(dto.getArticleDto().getTitle(), dto.getArticleDto().getBody(), dto.getArticleDto().getDescription());
 
         return article;
     }
