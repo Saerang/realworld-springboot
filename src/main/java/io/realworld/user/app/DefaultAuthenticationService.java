@@ -1,7 +1,6 @@
 package io.realworld.user.app;
 
 import io.realworld.common.exception.UserNotFoundException;
-import io.realworld.user.app.enumerate.LoginType;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static io.realworld.user.app.enumerate.LoginType.*;
+import static io.realworld.user.app.enumerate.LoginType.EMAIL;
 
 @Service
 @RequiredArgsConstructor

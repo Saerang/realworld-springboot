@@ -4,6 +4,7 @@ import io.realworld.article.api.dto.ArticleCreateDto;
 import io.realworld.article.api.dto.ArticleUpdateDto;
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.repository.ArticleRepository;
+import io.realworld.article.domain.repository.ArticleTagRepository;
 import io.realworld.common.exception.ArticleNotFoundException;
 import io.realworld.common.exception.ArticleUserNotMatchedException;
 import io.realworld.tag.app.TagService;
@@ -22,6 +23,7 @@ import java.util.Set;
 public class DefaultArticleService implements ArticleService {
 
     final private TagService tagService;
+    final private ArticleTagRepository articleTagRepository;
     final private ArticleRepository articleRepository;
 
     @Override

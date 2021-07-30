@@ -39,7 +39,7 @@ public class ProfileServiceTest {
         userRepository.save(user);
 
         //when
-        Pair<User, Boolean> result = profileService.getProfile(user.getUsername());
+        Pair<User, Boolean> result = profileService.getProfile(user.getUsername(), 101L);
 
         //then
         assertThat(result.getLeft().getUsername()).isEqualTo(user.getUsername());
@@ -56,7 +56,7 @@ public class ProfileServiceTest {
         // em.clear();
 
         //when
-        Pair<User, Boolean> result = profileService.followUser(follower.getId(), followee.getUsername());
+        Pair<User, Boolean> result = profileService.followUser(followee.getUsername(), follower.getId());
 
         //then
         assertThat(result.getRight()).isTrue();
@@ -76,7 +76,7 @@ public class ProfileServiceTest {
         em.clear();
 
         //when
-        Pair<User, Boolean> result = profileService.unfollowUser(follower.getId(), followee.getUsername());
+        Pair<User, Boolean> result = profileService.unfollowUser(followee.getUsername(), follower.getId());
         List<FollowRelation> followRelations = followRelationRepository.findByFolloweeId(follower.getId());
 
         //then

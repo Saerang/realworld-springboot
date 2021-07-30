@@ -9,13 +9,13 @@ import org.springframework.data.domain.Pageable;
 public interface ArticleMapperService {
     SingleArticleResponseDto getSingleArticleResponseDto(String slug, Long userId);
 
-    MultipleArticlesResponseDto getArticles(String tag, String author, String favorited, Pageable pageable, Long userId);
+    MultipleArticlesResponseDto getArticles(String tag, String author, String favorited, Long userId, Pageable pageable);
 
-    MultipleArticlesResponseDto getFeedArticles(Pageable pageable, Long userId);
+    MultipleArticlesResponseDto getFeedArticles(Long currentUserId, Pageable pageable);
 
     SingleArticleResponseDto createArticle(ArticleCreateDto articleCreateDto, Long currentUserId);
 
-    void deleteArticle(String slug, Long userId);
+    void deleteArticle(String slug, Long currentUserId);
 
-    SingleArticleResponseDto updateArticle(ArticleUpdateDto dto, String slug, Long userId);
+    SingleArticleResponseDto updateArticle(ArticleUpdateDto dto, String slug, Long currentUserId);
 }

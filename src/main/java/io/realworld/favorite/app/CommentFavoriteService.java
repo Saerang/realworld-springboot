@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-// TODO: 추후 댓글 좋아요 만들면 사용.
 @Service
 public class CommentFavoriteService implements ArticleFavoriteService {
     final private FavoriteRepository favoriteRepository;

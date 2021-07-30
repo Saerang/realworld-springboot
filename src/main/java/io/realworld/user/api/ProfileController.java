@@ -21,19 +21,19 @@ public class ProfileController {
 
     @GetMapping("/profiles/{username}")
     public ProfileResponseDto getProfile(@PathVariable String username) {
-        Pair<User, Boolean> user = profileService.getProfile(username);
+        Pair<User, Boolean> user = profileService.getProfile(username, getCurrentUserId());
         return getProfileResponseDto(user);
     }
 
     @PostMapping("/profiles/{username}/follow")
     public ProfileResponseDto followUser(@PathVariable String username) {
-        Pair<User, Boolean> user = profileService.followUser(getCurrentUserId(), username);
+        Pair<User, Boolean> user = profileService.followUser(username, getCurrentUserId());
         return getProfileResponseDto(user);
     }
 
     @DeleteMapping("/profiles/{username}/follow")
     public ProfileResponseDto unfollowUser(@PathVariable String username) {
-        Pair<User, Boolean> user = profileService.unfollowUser(getCurrentUserId(), username);
+        Pair<User, Boolean> user = profileService.unfollowUser(username, getCurrentUserId());
         return getProfileResponseDto(user);
     }
 

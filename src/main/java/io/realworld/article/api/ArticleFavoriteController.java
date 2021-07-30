@@ -1,7 +1,7 @@
-package io.realworld.favorite.api;
+package io.realworld.article.api;
 
 import io.realworld.article.api.dto.SingleArticleResponseDto;
-import io.realworld.article.app.ArticleFavoriteMapper;
+import io.realworld.article.app.ArticleFavoriteMapperService;
 import io.realworld.user.app.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ArticleFavoriteController {
 
-    private final ArticleFavoriteMapper articleFavoriteMapper;
+    private final ArticleFavoriteMapperService articleFavoriteMapper;
     private final AuthenticationService authenticationService;
 
     @PostMapping("/articles/{slug}/favorite")
@@ -23,4 +23,5 @@ public class ArticleFavoriteController {
     public SingleArticleResponseDto articleUnfavorite(@PathVariable String slug) {
         return articleFavoriteMapper.unfavoriteArticle(slug, authenticationService.getCurrentUserId());
     }
+
 }

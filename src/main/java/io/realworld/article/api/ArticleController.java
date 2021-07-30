@@ -4,6 +4,7 @@ import io.realworld.article.api.dto.ArticleCreateDto;
 import io.realworld.article.api.dto.ArticleUpdateDto;
 import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
+import io.realworld.article.app.ArticleFavoriteMapperService;
 import io.realworld.article.app.ArticleMapperService;
 import io.realworld.user.app.AuthenticationService;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +34,7 @@ public class ArticleController {
             @RequestParam(required = false, defaultValue = "createdAt") final String sortProperty
     ) {
         PageRequest pageable = PageRequest.of(offset, limit, Sort.by(sortDirection, sortProperty));
-        return articleMapperService.getArticles(tag, author, favorited, pageable, getCurrentUserId());
+        return articleMapperService.getArticles(tag, author, favorited, getCurrentUserId(), pageable);
     }
 
     @GetMapping("/articles/feed")
@@ -44,7 +45,7 @@ public class ArticleController {
             @RequestParam(required = false, defaultValue = "createdAt") final String sortProperty
     ) {
         PageRequest pageable = PageRequest.of(offset, limit, Sort.by(sortDirection, sortProperty));
-        return articleMapperService.getFeedArticles(pageable, getCurrentUserId());
+        return articleMapperService.getFeedArticles(getCurrentUserId(), pageable);
     }
 
     @GetMapping("/articles/{slug}")

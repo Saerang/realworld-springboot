@@ -62,7 +62,7 @@ class ArticleMapperServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 20);
 
         // when
-        MultipleArticlesResponseDto multipleArticlesResponseDto = articleMapperService.getArticles(null, null, null, pageRequest, 101L);
+        MultipleArticlesResponseDto multipleArticlesResponseDto = articleMapperService.getArticles(null, null, null, 101L, pageRequest);
 
         // then
         assertThat(multipleArticlesResponseDto.getArticlesCount()).isEqualTo(9);
@@ -74,7 +74,7 @@ class ArticleMapperServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 20);
 
         // when
-        MultipleArticlesResponseDto multipleArticlesResponseDtoFeed = articleMapperService.getFeedArticles(pageRequest, 202L);
+        MultipleArticlesResponseDto multipleArticlesResponseDtoFeed = articleMapperService.getFeedArticles(202L, pageRequest);
 
         // then
         assertThat(multipleArticlesResponseDtoFeed.getArticlesCount()).isEqualTo(3);

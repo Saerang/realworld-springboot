@@ -6,7 +6,6 @@ import io.realworld.comment.api.dto.CommentsResponseDto;
 import io.realworld.comment.app.CommentService;
 import io.realworld.comment.domain.Comment;
 import io.realworld.common.mapper.Mappers;
-import io.realworld.favorite.app.enumerate.FavoriteType;
 import io.realworld.user.app.AuthenticationService;
 import io.realworld.user.app.FollowRelationService;
 import io.realworld.user.app.UserService;
@@ -20,15 +19,12 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.springframework.data.util.Pair.toMap;
-
 @RestController
 @RequestMapping("/api")
 public class CommentController {
 
     final private CommentService commentService;
     final private AuthenticationService authenticationService;
-    // TODO: Service 에서 하는게 맞는지? Controller 에서 하는게 맞는지? refactoring 생각해보기
     final private UserService userService;
     final private FollowRelationService followRelationService;
 
@@ -67,7 +63,6 @@ public class CommentController {
     public void deleteComment(@PathVariable String slug, @PathVariable Long id) {
         commentService.deleteComment(id, slug);
     }
-
 
     private CommentResponseDto toCommentResponseDto(Comment comment) {
         return Mappers.toCommentResponseDto(comment, authenticationService.getCurrentUser(), false);

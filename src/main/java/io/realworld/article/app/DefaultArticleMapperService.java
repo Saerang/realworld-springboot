@@ -5,13 +5,13 @@ import io.realworld.article.api.dto.ArticleUpdateDto;
 import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
 import io.realworld.article.domain.Article;
+import io.realworld.common.mapper.Mappers;
 import io.realworld.favorite.app.FavoriteServiceFactory;
 import io.realworld.favorite.app.enumerate.FavoriteType;
 import io.realworld.favorite.domain.Favorite;
 import io.realworld.favorite.domain.FavoriteId;
 import io.realworld.user.app.FollowRelationService;
 import io.realworld.user.app.UserService;
-import io.realworld.common.mapper.Mappers;
 import io.realworld.user.domain.FollowRelation;
 import io.realworld.user.domain.FollowRelationId;
 import io.realworld.user.domain.User;
@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultArticleMapperService implements ArticleMapperService, ArticleFavoriteMapper {
+public class DefaultArticleMapperService implements ArticleMapperService, ArticleFavoriteMapperService {
     final private ArticleService articleService;
     final private UserService userService;
     final private FollowRelationService followRelationService;
@@ -53,7 +52,7 @@ public class DefaultArticleMapperService implements ArticleMapperService, Articl
     }
 
     @Override
-    public MultipleArticlesResponseDto getArticles(String tag, String author, String favorited, Pageable pageable, Long userId) {
+    public MultipleArticlesResponseDto getArticles(String tag, String author, String favorited, Long userId, Pageable pageable) {
         Page<Article> articles = articleService.getArticles(tag, author, favorited, pageable);
 
         if(articles.getTotalElements() == 0) {
@@ -67,7 +66,7 @@ public class DefaultArticleMapperService implements ArticleMapperService, Articl
 
     // TODO: 넘 복잡. 이럴 땐 Entity 묶어서 한방쿼리로 가져오는게 좋을지? 아니면 repository 직접 호출해서 DTO 이용 하는게 좋을지?
     @Override
-    public MultipleArticlesResponseDto getFeedArticles(Pageable pageable, Long userId) {
+    public MultipleArticlesResponseDto getFeedArticles(Long userId, Pageable pageable) {
         List<Long> followerIds = getFollower(userId);
 
         Page<Article> articles = articleService.getArticlesByUserIds(followerIds, pageable);

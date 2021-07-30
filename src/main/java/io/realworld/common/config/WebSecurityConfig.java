@@ -37,27 +37,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 );
     }
 
-    /* 별도 정리 필요.
-    User
-        Auth:
-        GET /api/user : current user
-        PUT /api/user : update
-
-        No Auth:
-        POST /api/users/login : login
-        POST /api/users : registration
-
-    PROFILE
-        Auth:
-        POST: /api/profiles/:username/follow : follow
-        DELETE: /api/profiles/:username/follow : unfollow
-
-        NoAuth:
-        GET /api/profiles/:username : get profile
-
-    Article
-    Auth:
-     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http

@@ -2,7 +2,6 @@ package io.realworld.tag.api;
 
 import io.realworld.common.mapper.Mappers;
 import io.realworld.tag.app.TagService;
-import io.realworld.tag.app.dto.TagResponseDto;
 import io.realworld.tag.app.dto.TagResponseDtos;
 import io.realworld.tag.domain.Tag;
 import org.springframework.web.bind.annotation.GetMapping;

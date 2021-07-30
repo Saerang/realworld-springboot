@@ -9,11 +9,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-/**
- * Aspect for logging execution of service and repository Spring components.
- * @author Ramesh Fadatare
- *
- */
 @Slf4j
 @Aspect
 @Component
