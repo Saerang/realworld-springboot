@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class FavoriteServiceTest {
+public class ArticleFavoriteServiceTest {
 
     @Autowired
     FavoriteServiceFactory favoriteServiceFactory;

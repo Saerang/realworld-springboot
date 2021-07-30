@@ -35,18 +35,15 @@ public class UserController {
 
     @GetMapping("/user")
     public UserResponseDto getCurrentUser() {
-        User user = userService.getCurrentUser();
+        User user = authenticationService.getCurrentUser();
         return this.getUserResponseDto(user);
     }
 
     @PutMapping("/user")
     public UserResponseDto updateUser(@RequestBody UserUpdateRequestDto dto) {
-        User user = userService.updateUser(dto, getCurrentUserId());
+        Long currentUserId = authenticationService.getCurrentUserId();
+        User user = userService.updateUser(dto, currentUserId);
         return this.getUserResponseDto(user);
-    }
-
-    private Long getCurrentUserId() {
-        return authenticationService.getCurrentUserId();
     }
 
     private UserResponseDto getUserResponseDto(User user) {

@@ -11,11 +11,9 @@ public interface UserService {
 
     User createUser(UserCreateRequestDto dto);
 
-    User getCurrentUser();
-
     User getUserByUsername(String username);
 
-    User updateUser(UserUpdateRequestDto dto, long userId);
+    User updateUser(UserUpdateRequestDto dto, long currentUserId);
 
     User login(UserLoginRequestDto dto);
 

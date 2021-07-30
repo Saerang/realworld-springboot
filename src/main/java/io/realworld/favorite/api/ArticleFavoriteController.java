@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class FavoriteController {
+public class ArticleFavoriteController {
 
     private final ArticleFavoriteMapper articleFavoriteMapper;
     private final AuthenticationService authenticationService;

@@ -183,14 +183,6 @@ public class UserServiceTest {
     }
     
     @Test
-    void getCurrentUser_authNotFound() {
-        // given 
-        // when
-        // then
-        assertThatThrownBy(() -> userService.getCurrentUser()).isInstanceOf(UserNotFoundException.class).hasMessage("User dose not found.");
-    }
-
-    @Test
     void login() {
         //given
         UserLoginRequestDto.UserDto userDto = UserLoginRequestDto.UserDto.builder()

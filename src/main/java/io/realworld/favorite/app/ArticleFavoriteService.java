@@ -2,96 +2,25 @@ package io.realworld.favorite.app;
 
 import io.realworld.favorite.app.enumerate.FavoriteType;
 import io.realworld.favorite.domain.Favorite;
-import io.realworld.favorite.domain.FavoriteId;
-import io.realworld.favorite.domain.repository.FavoriteRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
-import static io.realworld.favorite.app.enumerate.FavoriteType.ARTICLE;
+public interface ArticleFavoriteService {
+    FavoriteType getFavoriteType();
 
-// TODO: User 가 실제 존재하는지 체크 필요함.
-@Service
-@Transactional
-public class ArticleFavoriteService implements FavoriteService {
+    List<Favorite> getFavorites(Long favoritedId);
 
-    final private FavoriteRepository favoriteRepository;
+    List<Favorite> getFavorites(List<Long> favoritedId);
 
-    public ArticleFavoriteService(FavoriteRepository favoriteRepository) {
-        this.favoriteRepository = favoriteRepository;
-    }
+    List<Long> getFavoritedIds(Long userId);
 
-    @Override
-    public FavoriteType getFavoriteType() {
-        return ARTICLE;
-    }
+    boolean isFavorited(Long userId, Long favoriteId);
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Favorite> getFavorites(Long favoritedId) {
-        return favoriteRepository.findByFavoritedIdAndFavoriteType(favoritedId, getFavoriteType());
-    }
+    void favoriteAuthor(Long userId, Long favoriteId);
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Favorite> getFavorites(List<Long> favoritedId) {
-        return favoriteRepository.findByFavoritedIdsAndFavoriteType(favoritedId, getFavoriteType());
-    }
+    void favoriteAuthor(Long userId, String searchFavorite);
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Long> getFavoritedIds(Long userId) {
-        if (userId == null) {
-            return Collections.emptyList();
-        }
+    void unfavoriteAuthor(Long userId, Long favoriteId);
 
-        return favoriteRepository.findFavoritedIdByUserIdAndFavoriteType(userId, getFavoriteType());
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public boolean isFavorited(Long userId, Long favoriteId) {
-        FavoriteId _favoriteId = FavoriteId.builder()
-                .userId(userId)
-                .favoritedId(favoriteId)
-                .favoriteType(this.getFavoriteType())
-                .build();
-
-        return favoriteRepository.findById(_favoriteId).isPresent();
-    }
-
-    @Override
-    public void favoriteAuthor(Long userId, Long favoritedId) {
-        Favorite favorite = Favorite.builder()
-                .userId(userId)
-                .favoritedId(favoritedId)
-                .favoriteType(this.getFavoriteType())
-                .build();
-
-        favoriteRepository.save(favorite);
-    }
-
-    @Override
-    public void favoriteAuthor(Long userId, String slug) {
-
-    }
-
-    @Override
-    public void unfavoriteAuthor(Long userId, Long favoritedId) {
-        Favorite favorite = Favorite.builder()
-                .userId(userId)
-                .favoritedId(favoritedId)
-                .favoriteType(this.getFavoriteType())
-                .build();
-
-        favoriteRepository.delete(favorite);
-    }
-
-    @Override
-    public void unfavoriteAuthor(Long userId, String slug) {
-
-    }
-
+    void unfavoriteAuthor(Long userId, String searchFavorite);
 }

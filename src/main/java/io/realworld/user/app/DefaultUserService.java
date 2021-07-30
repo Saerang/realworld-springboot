@@ -10,8 +10,6 @@ import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -50,18 +48,6 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public User getCurrentUser() {
-        // ToDo: service 분리하는게 좋아보임.
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            throw new UserNotFoundException();
-        }
-
-        return getUserByEmail(authentication.getName());
-    }
-
-    @Override
     public User getUserById(long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(USER_ID.getMessage() + userId));
     }
@@ -81,14 +67,14 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public User updateUser(UserUpdateRequestDto dto, long userId) {
+    public User updateUser(UserUpdateRequestDto dto, long currentUserId) {
         Optional<User> findUser = userRepository.findByEmailOrUsername(dto.getUserDto().getEmail(), dto.getUserDto().getUsername());
 
-        if (findUser.isPresent() && findUser.get().getId() != userId) {
+        if (findUser.isPresent() && findUser.get().getId() != currentUserId) {
             throw new UserAlreadyExistException(findUser.get().getId());
         }
 
-        User user = getCurrentUser();
+        User user = this.getUserById(currentUserId);
         user.updateUserInfo(
                 dto.getUserDto().getEmail(), dto.getUserDto().getUsername(),
                 dto.getUserDto().getPassword(), userPasswordEncoder,

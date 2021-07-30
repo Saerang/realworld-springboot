@@ -7,7 +7,6 @@ import io.realworld.article.domain.repository.ArticleRepository;
 import io.realworld.common.WithDefaultUser;
 import io.realworld.tag.app.dto.TagRequestDto;
 import io.realworld.user.domain.repository.UserRepository;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
