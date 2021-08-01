@@ -5,7 +5,7 @@ import io.realworld.favorite.domain.Favorite;
 
 import java.util.List;
 
-public interface ArticleFavoriteService {
+public interface FavoriteService {
     FavoriteType getFavoriteType();
 
     List<Favorite> getFavorites(Long favoritedId);

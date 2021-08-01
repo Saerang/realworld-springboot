@@ -9,7 +9,9 @@ import java.util.List;
 @Getter
 @ToString
 public class MultipleArticlesResponseDto {
+
     private final List<ArticleResponseDto> articles;
+
     private final long articlesCount;
 
     @Builder

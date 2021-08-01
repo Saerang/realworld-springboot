@@ -15,11 +15,11 @@ import static io.realworld.favorite.app.enumerate.FavoriteType.ARTICLE;
 // TODO: User 가 실제 존재하는지 체크 필요함.
 @Service
 @Transactional
-public class DefaultArticleFavoriteService implements ArticleFavoriteService {
+public class DefaultFavoriteService implements FavoriteService {
 
     final private FavoriteRepository favoriteRepository;
 
-    public DefaultArticleFavoriteService(FavoriteRepository favoriteRepository) {
+    public DefaultFavoriteService(FavoriteRepository favoriteRepository) {
         this.favoriteRepository = favoriteRepository;
     }
 

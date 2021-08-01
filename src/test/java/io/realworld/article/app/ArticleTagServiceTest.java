@@ -15,19 +15,6 @@ class ArticleTagServiceTest {
     @Autowired
     ArticleTagService articleTagService;
 
-    @Test
-    void getArticleTags_byArticleIds() {
-        //given
-        List<Long> articleIds = List.of(101L);
-
-        //when
-        List<ArticleTag> articleTags = articleTagService.getArticleTags(articleIds);
-
-        //then
-        assertThat(articleTags).hasSize(1);
-        assertThat(articleTags).extracting("tag.tag").containsExactly("tag101");
-    }
-
 //    @Test
 //    void getArticleTags_byArticleIds_gourp() {
 //        //given

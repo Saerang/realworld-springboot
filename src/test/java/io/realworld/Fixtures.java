@@ -3,8 +3,11 @@ package io.realworld;
 import io.realworld.article.domain.Article;
 import io.realworld.comment.domain.Comment;
 import io.realworld.comment.domain.Comment.CommentBuilder;
+import io.realworld.tag.domain.Tag;
+import io.realworld.tag.domain.Tag.TagBuilder;
 import io.realworld.user.api.SpringUserPasswordEncoder;
 import io.realworld.user.domain.User;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static io.realworld.article.domain.Article.ArticleBuilder;
@@ -50,5 +53,11 @@ public class Fixtures {
                 .image("image101")
                 .userPasswordEncoder(new SpringUserPasswordEncoder(new BCryptPasswordEncoder()))
                 .build();
+    }
+
+    public static TagBuilder aTag() {
+        return Tag.builder()
+                .id(1L)
+                .tag("tag");
     }
 }

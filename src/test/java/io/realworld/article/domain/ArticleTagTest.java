@@ -3,6 +3,8 @@ package io.realworld.article.domain;
 import io.realworld.tag.domain.Tag;
 import org.junit.jupiter.api.Test;
 
+import static io.realworld.Fixtures.aTag;
+import static io.realworld.Fixtures.anArticle;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ArticleTagTest {
@@ -10,17 +12,17 @@ public class ArticleTagTest {
     @Test
     void createArticleTag() {
         // given
-        Tag tag = Tag.builder().tag("tag").build();
-        Article article = Article.builder().userId(1L).title("title").body("body").build();
+        Article article = anArticle().build();
+        Tag tag = aTag().build();
 
         // when
         ArticleTag articleTag = ArticleTag.builder()
-                .tag(tag)
+                .tagId(tag.getId())
                 .article(article)
                 .build();
 
         // then
-        assertThat(articleTag.getTag().getTag()).isEqualTo("tag");
-        assertThat(articleTag.getArticle().getBody()).isEqualTo("body");
+        assertThat(articleTag.getTagId()).isEqualTo(tag.getId());
+        assertThat(articleTag.getArticle().getBody()).isEqualTo(article.getBody());
     }
 }

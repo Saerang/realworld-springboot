@@ -4,7 +4,6 @@ import io.realworld.article.api.dto.ArticleCreateDto;
 import io.realworld.article.api.dto.ArticleUpdateDto;
 import io.realworld.article.domain.Article;
 import io.realworld.article.domain.repository.ArticleRepository;
-import io.realworld.article.domain.repository.ArticleTagRepository;
 import io.realworld.common.exception.ArticleNotFoundException;
 import io.realworld.common.exception.ArticleUserNotMatchedException;
 import io.realworld.tag.app.TagService;
@@ -23,7 +22,6 @@ import java.util.Set;
 public class DefaultArticleService implements ArticleService {
 
     final private TagService tagService;
-    final private ArticleTagRepository articleTagRepository;
     final private ArticleRepository articleRepository;
 
     @Override
@@ -54,7 +52,7 @@ public class DefaultArticleService implements ArticleService {
     @Override
     @Transactional(readOnly = true)
     public Page<Article> getArticles(String tag, String author, String favorited, Pageable pageable) {
-        return articleRepository.findAllWithTag(pageable);
+        return articleRepository.findAll(pageable);
     }
 
     @Override
@@ -95,7 +93,7 @@ public class DefaultArticleService implements ArticleService {
     @Override
     @Transactional(readOnly = true)
     public Page<Article> getArticlesByUserIds(List<Long> userIds, Pageable pageable) {
-        return articleRepository.findAllByUserId(userIds, pageable);
+        return articleRepository.findByUserIdIn(userIds, pageable);
     }
 
 }

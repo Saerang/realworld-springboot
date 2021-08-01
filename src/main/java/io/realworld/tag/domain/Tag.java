@@ -23,9 +23,15 @@ public class Tag extends BaseTimeEntity {
     @Column(unique = true)
     private String tag;
 
-    @Builder
     public Tag(String tag) {
+        this(null, tag);
+    }
+
+    @Builder
+    public Tag(Long id, String tag) {
         Assert.state(StringUtils.isNotBlank(tag), "tag may not be blank.");
+
+        this.id = id;
         this.tag = tag;
     }
 

@@ -14,6 +14,7 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 public class ArticleUpdateDto {
+
     @NotNull
     @JsonProperty("article")
     private ArticleDto articleDto;

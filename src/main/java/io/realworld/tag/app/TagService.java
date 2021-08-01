@@ -14,4 +14,6 @@ public interface TagService {
     Tag getTag(TagRequestDto dto);
 
     Set<Tag> getTags();
+
+    Set<Tag> getTags(List<Long> tagIds);
 }

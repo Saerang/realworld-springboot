@@ -16,20 +16,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Optional<Article> findBySlug(String slug);
 
-    // TODO: join fetch 는 생각해보자
-    @Query(value = "select distinct a from Article a " +
-            "left join fetch a.articleTags at " +
-            "left join fetch at.tag t ",
-    countQuery = "select count(distinct a) from Article a")
-    Page<Article> findAllWithTag(Pageable pageable);
-
     Page<Article> findByIdIn(List<Long> ids, Pageable pageable);
 
-    // TODO: join fetch 는 생각해보자
-    @Query(value = "select a from Article a " +
-            "left join fetch a.articleTags at " +
-            "left join fetch at.tag t " +
-            "where a.userId in (:userIds)",
-            countQuery = "select count(a) from Article a join a.articleTags at join at.tag t where a.userId in (:userIds)")
-    Page<Article> findAllByUserId(@Param("userIds") List<Long> userIds, Pageable pageable);
+    Page<Article> findByUserIdIn(List<Long> userIds, Pageable pageable);
+
 }

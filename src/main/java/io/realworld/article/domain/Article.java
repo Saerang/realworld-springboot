@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,7 +20,8 @@ import static javax.persistence.CascadeType.ALL;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Article {
+public class Article extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
@@ -41,10 +41,6 @@ public class Article {
     @OneToMany(mappedBy = "article", cascade = ALL)
     private final Set<ArticleTag> articleTags = new HashSet<>();
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
     public Article(String title, String description, String body, Long userId) {
         this(null, title, description, body, userId);
     }
@@ -63,12 +59,12 @@ public class Article {
     }
 
     public void addTags(Set<Tag> tags) {
-        this.articleTags.addAll(tags.stream().map(tag -> new ArticleTag(this, tag)).collect(toSet()));
+        this.articleTags.addAll(tags.stream().map(tag -> new ArticleTag(this, tag.getId())).collect(toSet()));
     }
 
     public void updateTags(Set<Tag> tags) {
         this.articleTags.clear();
-        this.articleTags.addAll(tags.stream().map(tag -> new ArticleTag(this, tag)).collect(toSet()));
+        this.articleTags.addAll(tags.stream().map(tag -> new ArticleTag(this, tag.getId())).collect(toSet()));
     }
 
     public void updateArticle(String title, String body, String description) {
@@ -83,12 +79,6 @@ public class Article {
     // TODO: slug 로직 찾아보기.
     private String getReplaceSlug() {
         return this.title.replaceAll(" ", "-") + "-" + RandomStringUtils.randomAlphanumeric(10);
-    }
-
-    @PrePersist
-    public void initDate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
 
     @Override

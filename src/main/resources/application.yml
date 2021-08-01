@@ -15,8 +15,9 @@ spring:
     hibernate:
       ddl-auto: none
     properties:
-      show_sql: true
-      format_sql: true
+      hibernate:
+        show_sql: true
+        format_sql: true
 
   flyway:
     enabled: true

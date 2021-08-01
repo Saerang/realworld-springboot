@@ -11,6 +11,7 @@ import java.util.Set;
 @Getter
 @ToString
 public class ArticleResponseDto {
+
     private final String slug;
 
     private final String title;
@@ -61,4 +62,5 @@ public class ArticleResponseDto {
             this.following = following;
         }
     }
+
 }

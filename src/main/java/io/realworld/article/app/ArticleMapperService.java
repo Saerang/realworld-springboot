@@ -7,7 +7,8 @@ import io.realworld.article.api.dto.SingleArticleResponseDto;
 import org.springframework.data.domain.Pageable;
 
 public interface ArticleMapperService {
-    SingleArticleResponseDto getSingleArticleResponseDto(String slug, Long userId);
+
+    SingleArticleResponseDto getArticle(String slug, Long userId);
 
     MultipleArticlesResponseDto getArticles(String tag, String author, String favorited, Long userId, Pageable pageable);
 

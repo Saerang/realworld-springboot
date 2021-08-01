@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class ArticleFavoriteServiceTest {
+public class FavoriteServiceTest {
 
     @Autowired
     FavoriteServiceFactory favoriteServiceFactory;
@@ -113,8 +113,6 @@ public class ArticleFavoriteServiceTest {
 
         // when
         favoriteServiceFactory.getService(ARTICLE).unfavoriteAuthor(101L, 102L);
-
-
         Optional<Favorite> optionalFavorite2 = favoriteRepository.findById(favoriteId);
 
         // then

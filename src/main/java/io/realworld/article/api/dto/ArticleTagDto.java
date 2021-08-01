@@ -9,7 +9,9 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class ArticleTagDto {
+
     private Long articleId;
+
     private String tag;
 
     @Builder

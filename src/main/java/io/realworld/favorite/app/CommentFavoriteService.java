@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CommentFavoriteService implements ArticleFavoriteService {
+public class CommentFavoriteService implements FavoriteService {
     final private FavoriteRepository favoriteRepository;
 
     public CommentFavoriteService(FavoriteRepository favoriteRepository) {

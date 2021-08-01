@@ -4,7 +4,6 @@ import io.realworld.article.api.dto.ArticleCreateDto;
 import io.realworld.article.api.dto.ArticleUpdateDto;
 import io.realworld.article.api.dto.MultipleArticlesResponseDto;
 import io.realworld.article.api.dto.SingleArticleResponseDto;
-import io.realworld.article.app.ArticleFavoriteMapperService;
 import io.realworld.article.app.ArticleMapperService;
 import io.realworld.user.app.AuthenticationService;
 import org.springframework.data.domain.PageRequest;
@@ -50,7 +49,7 @@ public class ArticleController {
 
     @GetMapping("/articles/{slug}")
     public SingleArticleResponseDto getArticle(@PathVariable String slug) {
-        return articleMapperService.getSingleArticleResponseDto(slug, getCurrentUserId());
+        return articleMapperService.getArticle(slug, getCurrentUserId());
     }
 
     @PostMapping("/articles")

@@ -37,7 +37,7 @@ public class ArticleTagRepositoryTest {
         // when
         ArticleTag articleTag = ArticleTag.builder()
                 .article(article)
-                .tag(tag)
+                .tagId(tag.getId())
                 .build();
         ArticleTag saveArticleTag = articleTagRepository.save(articleTag);
 
@@ -49,6 +49,6 @@ public class ArticleTagRepositoryTest {
         // then
         assertThat(findArticleTag.getArticle().getUserId()).isEqualTo(101);
         assertThat(findArticleTag.getArticle().getBody()).isEqualTo("body");
-        assertThat(findArticleTag.getTag().getTag()).isEqualTo("tag");
+        assertThat(findArticleTag.getTagId()).isEqualTo(tag.getId());
     }
 }

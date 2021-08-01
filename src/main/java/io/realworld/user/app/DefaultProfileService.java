@@ -1,14 +1,14 @@
 package io.realworld.user.app;
 
 import io.realworld.user.domain.FollowRelation;
+import io.realworld.user.domain.FollowRelationId;
 import io.realworld.user.domain.User;
 import io.realworld.user.domain.repository.FollowRelationRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +23,10 @@ public class DefaultProfileService implements ProfileService {
 
         boolean isFollowing = false;
         if (followeeUserId != null) {
-            List<FollowRelation> followRelations = followRelationRepository.findByFolloweeId(followeeUserId);
-            if(!CollectionUtils.isEmpty(followRelations)) isFollowing = true;
+            Optional<FollowRelation> followRelation = followRelationRepository.findById(new FollowRelationId(user.getId(), followeeUserId));
+            if(followRelation.isPresent()) {
+                isFollowing = true;
+            }
         }
 
         return Pair.of(user, isFollowing);
@@ -36,8 +38,10 @@ public class DefaultProfileService implements ProfileService {
 
         boolean isFollowing = false;
         if (followeeUserId != null) {
-            List<FollowRelation> followRelations = followRelationRepository.findByFolloweeId(followeeUserId);
-            if(!CollectionUtils.isEmpty(followRelations)) isFollowing = true;
+            Optional<FollowRelation> followRelation = followRelationRepository.findById(new FollowRelationId(profileUserId, followeeUserId));
+            if(followRelation.isPresent()) {
+                isFollowing = true;
+            }
         }
 
         return Pair.of(followeeUser, isFollowing);

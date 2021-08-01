@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-public class DefaultArticleTagService implements ArticleTagService{
+public class DefaultArticleTagService implements ArticleTagService {
 
     final private ArticleTagRepository articleTagRepository;
     final private TagRepository tagRepository;

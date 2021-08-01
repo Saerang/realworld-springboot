@@ -7,6 +7,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class SingleArticleResponseDto {
+
     // TODO: Single, Multiple 같이 쓰는데 분리하는게 좋음.
     private final ArticleResponseDto article;
 

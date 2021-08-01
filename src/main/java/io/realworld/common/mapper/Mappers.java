@@ -47,10 +47,11 @@ public class Mappers {
         return ProfileResponseDto.builder().profile(profileDto).build();
     }
 
-    public static SingleArticleResponseDto toSingleArticleResponseDto(Article article, User user, boolean isFavorited, long favoritesCount, boolean isFollowing) {
+    public static SingleArticleResponseDto toSingleArticleResponseDto(Article article, Set<Tag> tags, User user, boolean isFavorited, long favoritesCount, boolean isFollowing) {
         ArticleResponseDto articleResponseDto = toArticleResponseDto(
                 article,
-                article.getArticleTags().stream().map(ArticleTag::getTag).collect(Collectors.toSet()),
+                tags,
+//                article.getArticleTags().stream().map(ArticleTag::getTag).collect(Collectors.toSet()),
                 user,
                 isFavorited,
                 favoritesCount,
@@ -60,11 +61,11 @@ public class Mappers {
         return SingleArticleResponseDto.builder().article(articleResponseDto).build();
     }
 
-    public static MultipleArticlesResponseDto toMultipleArticlesResponseDto(Page<Article> articles, Map<Long, User> userMap, Map<Long, Long> favoritesCount, List<Long> favoritedIds, List<Long> followerIds) {
+    public static MultipleArticlesResponseDto toMultipleArticlesResponseDto(Page<Article> articles, Map<Long, Set<Tag>> tagsMap, Map<Long, User> userMap, Map<Long, Long> favoritesCount, List<Long> favoritedIds, List<Long> followerIds) {
         List<ArticleResponseDto> articleResponseDtos = articles.stream()
                 .map(article -> toArticleResponseDto(
                         article,
-                        article.getArticleTags().stream().map(ArticleTag::getTag).collect(Collectors.toSet()),
+                        tagsMap.get(article.getId()),
                         userMap.get(article.getUserId()),
                         favoritedIds.contains(article.getId()),
                         favoritesCount.getOrDefault(article.getId(), 0L),
@@ -98,19 +99,6 @@ public class Mappers {
 
     public static TagResponseDto toTagResponseDtos(Tag tag) {
         return TagResponseDto.builder().tag(tag.getTag()).build();
-    }
-
-    public static ArticleTagDto toArticleTagDto(ArticleTag articleTag) {
-        return ArticleTagDto.builder()
-                .articleId(articleTag.getArticle().getId())
-                .tag(articleTag.getTag().getTag())
-                .build();
-    }
-
-    public static TagResponseDto toTagResponseDto(Tag tag) {
-        return TagResponseDto.builder()
-                .tag(tag.getTag())
-                .build();
     }
 
     public static TagResponseDtos toTagResponseDtos(Set<Tag> tags) {

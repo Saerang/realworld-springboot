@@ -11,20 +11,20 @@ import java.util.Map;
 @Component
 public class FavoriteServiceFactory {
 
-    private final Map<FavoriteType, ArticleFavoriteService> favoriteServiceMap = new HashMap<>();
+    private final Map<FavoriteType, FavoriteService> favoriteServiceMap = new HashMap<>();
 
-    public FavoriteServiceFactory(List<ArticleFavoriteService> favoriteServices) {
+    public FavoriteServiceFactory(List<FavoriteService> favoriteServices) {
 
         if(CollectionUtils.isEmpty(favoriteServices)) {
             throw new IllegalArgumentException("ArticleFavoriteService not found.");
         }
 
-        for (ArticleFavoriteService favoriteService : favoriteServices) {
+        for (FavoriteService favoriteService : favoriteServices) {
             this.favoriteServiceMap.put(favoriteService.getFavoriteType(), favoriteService);
         }
     }
 
-    public ArticleFavoriteService getService(FavoriteType favoriteType) {
+    public FavoriteService getService(FavoriteType favoriteType) {
         return favoriteServiceMap.get(favoriteType);
     }
 }

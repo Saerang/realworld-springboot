@@ -9,8 +9,7 @@ import java.util.List;
 
 public interface ArticleTagRepository extends JpaRepository<ArticleTag, Long> {
 
-    @Query("select at from ArticleTag at join fetch at.tag t " +
-            "where at.article.id in (:articleIds)")
+    @Query("select at from ArticleTag at where at.article.id in (:articleIds)")
     List<ArticleTag> findAllWithTagByArticle_IdIn(@Param("articleIds") List<Long> articleIds);
 
 }
