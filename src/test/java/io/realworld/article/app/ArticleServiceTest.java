@@ -19,10 +19,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static io.realworld.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -82,13 +82,11 @@ public class ArticleServiceTest {
     }
 
     @Test
-    @Disabled
-    @Description("Query Dsl 적용 후 작성 필요.")
-    void getAllArticles_ByTag() {
+    void getArticles_ByTag() {
         //given
         Tag tag = saveTag();
-        Article article1 = saveArticle("title1", "body1", tag, "description");
-        Article article2 = saveArticle("title2", "body2", tag, "description");
+        Article article1 = saveArticle("title1", "body1", tag, defaultUser().getId());
+        Article article2 = saveArticle("title2", "body2", tag, defaultUser().getId());
 
         //when
         Page<Article> articles = articleService.getArticles(tag.getTag(), null, null, PageRequest.of(0, 20));
@@ -101,37 +99,35 @@ public class ArticleServiceTest {
     }
 
     @Test
-    @Disabled
-    @Description("Query DSL 적용 후 다시 작업")
-    void getPageArticles() {
+    void getArticles_ByAuthor() {
         //given
         Tag tag = saveTag();
-        saveArticle("title1", "body1", tag, "description");
-        Article article2 = saveArticle("title2", "body2", tag, "description");
+        Article article1 = saveArticle("title1", "body1", tag, 203L);
+        Article article2 = saveArticle("title2", "body2", tag, 203L);
 
         //when
-        Page<Article> articles = articleService.getArticles(tag.getTag(), null, null, PageRequest.of(0, 1));
+        Page<Article> articles = articleService.getArticles(null, "realworld203", null, PageRequest.of(0, 20));
 
         //then
-        assertThat(articles).hasSize(1);
-        assertThat(articles).extracting("title").contains(article2.getTitle());
-        assertThat(articles).extracting("body").contains(article2.getBody());
-        assertThat(articles).extracting("slug").contains(article2.getSlug());
+        assertThat(articles).hasSize(2);
+        assertThat(articles).extracting("title").contains(article1.getTitle(), article2.getTitle());
+        assertThat(articles).extracting("body").contains(article1.getBody(), article2.getBody());
+        assertThat(articles).extracting("slug").contains(article1.getSlug(), article2.getSlug());
     }
 
     @Test
-    void getArticles_byArticleIds() {
+    void getArticles_ByFavorited() {
         //given
-        List<Long> articleIds = List.of(101L, 102L, 103L);
-        PageRequest pageRequest = PageRequest.of(0, 10);
-
         //when
-        Page<Article> articles = articleService.getArticlesByArticleIds(articleIds, pageRequest);
+        Page<Article> articles = articleService.getArticles(null, null, "realworld101", PageRequest.of(0, 5));
 
         //then
-        assertThat(articles).hasSize(3);
-        assertThat(articles).extracting("id").isEqualTo(articleIds);
+        assertThat(articles).hasSize(4);
+        assertThat(articles).extracting("title").contains("title101", "title102", "title103", "title104");
+        assertThat(articles).extracting("body").contains("body101", "body102", "body103", "body104");
+        assertThat(articles).extracting("slug").contains("slug101", "slug102", "slug103", "slug104");
     }
+
 
     @Test
     void updateArticle() {
@@ -181,18 +177,18 @@ public class ArticleServiceTest {
 
     private Article saveArticleWithTag() {
         Tag tag = saveTag();
-        return saveArticle("title", "body", tag, "description");
+        return saveArticle("title", "body", tag, defaultUser().getId());
     }
 
     private Tag saveTag() {
         return tagRepository.save(Tag.builder().tag("tag").build());
     }
 
-    private Article saveArticle(String title, String body, Tag tag, String description) {
+    private Article saveArticle(String title, String body, Tag tag, Long userId) {
         Article article = Article.builder()
-                .userId(101L)
+                .userId(userId)
                 .title(title)
-                .description(description)
+                .description("description")
                 .body(body)
                 .build();
 

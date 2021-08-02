@@ -20,7 +20,5 @@ public interface ArticleService {
 
     void deleteArticle(String slug, Long userId);
 
-    Page<Article> getArticlesByArticleIds(List<Long> articleIds, Pageable pageable);
-
     Page<Article> getArticlesByUserIds(List<Long> userIds, Pageable pageable);
 }

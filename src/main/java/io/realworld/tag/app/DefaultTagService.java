@@ -42,6 +42,11 @@ public class DefaultTagService implements TagService {
     }
 
     @Override
+    public Optional<Tag> getTag(String tag) {
+        return tagRepository.findByTag(tag);
+    }
+
+    @Override
     public Set<Tag> getTags() {
         return new HashSet<>(tagRepository.findAll());
     }

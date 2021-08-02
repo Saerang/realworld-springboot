@@ -2,7 +2,9 @@ package io.realworld.article.app;
 
 import io.realworld.article.api.dto.ArticleCreateDto;
 import io.realworld.article.api.dto.ArticleUpdateDto;
+import io.realworld.article.app.dto.ArticleSearchCondition;
 import io.realworld.article.domain.Article;
+import io.realworld.article.domain.repository.ArticleQueryRepository;
 import io.realworld.article.domain.repository.ArticleRepository;
 import io.realworld.common.exception.ArticleNotFoundException;
 import io.realworld.common.exception.ArticleUserNotMatchedException;
@@ -23,6 +25,7 @@ public class DefaultArticleService implements ArticleService {
 
     final private TagService tagService;
     final private ArticleRepository articleRepository;
+    final private ArticleQueryRepository articleQueryRepository;
 
     @Override
     public Article createArticle(ArticleCreateDto dto, Long userId) {
@@ -48,11 +51,17 @@ public class DefaultArticleService implements ArticleService {
         return articleRepository.findBySlug(slug).orElseThrow(() -> new ArticleNotFoundException(slug));
     }
 
-    // TODO: queryDsl 로 바꿔서 동적 쿼리 작성해야됨.
     @Override
     @Transactional(readOnly = true)
     public Page<Article> getArticles(String tag, String author, String favorited, Pageable pageable) {
-        return articleRepository.findAll(pageable);
+
+        ArticleSearchCondition condition = ArticleSearchCondition.builder()
+                .tag(tag)
+                .author(author)
+                .favorited(favorited)
+                .build();
+
+        return articleQueryRepository.search(condition, pageable);
     }
 
     @Override
@@ -82,12 +91,6 @@ public class DefaultArticleService implements ArticleService {
         }
 
         articleRepository.delete(article);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<Article> getArticlesByArticleIds(List<Long> articleIds, Pageable pageable) {
-        return articleRepository.findByIdIn(articleIds, pageable);
     }
 
     @Override
