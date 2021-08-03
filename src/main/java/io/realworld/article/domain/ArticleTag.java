@@ -1,7 +1,6 @@
 package io.realworld.article.domain;
 
 import io.realworld.common.base.BaseTimeEntity;
-import io.realworld.tag.domain.Tag;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

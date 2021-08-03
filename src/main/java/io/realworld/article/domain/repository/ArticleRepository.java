@@ -12,11 +12,7 @@ import java.util.Optional;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
-    Optional<Article> findByUserId(long userId);
-
     Optional<Article> findBySlug(String slug);
-
-    Page<Article> findByIdIn(List<Long> ids, Pageable pageable);
 
     Page<Article> findByUserIdIn(List<Long> userIds, Pageable pageable);
 

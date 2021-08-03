@@ -1,6 +1,5 @@
 package io.realworld.article.domain.repository;
 
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -11,16 +10,12 @@ import io.realworld.article.app.dto.ArticleSearchCondition;
 import io.realworld.article.domain.Article;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static io.realworld.article.domain.QArticle.article;
 import static io.realworld.article.domain.QArticleTag.articleTag;
