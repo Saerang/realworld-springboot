@@ -6,6 +6,7 @@ import io.realworld.tag.domain.Tag;
 import io.realworld.tag.domain.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,9 +18,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DefaultTagService implements TagService {
 
-    final private TagRepository tagRepository;
+    private final TagRepository tagRepository;
 
     @Override
+    @Transactional
     public Tag createTag(TagRequestDto dto) {
         Tag tag = Tag.builder().tag(dto.getTag()).build();
 
