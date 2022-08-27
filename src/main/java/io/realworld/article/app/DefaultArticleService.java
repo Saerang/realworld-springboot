@@ -10,7 +10,6 @@ import io.realworld.common.exception.ArticleNotFoundException;
 import io.realworld.common.exception.ArticleUserNotMatchedException;
 import io.realworld.tag.app.TagService;
 import io.realworld.tag.domain.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,12 +19,17 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@RequiredArgsConstructor
 public class DefaultArticleService implements ArticleService {
 
     final private TagService tagService;
     final private ArticleRepository articleRepository;
     final private ArticleQueryRepository articleQueryRepository;
+
+    public DefaultArticleService(TagService tagService, ArticleRepository articleRepository, ArticleQueryRepository articleQueryRepository) {
+        this.tagService = tagService;
+        this.articleRepository = articleRepository;
+        this.articleQueryRepository = articleQueryRepository;
+    }
 
     @Override
     public Article createArticle(ArticleCreateDto dto, Long userId) {

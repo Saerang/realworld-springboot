@@ -34,8 +34,8 @@ public class DefaultTagService implements TagService {
     @Override
     public Set<Tag> createTags(Set<TagRequestDto> dtos) {
         return dtos.stream()
-                .map(this::createTag)
-                .collect(Collectors.toSet());
+                   .map(this::createTag)
+                   .collect(Collectors.toSet());
     }
 
     @Override

@@ -33,12 +33,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DefaultArticleMapperService implements ArticleMapperService, ArticleFavoriteMapperService {
 
-    final private ArticleService articleService;
-    final private TagService tagService;
-    final private ProfileService profileService;
-    final private UserService userService;
-    final private FollowRelationService followRelationService;
-    final private FavoriteServiceFactory favoriteServiceFactory;
+    private final ArticleService articleService;
+    private final TagService tagService;
+    private final ProfileService profileService;
+    private final UserService userService;
+    private final FollowRelationService followRelationService;
+    private final FavoriteServiceFactory favoriteServiceFactory;
 
     @Override
     public SingleArticleResponseDto getArticle(String slug, Long userId) {
@@ -70,7 +70,9 @@ public class DefaultArticleMapperService implements ArticleMapperService, Articl
 
         List<Long> authorIds = articles.stream().map(Article::getUserId).collect(Collectors.toList());
 
-        return Mappers.toMultipleArticlesResponseDto(articles, getTagsMap(articles), getUserMap(authorIds), getFavorites(articles), getFavoritedIds(userId), getFollower(userId));
+        return Mappers.toMultipleArticlesResponseDto(articles, getTagsMap(articles), getUserMap(authorIds),
+                                                     getFavorites(articles), getFavoritedIds(userId),
+                                                     getFollower(userId));
     }
 
     @Override
